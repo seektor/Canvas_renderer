@@ -1,7 +1,12 @@
+import { Header } from "./core/components/Header/Header";
+
 class App {
 
+    private header: Header;
+
     constructor() {
-        console.log(`Hello World`);
+        const root: HTMLElement = document.getElementById("root");
+        this.header = new Header(root);
     }
 }
 
