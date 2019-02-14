@@ -1,3 +1,4 @@
+import "./assets/styles/app.scss";
 import { Header } from "./core/components/Header/Header";
 
 class App {
