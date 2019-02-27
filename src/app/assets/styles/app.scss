@@ -1,8 +1,8 @@
-@import "./reset.scss";
+@import "./normalize/import-now";
 @import "./constants.scss";
 @import "./base.scss";
 @import "./mixins.scss";
 
-@import "../../../app/core/components/Header/header.scss";
-@import "../../../app/core/components/Body/body.scss";
-@import "../../../app//core//components/Footer/footer.scss";
+@import "../../../app/core/Viewport/Header/header.scss";
+@import "../../../app/core/Viewport/Body/body.scss";
+@import "../../../app//core/Viewport/Footer/footer.scss";
