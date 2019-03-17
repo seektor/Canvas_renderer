@@ -1,10 +1,45 @@
 import { fromEvent, Observable, Subject } from "rxjs";
 import { TCoordinates } from "../structures/TCoordinates";
+import { ILayer } from "./interfaces/ILayer";
+import { TDimensions } from "../structures/TDimensions";
+import { AbstractCanvasLayer } from "./AbstractCanvasLayer";
 
 export abstract class AbstractCanvasViewport {
 
-    constructor() {
+    protected container: HTMLElement;
+    protected displayCanvas: HTMLCanvasElement;
+    protected displayCanvasContext: CanvasRenderingContext2D;
+    protected layers: AbstractCanvasLayer[];
 
+    constructor(container: HTMLElement) {
+        this.container = container;
+        this.createDisplayCanvas();
+        this.layers = [];
+    }
+
+    protected abstract construct();
+
+    protected getElementDimensions(element: HTMLElement): TDimensions {
+        return {
+            height: element.offsetHeight,
+            width: element.offsetWidth,
+        }
+    }
+
+    private createDisplayCanvas() {
+        this.displayCanvas = document.createElement(`canvas`);
+        const displayCanvasDimensions: TDimensions = this.getElementDimensions(this.container);
+        this.displayCanvas.width = displayCanvasDimensions.width;
+        this.displayCanvas.height = displayCanvasDimensions.height;
+        this.displayCanvas.style.display = `block`;
+        this.displayCanvasContext = this.displayCanvas.getContext(`2d`);
+        this.container.appendChild(this.displayCanvas);
+    }
+
+    protected render() {
+        this.layers.forEach(layer => {
+            layer.drawOn(this.displayCanvasContext);
+        });
     }
 
     private createMainEvents() {

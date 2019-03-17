@@ -1,17 +1,19 @@
 import { DomUtils } from "../../utils/DomUtils";
+import { CanvasPlayground } from "../../components/canvasComponents/Playground/CanvasPlayground";
 
 export class Body {
 
     private bodyElement: HTMLElement;
 
-    constructor(hostElement: HTMLElement) {
-        this.buildComponent(hostElement);
+    constructor(container: HTMLElement) {
+        this.construct(container);
     }
 
-    private buildComponent(hostElement: HTMLElement) {
+    private construct(container: HTMLElement) {
         const template: string = require("./body.html");
         const templateFragment: DocumentFragment = DomUtils.convertToDocumentFragment(template);
         this.bodyElement = templateFragment.firstChild as HTMLElement;
-        hostElement.append(this.bodyElement);
+        container.append(this.bodyElement);
+        new CanvasPlayground(this.bodyElement);
     }
 }

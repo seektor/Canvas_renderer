@@ -4,11 +4,11 @@ export class Footer {
 
     private footerElement: HTMLElement;
 
-    constructor(hostElement: HTMLElement) {
-        this.buildComponent(hostElement);
+    constructor(container: HTMLElement) {
+        this.construct(container);
     }
 
-    private buildComponent(hostElement: HTMLElement) {
+    private construct(hostElement: HTMLElement) {
         const template: string = require("./footer.html");
         const templateFragment: DocumentFragment = DomUtils.convertToDocumentFragment(template);
         this.footerElement = templateFragment.firstChild as HTMLElement;
