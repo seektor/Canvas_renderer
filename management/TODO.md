@@ -4,3 +4,4 @@
 * Layout
 * Nesting
 * TsLint
+* Download font instead of linking
