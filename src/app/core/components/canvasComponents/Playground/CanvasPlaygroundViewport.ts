@@ -1,5 +1,5 @@
 import { AbstractCanvasViewport } from "../../../CanvasRenderer/AbstractCanvasViewport";
-import { CanvasPlaygroundBaseLayer } from "./layers/CanvasPlaygroundBasePlane";
+import { CanvasPlaygroundBaseLayer } from "./layers/CanvasPlaygroundBaseLayer";
 import { TDimensions } from "../../../structures/TDimensions";
 
 export class CanvasPlaygroundViewport extends AbstractCanvasViewport {
