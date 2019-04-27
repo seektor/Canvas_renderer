@@ -1,4 +1,4 @@
-import { DomUtils } from "../../utils/DomUtils";
+import { Utils } from "../../utils/Utils";
 
 export class Header {
 
@@ -10,7 +10,7 @@ export class Header {
 
     private construct(hostElement: HTMLElement) {
         const template: string = require("./header.html");
-        const templateFragment: DocumentFragment = DomUtils.convertToDocumentFragment(template);
+        const templateFragment: DocumentFragment = Utils.convertToDocumentFragment(template);
         this.headerElement = templateFragment.firstChild as HTMLElement;
         hostElement.append(this.headerElement);
     }

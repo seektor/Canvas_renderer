@@ -1,5 +1,5 @@
-import { DomUtils } from "../../utils/DomUtils";
-import { CanvasPlayground } from "../../../CanvasComponents/Playground/CanvasPlayground";
+import { Utils } from "../../utils/Utils";
+import { CanvasStoc } from "../../../CanvasComponents/StressTestOnCombined/CanvasStoc";
 
 export class Body {
 
@@ -11,9 +11,9 @@ export class Body {
 
     private construct(container: HTMLElement) {
         const template: string = require("./body.html");
-        const templateFragment: DocumentFragment = DomUtils.convertToDocumentFragment(template);
+        const templateFragment: DocumentFragment = Utils.convertToDocumentFragment(template);
         this.bodyElement = templateFragment.firstChild as HTMLElement;
         container.append(this.bodyElement);
-        new CanvasPlayground(this.bodyElement);
+        new CanvasStoc(this.bodyElement);
     }
 }

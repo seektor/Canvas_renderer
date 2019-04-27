@@ -1,5 +1,5 @@
 import { AbstractCanvasModel } from "../../CanvasRenderer/AbstractCanvasModel";
 
-export class CanvasPlaygroundModel extends AbstractCanvasModel {
+export class CanvasStocModel extends AbstractCanvasModel {
 
 }

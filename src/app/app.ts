@@ -10,10 +10,10 @@ class App {
     private footer: Footer;
 
     constructor() {
-        const root: HTMLElement = document.getElementById("root");
-        this.header = new Header(root);
-        this.body = new Body(root);
-        this.footer = new Footer(root);
+        const appElement: HTMLElement = document.getElementById("app");
+        this.header = new Header(appElement);
+        this.body = new Body(appElement);
+        this.footer = new Footer(appElement);
     }
 }
 
