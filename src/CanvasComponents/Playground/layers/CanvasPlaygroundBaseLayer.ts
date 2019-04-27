@@ -1,5 +1,5 @@
-import { AbstractCanvasLayer } from "../../../../CanvasRenderer/AbstractCanvasLayer";
-import { TLayer } from "../../../../CanvasRenderer/structures/TLayer";
+import { AbstractCanvasLayer } from "../../../CanvasRenderer/AbstractCanvasLayer";
+import { TLayer } from "../../../CanvasRenderer/structures/TLayer";
 
 export class CanvasPlaygroundBaseLayer extends AbstractCanvasLayer {
 

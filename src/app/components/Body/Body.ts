@@ -1,5 +1,5 @@
 import { DomUtils } from "../../utils/DomUtils";
-import { CanvasPlayground } from "../../components/canvasComponents/Playground/CanvasPlayground";
+import { CanvasPlayground } from "../../../CanvasComponents/Playground/CanvasPlayground";
 
 export class Body {
 

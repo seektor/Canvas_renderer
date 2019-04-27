@@ -1,7 +1,7 @@
 import { fromEvent, Observable, Subject } from "rxjs";
-import { TCoordinates } from "../structures/TCoordinates";
+import { TCoordinates } from "../app/structures/TCoordinates";
 import { ILayer } from "./interfaces/ILayer";
-import { TDimensions } from "../structures/TDimensions";
+import { TDimensions } from "../app/structures/TDimensions";
 import { AbstractCanvasLayer } from "./AbstractCanvasLayer";
 
 export abstract class AbstractCanvasViewport {
@@ -9,12 +9,10 @@ export abstract class AbstractCanvasViewport {
     protected container: HTMLElement;
     protected displayCanvas: HTMLCanvasElement;
     protected displayCanvasContext: CanvasRenderingContext2D;
-    protected layers: AbstractCanvasLayer[];
 
     constructor(container: HTMLElement) {
         this.container = container;
         this.createDisplayCanvas();
-        this.layers = [];
     }
 
     protected abstract construct();
@@ -37,9 +35,9 @@ export abstract class AbstractCanvasViewport {
     }
 
     protected render() {
-        this.layers.forEach(layer => {
-            layer.drawOn(this.displayCanvasContext);
-        });
+        // this.layers.forEach(layer => {
+        //     layer.drawOn(this.displayCanvasContext);
+        // });
     }
 
     private createMainEvents() {

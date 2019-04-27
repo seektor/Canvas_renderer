@@ -1,6 +1,6 @@
-import { AbstractCanvasViewport } from "../../../CanvasRenderer/AbstractCanvasViewport";
+import { AbstractCanvasViewport } from "../../CanvasRenderer/AbstractCanvasViewport";
 import { CanvasPlaygroundBaseLayer } from "./layers/CanvasPlaygroundBaseLayer";
-import { TDimensions } from "../../../structures/TDimensions";
+import { TDimensions } from "../../app/structures/TDimensions";
 
 export class CanvasPlaygroundViewport extends AbstractCanvasViewport {
 
@@ -12,9 +12,9 @@ export class CanvasPlaygroundViewport extends AbstractCanvasViewport {
 
     protected construct() {
         const layerDimensions: TDimensions = this.getElementDimensions(this.displayCanvas);
-        this.layers.push(new CanvasPlaygroundBaseLayer({
-            layerHeight: layerDimensions.height,
-            layerWidth: layerDimensions.width,
-        }))
+        // this.layers.push(new CanvasPlaygroundBaseLayer({
+        //     height: layerDimensions.height,
+        //     width: layerDimensions.width,
+        // }))
     }
 }

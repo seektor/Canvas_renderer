@@ -1,6 +1,6 @@
 export interface TLayer {
-    layerWidth: number;
-    layerHeight: number;
+    width: number;
+    height: number;
     sX?: number;
     sY?: number;
     sWidth?: number;

@@ -1,4 +1,4 @@
-import { AbstractCanvas } from "../../../CanvasRenderer/AbstractCanvas";
+import { AbstractCanvas } from "../../CanvasRenderer/AbstractCanvas";
 import { CanvasPlaygroundModel } from "./CanvasPlaygroundModel";
 import { CanvasPlaygroundViewport } from "./CanvasPlaygroundViewport";
 

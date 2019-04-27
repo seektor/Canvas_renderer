@@ -3,6 +3,6 @@
 @import "./base.scss";
 @import "./mixins.scss";
 
-@import "../../../app/core/Viewport/Header/header.scss";
-@import "../../../app/core/Viewport/Body/body.scss";
-@import "../../../app//core/Viewport/Footer/footer.scss";
+@import "../../components/Header/header.scss";
+@import "../../components/Body/body.scss";
+@import "../../components/Footer/footer.scss";

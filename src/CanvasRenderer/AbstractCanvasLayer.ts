@@ -17,14 +17,14 @@ export abstract class AbstractCanvasLayer {
     protected dWidth: number;
     protected dHeight: number;
 
-    constructor(layerParameters: TLayer) {
-        this.initializeParameters(layerParameters);
-        this.createPlaneDC(layerParameters.layerWidth, layerParameters.layerHeight);
+    constructor(layerParams: TLayer) {
+        this.initializeParameters(layerParams);
+        this.createPlaneDC(layerParams.width, layerParams.height);
     }
 
     private initializeParameters(layerParameters: TLayer) {
-        this.layerWidth = layerParameters.layerWidth;
-        this.layerHeight = layerParameters.layerHeight;
+        this.layerWidth = layerParameters.width;
+        this.layerHeight = layerParameters.height;
         this.dX = layerParameters.dX || 0;
         this.dY = layerParameters.dY || 0;
     }

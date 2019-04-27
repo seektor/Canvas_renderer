@@ -1,7 +1,7 @@
 import "./assets/styles/app.scss";
-import { Header } from "./core/Viewport/Header/Header";
-import { Body } from "./core/Viewport/Body/Body";
-import { Footer } from "./core/Viewport/Footer/Footer";
+import { Header } from "./components/Header/Header";
+import { Body } from "./components/Body/Body";
+import { Footer } from "./components/Footer/Footer";
 
 class App {
 
