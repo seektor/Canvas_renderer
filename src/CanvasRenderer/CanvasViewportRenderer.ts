@@ -1,7 +1,7 @@
-import { CanvasVirtualLayersRenderer } from "./CanvasVirtualLayersRenderer";
-import { CanvasPhysicalLayer } from "./CanvasPhysicalLayer";
 import { TDimensions } from "./structures/TDimensions";
 import { Utils } from "./utils/Utils";
+import { CanvasPhysicalLayer } from "./CanvasPhysicalLayer";
+import { AbstractCanvasBaseLayer } from "./AbstractCanvasBaseLayer";
 
 export class CanvasViewportRenderer {
 
@@ -13,14 +13,26 @@ export class CanvasViewportRenderer {
         this.physicalLayers = [];
     }
 
+    public renderView() {
+        this.physicalLayers.forEach(l => l.renderView());
+    }
+
+    public getViewportDimensions(): TDimensions {
+        return Utils.getElementDimensions(this.container);
+    }
+
     public addPhysicalLayer() {
         const displayDimensions: TDimensions = Utils.getElementDimensions(this.container);
         const physicalLayer: CanvasPhysicalLayer = new CanvasPhysicalLayer(displayDimensions);
-        this.physicalLayers.push(physicalLayer);
         const layerElement: HTMLElement = physicalLayer.getLayerElement();
         if (this.physicalLayers.length > 0) {
             layerElement.style.position = 'absolute';
         }
+        this.physicalLayers.push(physicalLayer);
         this.container.appendChild(layerElement);
+    }
+
+    public addBaseLayer(level: number, layer: AbstractCanvasBaseLayer) {
+        this.physicalLayers[level].addLayer(layer);
     }
 }

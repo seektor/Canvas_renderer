@@ -1,7 +1,8 @@
 import { AbstractCanvasBaseLayer } from "./AbstractCanvasBaseLayer";
 import { TLayer } from "./structures/TLayer";
+import { CanvasPhysicalLayer } from "./CanvasPhysicalLayer";
 
-export class CanvasVirtualLayersRenderer {
+export class CanvasLayersRenderer {
 
     private dx: number;
     private dy: number;
@@ -32,7 +33,7 @@ export class CanvasVirtualLayersRenderer {
         context.drawImage(this.bufferCanvas, this.dx, this.dy);
     }
 
-    public renderBuffer() {
+    public prepareBuffer() {
         this.layers.forEach(layer => layer.drawOn(this.bufferCanvasContext));
     }
 }

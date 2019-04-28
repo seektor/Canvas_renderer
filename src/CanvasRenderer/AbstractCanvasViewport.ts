@@ -1,4 +1,3 @@
-import { CanvasVirtualLayersRenderer } from "./CanvasVirtualLayersRenderer";
 import { Utils } from "./utils/Utils";
 import { TDimensions } from "./structures/TDimensions";
 import { CanvasViewportRenderer } from "./CanvasViewportRenderer";
@@ -15,6 +14,10 @@ export abstract class AbstractCanvasViewport {
         this.canvasViewportRenderer = new CanvasViewportRenderer(container);
     }
 
+    protected renderView() {
+        this.canvasViewportRenderer.renderView();
+    }
+
     protected abstract createLayers(): void;
 
     private construct() {
@@ -24,12 +27,8 @@ export abstract class AbstractCanvasViewport {
         viewportElement.style.position = "relative;"
     };
 
-    protected render() {
-        // this.layersRenderer.renderBuffer();
-        // this.layersRenderer.renderView(this.displayCanvasContext);
-        // this.layers.forEach(layer => {
-        //     layer.drawOn(this.displayCanvasContext);
-        // });
+    protected getViewportDimensions(): TDimensions {
+        return this.canvasViewportRenderer.getViewportDimensions();
     }
 
 }
