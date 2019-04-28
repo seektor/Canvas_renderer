@@ -1,7 +1,7 @@
-import { AbstractCanvasLayer } from "../../../CanvasRenderer/AbstractCanvasLayer";
+import { AbstractCanvasBaseLayer } from "../../../CanvasRenderer/AbstractCanvasBaseLayer";
 import { TSquareLayerParams } from "./structures/TSquareLayerParams";
 
-export class SquareLayer extends AbstractCanvasLayer {
+export class SquareLayer extends AbstractCanvasBaseLayer {
 
     private backgroundColor: string;
 

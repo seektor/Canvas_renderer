@@ -1,15 +1,14 @@
-import { TDimensions } from "../app/structures/TDimensions";
-import { AbstractCanvasLayer } from "./AbstractCanvasLayer";
+import { AbstractCanvasBaseLayer } from "./AbstractCanvasBaseLayer";
 import { TLayer } from "./structures/TLayer";
 
-export class LayersRenderer {
+export class CanvasVirtualLayersRenderer {
 
     private dx: number;
     private dy: number;
     private bufferCanvas: HTMLCanvasElement;
     private bufferCanvasContext: CanvasRenderingContext2D;
 
-    private layers: AbstractCanvasLayer[] = [];
+    private layers: AbstractCanvasBaseLayer[] = [];
 
     constructor(params: TLayer) {
         this.dx = params.dX || 0;
@@ -25,7 +24,7 @@ export class LayersRenderer {
         this.bufferCanvasContext = this.bufferCanvas.getContext(`2d`);
     }
 
-    public addLayer(layer: AbstractCanvasLayer) {
+    public addLayer(layer: AbstractCanvasBaseLayer) {
         this.layers.push(layer);
     }
 

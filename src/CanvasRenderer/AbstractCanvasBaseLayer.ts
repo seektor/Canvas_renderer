@@ -1,6 +1,6 @@
 import { TLayer } from "./structures/TLayer";
 
-export abstract class AbstractCanvasLayer {
+export abstract class AbstractCanvasBaseLayer {
 
     protected layerElement: HTMLCanvasElement;
     protected layerContext: CanvasRenderingContext2D;

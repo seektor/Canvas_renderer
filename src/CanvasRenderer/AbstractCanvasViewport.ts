@@ -1,35 +1,32 @@
-import { LayersRenderer } from "./LayersRenderer";
+import { CanvasVirtualLayersRenderer } from "./CanvasVirtualLayersRenderer";
 import { Utils } from "./utils/Utils";
 import { TDimensions } from "./structures/TDimensions";
+import { CanvasViewportRenderer } from "./CanvasViewportRenderer";
 
 export abstract class AbstractCanvasViewport {
 
     protected container: HTMLElement;
-    protected displayCanvas: HTMLCanvasElement;
-    protected displayCanvasContext: CanvasRenderingContext2D;
-    protected layersRenderer: LayersRenderer;
+    protected viewportElement: HTMLElement;
+    protected canvasViewportRenderer: CanvasViewportRenderer;
 
     constructor(container: HTMLElement) {
         this.container = container;
-        const viewportDimensions: TDimensions = Utils.getElementDimensions(container);
-        this.createDisplayCanvas(viewportDimensions);
-        this.layersRenderer = new LayersRenderer(viewportDimensions);
+        this.construct();
+        this.canvasViewportRenderer = new CanvasViewportRenderer(container);
     }
 
-    protected abstract construct();
+    protected abstract createLayers(): void;
 
-    private createDisplayCanvas(dimensions: TDimensions) {
-        this.displayCanvas = document.createElement(`canvas`);
-        this.displayCanvas.width = dimensions.width;
-        this.displayCanvas.height = dimensions.height;
-        this.displayCanvas.style.display = `block`;
-        this.displayCanvasContext = this.displayCanvas.getContext(`2d`);
-        this.container.appendChild(this.displayCanvas);
-    }
+    private construct() {
+        const viewportElement: HTMLElement = document.createElement('div');
+        viewportElement.style.height = "100%";
+        viewportElement.style.width = "100%";
+        viewportElement.style.position = "relative;"
+    };
 
     protected render() {
-        this.layersRenderer.renderBuffer();
-        this.layersRenderer.renderView(this.displayCanvasContext);
+        // this.layersRenderer.renderBuffer();
+        // this.layersRenderer.renderView(this.displayCanvasContext);
         // this.layers.forEach(layer => {
         //     layer.drawOn(this.displayCanvasContext);
         // });
