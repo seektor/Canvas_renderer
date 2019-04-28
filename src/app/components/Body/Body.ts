@@ -1,5 +1,6 @@
 import { Utils } from "../../utils/Utils";
-import { CanvasStoc } from "../../../CanvasComponents/StressTestOnCombined/CanvasStoc";
+import { CStoc } from "../../../CanvasComponents/StressTestOnCombined/CStoc";
+import { CPlayground } from "../../../CanvasComponents/Playground/CPlayground";
 
 export class Body {
 
@@ -14,6 +15,6 @@ export class Body {
         const templateFragment: DocumentFragment = Utils.convertToDocumentFragment(template);
         this.bodyElement = templateFragment.firstChild as HTMLElement;
         container.append(this.bodyElement);
-        new CanvasStoc(this.bodyElement);
+        new CPlayground(this.bodyElement);
     }
 }

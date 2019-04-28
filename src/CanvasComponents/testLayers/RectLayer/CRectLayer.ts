@@ -1,11 +1,11 @@
 import { AbstractCanvasBaseLayer } from "../../../CanvasRenderer/AbstractCanvasBaseLayer";
-import { TSquareLayerParams } from "./structures/TSquareLayerParams";
+import { TCRectLayerParams } from "./structures/TCRectLayerParams";
 
-export class SquareLayer extends AbstractCanvasBaseLayer {
+export class CRectLayer extends AbstractCanvasBaseLayer {
 
     private backgroundColor: string;
 
-    constructor(params: TSquareLayerParams) {
+    constructor(params: TCRectLayerParams) {
         super(params);
         this.backgroundColor = params.backgroundColor;
         this.render();
