@@ -3,7 +3,7 @@ import { TDimensions } from "../../CanvasRenderer/structures/TDimensions";
 import { Utils as CRUtils } from "../../CanvasRenderer/utils/Utils";
 import { AbstractCanvasBaseLayer } from "../../CanvasRenderer/AbstractCanvasBaseLayer";
 import { Utils } from "../utils/Utils";
-import { CRectLayer } from "../testLayers/RectLayer/CRectLayer";
+import { CRectBaseLayer } from "../testLayers/RectBaseLayer/CRectBaseLayer";
 
 export class CStocViewport extends AbstractCanvasViewport {
 

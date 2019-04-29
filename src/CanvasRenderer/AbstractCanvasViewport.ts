@@ -10,8 +10,8 @@ export abstract class AbstractCanvasViewport {
 
     constructor(container: HTMLElement) {
         this.container = container;
-        this.construct();
-        this.canvasViewportRenderer = new CanvasViewportRenderer(container);
+        this.construct(container);
+        this.canvasViewportRenderer = new CanvasViewportRenderer(this.viewportElement);
     }
 
     protected renderView() {
@@ -20,11 +20,13 @@ export abstract class AbstractCanvasViewport {
 
     protected abstract createLayers(): void;
 
-    private construct() {
+    private construct(container: HTMLElement) {
         const viewportElement: HTMLElement = document.createElement('div');
         viewportElement.style.height = "100%";
         viewportElement.style.width = "100%";
-        viewportElement.style.position = "relative;"
+        viewportElement.style.position = "relative";
+        container.appendChild(viewportElement);
+        this.viewportElement = viewportElement;
     };
 
     protected getViewportDimensions(): TDimensions {

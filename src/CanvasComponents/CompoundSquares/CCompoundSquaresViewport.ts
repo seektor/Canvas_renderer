@@ -4,9 +4,8 @@ import { Utils as CRUtils } from "../../CanvasRenderer/utils/Utils";
 import { AbstractCanvasBaseLayer } from "../../CanvasRenderer/AbstractCanvasBaseLayer";
 import { Utils } from "../utils/Utils";
 import { CRectBaseLayer } from "../testLayers/RectBaseLayer/CRectBaseLayer";
-import { CSquaresCompoundLayer } from "../testLayers/SquaresCompoundLayer/CSquaresCompoundLayer";
 
-export class CPlaygroundViewport extends AbstractCanvasViewport {
+export class CCompoundSquaresViewport extends AbstractCanvasViewport {
 
     constructor(container: HTMLElement) {
         super(container);
@@ -15,18 +14,15 @@ export class CPlaygroundViewport extends AbstractCanvasViewport {
     }
 
     protected createLayers() {
+        const displayDimensions: TDimensions = this.canvasViewportRenderer.getViewportDimensions();
         this.canvasViewportRenderer.addPhysicalLayer();
-        this.canvasViewportRenderer.addPhysicalLayer();
-        // const squaresCompoundLayer = new CSquaresCompoundLayer({
-        //     height: 500,
-        //     width: 500
-        // },
-        //     this.viewportElement);
-        // const squareLayer = new CRectBaseLayer({
-        //     backgroundColor: Utils.getRandomColor(),
-        //     height: 100,
-        //     width: 100,
-        // })
-        // this.canvasViewportRenderer.addBaseLayer(0, squaresCompoundLayer);
+        const layer: AbstractCanvasBaseLayer = new CRectBaseLayer({
+            backgroundColor: Utils.getRandomColor(),
+            height: displayDimensions.height,
+            width: displayDimensions.width,
+            dX: 0,
+            dY: 0
+        })
+        this.canvasViewportRenderer.addBaseLayer(0, layer);
     }
 }

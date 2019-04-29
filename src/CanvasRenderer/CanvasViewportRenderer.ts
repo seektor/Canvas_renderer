@@ -21,7 +21,7 @@ export class CanvasViewportRenderer {
         return Utils.getElementDimensions(this.container);
     }
 
-    public addPhysicalLayer() {
+    public addPhysicalLayer(append: boolean = true) {
         const displayDimensions: TDimensions = Utils.getElementDimensions(this.container);
         const physicalLayer: CanvasPhysicalLayer = new CanvasPhysicalLayer(displayDimensions);
         const layerElement: HTMLElement = physicalLayer.getLayerElement();
@@ -29,7 +29,13 @@ export class CanvasViewportRenderer {
             layerElement.style.position = 'absolute';
         }
         this.physicalLayers.push(physicalLayer);
-        this.container.appendChild(layerElement);
+        if (append) {
+            this.container.appendChild(layerElement);
+        }
+    }
+
+    public getLayers(): CanvasPhysicalLayer[] {
+        return this.physicalLayers;
     }
 
     public addBaseLayer(level: number, layer: AbstractCanvasBaseLayer) {

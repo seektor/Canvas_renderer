@@ -27,6 +27,12 @@ export abstract class AbstractCanvasBaseLayer {
         this.layerHeight = layerParameters.height;
         this.dX = layerParameters.dX || 0;
         this.dY = layerParameters.dY || 0;
+        this.dHeight = layerParameters.dHeight || layerParameters.height;
+        this.dWidth = layerParameters.dWidth || layerParameters.width;
+        this.sX = layerParameters.sX || 0;
+        this.sY = layerParameters.sY || 0;
+        this.sHeight = layerParameters.sHeight || layerParameters.height;
+        this.sWidth = layerParameters.sWidth || layerParameters.width;
     }
 
     private createPlaneDC(layerWidth: number, layerHeight: number) {
@@ -37,7 +43,7 @@ export abstract class AbstractCanvasBaseLayer {
     }
 
     public drawOn(context: CanvasRenderingContext2D) {
-        context.drawImage(this.layerElement, this.dX, this.dY);
+        context.drawImage(this.layerElement, this.sX, this.sY, this.sWidth, this.sHeight, this.dX, this.dY, this.dWidth, this.dHeight);
     }
 
     protected abstract render();

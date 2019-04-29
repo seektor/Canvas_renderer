@@ -1,13 +1,15 @@
 import { AbstractCanvas } from "../../CanvasRenderer/AbstractCanvas";
+import { CSquareModel } from "./CSquareModel";
+import { CSquareViewport } from "./CSquareViewport";
 
 export class CStoc extends AbstractCanvas {
 
-    protected model: CSquareM;
-    protected viewport: CStocViewport;
+    protected model: CSquareModel;
+    protected viewport: CSquareViewport;
 
     constructor(container: HTMLElement) {
         super(container);
-        this.model = new CStocModel();
-        this.viewport = new CStocViewport(container);
+        this.model = new CSquareModel();
+        this.viewport = new CSquareViewport(container);
     }
 }

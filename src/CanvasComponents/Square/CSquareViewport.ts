@@ -3,7 +3,7 @@ import { TDimensions } from "../../CanvasRenderer/structures/TDimensions";
 import { Utils as CRUtils } from "../../CanvasRenderer/utils/Utils";
 import { AbstractCanvasBaseLayer } from "../../CanvasRenderer/AbstractCanvasBaseLayer";
 import { Utils } from "../utils/Utils";
-import { CRectLayer } from "../testLayers/RectLayer/CRectLayer";
+import { CRectBaseLayer } from "../testLayers/RectBaseLayer/CRectBaseLayer";
 
 export class CSquareViewport extends AbstractCanvasViewport {
 
@@ -16,7 +16,7 @@ export class CSquareViewport extends AbstractCanvasViewport {
     protected createLayers() {
         const displayDimensions: TDimensions = this.canvasViewportRenderer.getViewportDimensions();
         this.canvasViewportRenderer.addPhysicalLayer();
-        const layer: AbstractCanvasBaseLayer = new CRectLayer({
+        const layer: AbstractCanvasBaseLayer = new CRectBaseLayer({
             backgroundColor: Utils.getRandomColor(),
             height: displayDimensions.height,
             width: displayDimensions.width,
