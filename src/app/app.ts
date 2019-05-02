@@ -14,6 +14,8 @@ class App {
         this.header = new Header(appElement);
         this.body = new Body(appElement);
         this.footer = new Footer(appElement);
+
+        this.body.initialize();
     }
 }
 
