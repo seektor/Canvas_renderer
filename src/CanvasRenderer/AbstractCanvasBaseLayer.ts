@@ -1,5 +1,5 @@
-import { TLayer } from "./structures/TLayer";
 import { ILayer } from "./interfaces/ILayer";
+import { TRenderLayer } from "./structures/TRenderLayer";
 
 export abstract class AbstractCanvasBaseLayer implements ILayer {
 
@@ -18,12 +18,12 @@ export abstract class AbstractCanvasBaseLayer implements ILayer {
     protected dWidth: number;
     protected dHeight: number;
 
-    constructor(layerParams: TLayer) {
+    constructor(layerParams: TRenderLayer) {
         this.initializeParameters(layerParams);
         this.createPlaneDC(layerParams.width, layerParams.height);
     }
 
-    private initializeParameters(layerParameters: TLayer) {
+    private initializeParameters(layerParameters: TRenderLayer) {
         this.layerWidth = layerParameters.width;
         this.layerHeight = layerParameters.height;
         this.dX = layerParameters.dX || 0;

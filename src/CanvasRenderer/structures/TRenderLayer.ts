@@ -1,4 +1,4 @@
-export interface TLayer {
+export interface TRenderLayer {
     width: number;
     height: number;
     sX?: number;

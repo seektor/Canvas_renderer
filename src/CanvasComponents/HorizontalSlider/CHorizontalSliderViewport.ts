@@ -5,7 +5,7 @@ import { ILayer } from "../../CanvasRenderer/interfaces/ILayer";
 import Colors from "../../UIHelpers/Colors";
 import { TViewportParams } from "../../CanvasRenderer/structures/TViewportParams";
 
-export class CVerticalSliderViewport extends AbstractCanvasViewport {
+export class CHorizontalSliderViewport extends AbstractCanvasViewport {
 
     constructor(container: HTMLElement, params?: TViewportParams) {
         super(container, params);
