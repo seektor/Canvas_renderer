@@ -4,7 +4,7 @@ import { TDimensions } from "../../CanvasRenderer/structures/TDimensions";
 import { ILayer } from "../../CanvasRenderer/interfaces/ILayer";
 import Colors from "../../UIHelpers/Colors";
 
-export class CFlatGridViewport extends AbstractCanvasViewport {
+export class CVerticalSliderViewport extends AbstractCanvasViewport {
 
     constructor(container: HTMLElement) {
         super(container);
@@ -14,7 +14,7 @@ export class CFlatGridViewport extends AbstractCanvasViewport {
 
     protected createLayers() {
         const stageDimensions: TDimensions = this.getStageDimensions();
-        const backgroundLayer: ILayer = new CRectBaseLayer({ backgroundColor: Colors.LIGHT_BLUE, height: stageDimensions.height, width: stageDimensions.width });
+        const backgroundLayer: ILayer = new CRectBaseLayer({ backgroundColor: Colors.RED, height: stageDimensions.height, width: stageDimensions.width });
         this.addLayer(backgroundLayer);
     }
 }

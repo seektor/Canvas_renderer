@@ -1,5 +1,6 @@
 import { TDimensions } from "./structures/TDimensions";
 import { Utils } from "./utils/Utils";
+import { ILayer } from "./interfaces/ILayer";
 
 export class CanvasStage {
 
@@ -9,8 +10,11 @@ export class CanvasStage {
     private drawBufferCanvas: HTMLCanvasElement;
     private drawBufferCanvasContext: CanvasRenderingContext2D;
 
+    private layers: ILayer[];
+
     constructor(container: HTMLElement) {
         this.container = container;
+        this.layers = [];
         this.construct(container);
     }
 
@@ -37,5 +41,18 @@ export class CanvasStage {
         drawBufferCanvas.style.display = `block`;
         this.drawBufferCanvas = drawBufferCanvas;
         this.drawBufferCanvasContext = this.displayCanvas.getContext(`2d`);
+    }
+
+    public render() {
+        this.layers.forEach(layer => layer.render(this.drawBufferCanvasContext));
+        this.displayCanvasContext.drawImage(this.drawBufferCanvas, 0, 0);
+    }
+
+    public addLayer(layer: ILayer) {
+        this.layers.push(layer);
+    }
+
+    public getDisplayDimensions(): TDimensions {
+        return Utils.getElementDimensions(this.displayCanvas);
     }
 }

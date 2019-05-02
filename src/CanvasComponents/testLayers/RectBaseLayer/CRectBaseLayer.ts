@@ -8,10 +8,10 @@ export class CRectBaseLayer extends AbstractCanvasBaseLayer {
     constructor(params: TCRectBaseLayerParams) {
         super(params);
         this.backgroundColor = params.backgroundColor;
-        this.render();
+        this.renderSelf();
     }
 
-    protected render() {
+    protected renderSelf() {
         this.layerContext.fillStyle = this.backgroundColor;
         this.layerContext.fillRect(0, 0, this.layerWidth, this.layerHeight);
     }

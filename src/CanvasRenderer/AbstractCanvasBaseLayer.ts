@@ -1,6 +1,7 @@
 import { TLayer } from "./structures/TLayer";
+import { ILayer } from "./interfaces/ILayer";
 
-export abstract class AbstractCanvasBaseLayer {
+export abstract class AbstractCanvasBaseLayer implements ILayer {
 
     protected layerElement: HTMLCanvasElement;
     protected layerContext: CanvasRenderingContext2D;
@@ -42,10 +43,14 @@ export abstract class AbstractCanvasBaseLayer {
         this.layerContext = this.layerElement.getContext(`2d`);
     }
 
-    public drawOn(context: CanvasRenderingContext2D) {
+    public render(context: CanvasRenderingContext2D) {
+        this.drawImage(context);
+    }
+
+    private drawImage(context: CanvasRenderingContext2D) {
         context.drawImage(this.layerElement, this.sX, this.sY, this.sWidth, this.sHeight, this.dX, this.dY, this.dWidth, this.dHeight);
     }
 
-    protected abstract render();
+    protected abstract renderSelf();
 
 }
