@@ -30,11 +30,19 @@ class ResizeService {
         }
     }
 
-    // TODO: Throttle
-    public subscribeToWindow(element: HTMLElement, callback: () => void): void {
-        window.addEventListener('resize', callback);
-        const subscriber: TWindowResizeSubscriber = { callback, element };
+    public subscribeToWindow(element: HTMLElement, callback: () => void, debounceTime?: number): void {
+        const processedCallback: () => void = debounceTime > 0 ? this.debounce(callback, debounceTime) : callback;
+        window.addEventListener('resize', processedCallback);
+        const subscriber: TWindowResizeSubscriber = { callback: processedCallback, element };
         this.windowSubscribers.push(subscriber);
+    }
+
+    private debounce(callback: () => void, debounceTime: number) {
+        let timeout;
+        return function () {
+            clearTimeout(timeout);
+            timeout = setTimeout(callback, debounceTime);
+        }
     }
 
     private checkDimensions(): void {

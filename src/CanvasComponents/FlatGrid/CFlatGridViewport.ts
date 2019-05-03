@@ -44,11 +44,8 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
     private setResizeService() {
         if (!this.isHosted) {
             ResizeService.subscribeToWindow(this.container, () => requestAnimationFrame(() => {
-                const containerDimensions: TDimensions = this.getContainerDimensions();
-                this.setRelativePositions(containerDimensions);
-                this.onResize();
-                this.renderStage();
-            }));
+                console.log("xDDD");
+            }), 500);
         }
     }
 
