@@ -1,5 +1,7 @@
 import { ILayer } from "./interfaces/ILayer";
 import { TRenderLayer } from "./structures/TRenderLayer";
+import { ILayerHost } from "./interfaces/ILayerHost";
+import { TLayerRelativePosition } from "./structures/TLayerRelativePosition";
 
 export abstract class AbstractCanvasBaseLayer implements ILayer {
 
@@ -18,7 +20,10 @@ export abstract class AbstractCanvasBaseLayer implements ILayer {
     protected dWidth: number;
     protected dHeight: number;
 
-    constructor(layerParams: TRenderLayer) {
+    protected layerHost: ILayerHost;
+
+    constructor(layerHost: ILayerHost, layerParams: TRenderLayer) {
+        this.layerHost = layerHost;
         this.initializeParameters(layerParams);
         this.createPlaneDC(layerParams.width, layerParams.height);
     }
@@ -49,6 +54,15 @@ export abstract class AbstractCanvasBaseLayer implements ILayer {
 
     private drawImage(context: CanvasRenderingContext2D) {
         context.drawImage(this.layerElement, this.sX, this.sY, this.sWidth, this.sHeight, this.dX, this.dY, this.dWidth, this.dHeight);
+    }
+
+    public onResize() {
+        const layerRelativePosition: TLayerRelativePosition = this.layerHost.getSubLayerRelativePosition(this);
+        this.layerHeight = layerRelativePosition.height;
+        this.layerWidth = layerRelativePosition.width;
+        this.dX = layerRelativePosition.dX;
+        this.dY = layerRelativePosition.dY;
+        this.renderSelf();
     }
 
     protected abstract renderSelf();

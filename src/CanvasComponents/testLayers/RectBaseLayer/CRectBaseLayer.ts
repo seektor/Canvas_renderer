@@ -1,12 +1,13 @@
 import { AbstractCanvasBaseLayer } from "../../../CanvasRenderer/AbstractCanvasBaseLayer";
 import { TCRectBaseLayerParams } from "./structures/TCRectBaseLayerParams";
+import { ILayerHost } from "../../../CanvasRenderer/interfaces/ILayerHost";
 
 export class CRectBaseLayer extends AbstractCanvasBaseLayer {
 
     private backgroundColor: string;
 
-    constructor(params: TCRectBaseLayerParams) {
-        super(params);
+    constructor(layerHost: ILayerHost, params: TCRectBaseLayerParams) {
+        super(layerHost, params);
         this.backgroundColor = params.backgroundColor;
         this.renderSelf();
     }

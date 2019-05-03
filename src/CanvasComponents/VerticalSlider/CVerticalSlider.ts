@@ -1,7 +1,6 @@
 import { CVerticalSliderModel } from "./CVerticalSliderModel";
 import { CVerticalSliderViewport } from "./CVerticalSliderViewport";
 import { ViewportCtor } from "../../CanvasRenderer/interfaces/ViewportCtor";
-import { CHorizontalSliderViewport } from "../HorizontalSlider/CHorizontalSliderViewport";
 import { AbstractCanvasComponent } from "../../CanvasRenderer/AbstractCanvasComponent";
 
 export class CVerticalSlider extends AbstractCanvasComponent {

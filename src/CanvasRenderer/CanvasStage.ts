@@ -3,6 +3,7 @@ import { Utils } from "./utils/Utils";
 import { ILayer } from "./interfaces/ILayer";
 import { TStageParams } from "./structures/TStageParams";
 import { TLayerRelativePosition } from "./structures/TLayerRelativePosition";
+import { ILayerHost } from "./interfaces/ILayerHost";
 
 export class CanvasStage implements ILayer {
 
@@ -12,22 +13,27 @@ export class CanvasStage implements ILayer {
     private drawBufferCanvas: HTMLCanvasElement;
     private drawBufferCanvasContext: CanvasRenderingContext2D;
     private displayPosition: TLayerRelativePosition;
+    private isHosted: boolean;
+    private layerHost: ILayerHost;
 
     private layers: ILayer[];
 
-    constructor(container: HTMLElement, params?: TStageParams) {
+    constructor(container: HTMLElement, layerHost: ILayerHost, params?: TStageParams) {
         this.container = container;
+        this.layerHost = layerHost;
         this.layers = [];
         this.construct(container, params);
     }
 
     private construct(container: HTMLElement, params?: TStageParams) {
         if (params) {
-            this.displayPosition = { dx: params.dx, dy: params.dy, height: params.height, width: params.width };
+            this.isHosted = true;
+            this.displayPosition = { dX: params.dX, dY: params.dY, height: params.height, width: params.width };
             this.displayCanvas = params.displayCanvas;
         } else {
-            const containerDimensions = Utils.getElementDimensions(container);
-            this.displayPosition = { dx: 0, dy: 0, ...containerDimensions };
+            this.isHosted = false;
+            const containerDimensions: TDimensions = Utils.getElementDimensions(container);
+            this.displayPosition = { dX: 0, dY: 0, ...containerDimensions };
             this.createDisplayCanvas(containerDimensions);
             container.appendChild(this.displayCanvas);
         }
@@ -58,7 +64,7 @@ export class CanvasStage implements ILayer {
 
     public render(context: CanvasRenderingContext2D) {
         this.layers.forEach(layer => layer.render(this.drawBufferCanvasContext));
-        context.drawImage(this.drawBufferCanvas, this.displayPosition.dx, this.displayPosition.dy);
+        context.drawImage(this.drawBufferCanvas, this.displayPosition.dX, this.displayPosition.dY);
     }
 
     public addLayer(...layers: ILayer[]) {
@@ -71,5 +77,16 @@ export class CanvasStage implements ILayer {
 
     public getDisplayCanvas(): HTMLCanvasElement {
         return this.displayCanvas;
+    }
+
+    public onResize() {
+        const layerPosition = this.layerHost.getSubLayerRelativePosition(this);
+        if (!this.isHosted) {
+            this.displayCanvas.width = layerPosition.width;
+            this.displayCanvas.height = layerPosition.height;
+        }
+        this.drawBufferCanvas.width = layerPosition.width;
+        this.drawBufferCanvas.height = layerPosition.height;
+        this.layers.forEach(layer => layer.onResize());
     }
 }

@@ -1,5 +1,5 @@
-import { AbstractCanvasModel } from "../../CanvasRenderer/AbstractCanvasModel";
+// import { AbstractCanvasModel } from "../../CanvasRenderer/AbstractCanvasModel";
 
-export class CHorizontalSliderModel extends AbstractCanvasModel {
+// export class CHorizontalSliderModel extends AbstractCanvasModel {
 
-}
+// }
