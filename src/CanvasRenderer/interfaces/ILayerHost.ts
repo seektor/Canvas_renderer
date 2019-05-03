@@ -1,6 +1,8 @@
 import { ILayer } from "./ILayer";
-import { TLayerRelativePosition } from "../structures/TLayerRelativePosition";
+import { TPosAndDim } from "../structures/TPosAndDim";
 
 export interface ILayerHost {
-    getSubLayerRelativePosition(subLayer: ILayer): TLayerRelativePosition;
+    getSubLayerRelativePosAndDim(subLayer: ILayer): TPosAndDim;
+    getDisplayCanvas(): HTMLCanvasElement;
+    getContainerElement(): HTMLElement;
 }

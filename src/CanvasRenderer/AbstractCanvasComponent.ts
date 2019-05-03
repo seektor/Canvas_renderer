@@ -2,7 +2,7 @@ import { AbstractCanvasModel } from "./AbstractCanvasModel";
 import { AbstractCanvasViewport } from "./AbstractCanvasViewport";
 import { ViewportCtor } from "./interfaces/ViewportCtor";
 import { TViewportParams } from "./structures/TViewportParams";
-import { CanvasStage } from "./CanvasStage";
+import { AbstractCanvasStage } from "./AbstractCanvasStage";
 import { ILayer } from "./interfaces/ILayer";
 
 export abstract class AbstractCanvasComponent {

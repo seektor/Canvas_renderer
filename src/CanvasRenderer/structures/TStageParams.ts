@@ -1,5 +1,6 @@
-import { TLayerRelativePosition } from "./TLayerRelativePosition";
+import { ILayerPosAndDimExtractor } from "../interfaces/ILayerPosAndDimExtractor";
 
-export interface TStageParams extends TLayerRelativePosition {
+export interface TStageParams {
     displayCanvas: HTMLCanvasElement;
+    layerPosAndDimExtractor: ILayerPosAndDimExtractor;
 }
