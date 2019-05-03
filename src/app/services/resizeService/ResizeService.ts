@@ -3,6 +3,10 @@ import { TWindowResizeSubscriber } from './structures/TWindowResizeSubscriber';
 
 class ResizeService {
 
+    public static getInstance(): ResizeService {
+        return this.instance || (this.instance = new this());
+    }
+
     private static instance: ResizeService;
     private anySubscribers: TResizeSubscriber[];
     private windowSubscribers: TWindowResizeSubscriber[];
@@ -11,10 +15,6 @@ class ResizeService {
     private constructor() {
         this.anySubscribers = [];
         this.windowSubscribers = [];
-    }
-
-    public static getInstance(): ResizeService {
-        return this.instance || (this.instance = new this());
     }
 
     public subscribeToAny(element: HTMLElement, callback: () => void): void {
@@ -37,26 +37,6 @@ class ResizeService {
         this.windowSubscribers.push(subscriber);
     }
 
-    private debounce(callback: () => void, debounceTime: number) {
-        let timeout;
-        return function () {
-            clearTimeout(timeout);
-            timeout = setTimeout(callback, debounceTime);
-        }
-    }
-
-    private checkDimensions(): void {
-        this.anySubscribers.forEach(subscriber => this.checkDimension(subscriber));
-    }
-
-    private checkDimension(subscriber: TResizeSubscriber): void {
-        if (subscriber.element.clientWidth !== subscriber.prevClientWidth || subscriber.element.clientHeight !== subscriber.prevClientHeight) {
-            subscriber.callback();
-        }
-        subscriber.prevClientWidth = subscriber.element.clientWidth;
-        subscriber.prevClientHeight = subscriber.element.clientHeight;
-    }
-
     public unsubscribe(element: HTMLElement): void {
         const anySubscriberIndex: number = this.anySubscribers.findIndex((subscriber) => subscriber.element === element);
         if (anySubscriberIndex !== -1) {
@@ -72,6 +52,26 @@ class ResizeService {
                 this.windowSubscribers.splice(windowSubscriberIndex, 1);
             }
         }
+    }
+
+    private debounce(callback: () => void, debounceTime: number): () => void {
+        let timeout;
+        return function (): void {
+            clearTimeout(timeout);
+            timeout = setTimeout(callback, debounceTime);
+        }
+    }
+
+    private checkDimensions(): void {
+        this.anySubscribers.forEach(subscriber => this.checkDimension(subscriber));
+    }
+
+    private checkDimension(subscriber: TResizeSubscriber): void {
+        if (subscriber.element.clientWidth !== subscriber.prevClientWidth || subscriber.element.clientHeight !== subscriber.prevClientHeight) {
+            subscriber.callback();
+        }
+        subscriber.prevClientWidth = subscriber.element.clientWidth;
+        subscriber.prevClientHeight = subscriber.element.clientHeight;
     }
 }
 

@@ -1,9 +1,8 @@
-import { AbstractCanvasModel } from "./AbstractCanvasModel";
-import { AbstractCanvasViewport } from "./AbstractCanvasViewport";
-import { ViewportCtor } from "./interfaces/ViewportCtor";
-import { TViewportParams } from "./structures/TViewportParams";
-import { AbstractCanvasStage } from "./AbstractCanvasStage";
-import { ILayer } from "./interfaces/ILayer";
+import { AbstractCanvasModel } from './AbstractCanvasModel';
+import { AbstractCanvasViewport } from './AbstractCanvasViewport';
+import { ViewportCtor } from './interfaces/ViewportCtor';
+import { TViewportParams } from './structures/TViewportParams';
+import { ILayer } from './interfaces/ILayer';
 
 export abstract class AbstractCanvasComponent {
 
@@ -15,7 +14,7 @@ export abstract class AbstractCanvasComponent {
 
     public createViewport(params: TViewportParams) {
         if (this.viewport) {
-            console.warn("Viewport already exists.");
+            console.warn('Viewport already exists.');
             return;
         }
         this.viewport = this.viewportCtor(params);
@@ -23,7 +22,7 @@ export abstract class AbstractCanvasComponent {
 
     public getMainStage(): ILayer {
         if (!this.viewport) {
-            console.warn("Viewport does not exist.");
+            console.warn('Viewport does not exist.');
             return;
         }
         return this.viewport.getMainStage();

@@ -1,10 +1,10 @@
-import { AbstractCanvasStage } from "../../../CanvasRenderer/AbstractCanvasStage";
-import { ILayerHost } from "../../../CanvasRenderer/interfaces/ILayerHost";
-import { TRenderLayer } from "../../../CanvasRenderer/structures/TRenderLayer";
-import { ILayer } from "../../../CanvasRenderer/interfaces/ILayer";
-import { CRectBaseLayer } from "../../testLayers/RectBaseLayer/CRectBaseLayer";
-import Colors from "../../../UIHelpers/Colors";
-import { ILayerPosAndDimExtractor } from "../../../CanvasRenderer/interfaces/ILayerPosAndDimExtractor";
+import { AbstractCanvasStage } from '../../../CanvasRenderer/AbstractCanvasStage';
+import { ILayerHost } from '../../../CanvasRenderer/interfaces/ILayerHost';
+import { TRenderLayer } from '../../../CanvasRenderer/structures/TRenderLayer';
+import { ILayer } from '../../../CanvasRenderer/interfaces/ILayer';
+import { CRectBaseLayer } from '../../testLayers/RectBaseLayer/CRectBaseLayer';
+import Colors from '../../../UIHelpers/Colors';
+import { ILayerPosAndDimExtractor } from '../../../CanvasRenderer/interfaces/ILayerPosAndDimExtractor';
 
 export class CVerticalSliderMainStage extends AbstractCanvasStage {
 
@@ -14,7 +14,7 @@ export class CVerticalSliderMainStage extends AbstractCanvasStage {
         this.renderSelf();
     }
 
-    protected createLayers() {
+    protected createLayers(): void {
 
         const backgroundLayer: ILayer = new CRectBaseLayer(this, { backgroundColor: Colors.RED, height: this.layerHeight, width: this.layerWidth });
         const backgroundLayerPosAndDimExtractor: ILayerPosAndDimExtractor = (layer) => ({

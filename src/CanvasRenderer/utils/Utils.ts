@@ -1,4 +1,4 @@
-import { TDimensions } from "../structures/TDimensions";
+import { TDimensions } from '../structures/TDimensions';
 
 export class Utils {
 

@@ -1,7 +1,7 @@
-import { AbstractCanvasViewport } from "../../CanvasRenderer/AbstractCanvasViewport";
-import { TViewportParams } from "../../CanvasRenderer/structures/TViewportParams";
-import ResizeService from "../../app/services/resizeService/ResizeService";
-import { CVerticalSliderMainStage } from "./layers/CVerticalSliderMainStage";
+import { AbstractCanvasViewport } from '../../CanvasRenderer/AbstractCanvasViewport';
+import { TViewportParams } from '../../CanvasRenderer/structures/TViewportParams';
+import ResizeService from '../../app/services/resizeService/ResizeService';
+import { CVerticalSliderMainStage } from './layers/CVerticalSliderMainStage';
 
 export class CVerticalSliderViewport extends AbstractCanvasViewport {
 
