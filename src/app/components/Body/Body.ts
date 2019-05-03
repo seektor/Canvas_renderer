@@ -23,6 +23,7 @@ export class Body {
         // CommunicationService.setDataProvider(reduxTestDb.getStore());
         // CommunicationService.createAvgSummaryTable("main", "country", "price");
 
-        new CFlatGrid(this.bodyElement);
+        const canvasFlatGridComponent: CFlatGrid = new CFlatGrid();
+        canvasFlatGridComponent.createViewport({ container: this.bodyElement });
     }
 }

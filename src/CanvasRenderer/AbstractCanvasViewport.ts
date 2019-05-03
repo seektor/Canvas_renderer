@@ -1,9 +1,8 @@
 import { CanvasStage } from "./CanvasStage";
 import { ILayer } from "./interfaces/ILayer";
 import { TDimensions } from "./structures/TDimensions";
-import { TViewportParams } from "./structures/TViewportParams";
-import { TStageParams } from "./structures/TStageParams";
 import { AbstractCanvasComponent } from "./AbstractCanvasComponent";
+import { TViewportParams } from "./structures/TViewportParams";
 
 export abstract class AbstractCanvasViewport {
 
@@ -11,12 +10,11 @@ export abstract class AbstractCanvasViewport {
     protected subComponents: AbstractCanvasComponent[];
     private mainStage: CanvasStage;
 
-    constructor(container: HTMLElement, params: TViewportParams | null) {
-        this.container = container;
+    constructor(params: TViewportParams) {
+        this.container = params.container;
         this.subComponents = [];
-        const stageParams: TStageParams | undefined = params && params.stageParams;
         this.renderStage = params && params.stageParams ? () => void 0 : this.renderStage;
-        this.mainStage = new CanvasStage(container, stageParams);
+        this.mainStage = new CanvasStage(params.container, params.stageParams);
     }
 
     protected abstract createLayers(): void;

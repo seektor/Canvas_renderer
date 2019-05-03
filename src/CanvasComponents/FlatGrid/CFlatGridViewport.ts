@@ -14,8 +14,8 @@ export class CFlatGridViewport extends AbstractCanvasViewport {
     private verticalSliderPosition: TLayerRelativePosition;
     private horizontalSliderPosition: TLayerRelativePosition;
 
-    constructor(container: HTMLElement, params?: TViewportParams) {
-        super(container, params);
+    constructor(params: TViewportParams) {
+        super(params);
         this.setRelativePositions();
         this.createLayers();
         this.renderStage();
@@ -49,15 +49,17 @@ export class CFlatGridViewport extends AbstractCanvasViewport {
         const stageDimensions: TDimensions = this.getStageDimensions();
         const backgroundLayer: ILayer = new CRectBaseLayer({ backgroundColor: Colors.LIGHT_BLUE, height: stageDimensions.height, width: stageDimensions.width });
         const headerLayer: ILayer = new CRectBaseLayer({ backgroundColor: Colors.GREEN, ...this.contentPosition });
-        const verticalSliderComponent: CVerticalSlider = new CVerticalSlider(this.container, true);
+        const verticalSliderComponent: CVerticalSlider = new CVerticalSlider();
         verticalSliderComponent.createViewport({
+            container: this.container,
             stageParams: {
                 displayCanvas: this.getDisplayCanvas(),
                 ...this.verticalSliderPosition
             }
         });
-        const horizontalSliderComponent: CHorizontalSlider = new CHorizontalSlider(this.container, true);
+        const horizontalSliderComponent: CHorizontalSlider = new CHorizontalSlider();
         horizontalSliderComponent.createViewport({
+            container: this.container,
             stageParams: {
                 displayCanvas: this.getDisplayCanvas(),
                 ...this.horizontalSliderPosition

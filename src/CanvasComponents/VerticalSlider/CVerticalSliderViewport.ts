@@ -7,8 +7,8 @@ import { TViewportParams } from "../../CanvasRenderer/structures/TViewportParams
 
 export class CVerticalSliderViewport extends AbstractCanvasViewport {
 
-    constructor(container: HTMLElement, params?: TViewportParams) {
-        super(container, params);
+    constructor(params: TViewportParams) {
+        super(params);
         this.createLayers();
         this.renderStage();
     }

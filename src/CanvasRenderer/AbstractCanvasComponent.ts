@@ -7,24 +7,25 @@ import { ILayer } from "./interfaces/ILayer";
 
 export abstract class AbstractCanvasComponent {
 
-    protected container: HTMLElement;
     protected abstract model: AbstractCanvasModel;
     protected abstract viewport: AbstractCanvasViewport;
     protected abstract viewportCtor: ViewportCtor<AbstractCanvasViewport>;
 
-    constructor(container: HTMLElement) {
-        this.container = container;
-    }
+    constructor() { }
 
-    public createViewport(params?: TViewportParams) {
+    public createViewport(params: TViewportParams) {
         if (this.viewport) {
-            console.warn("Viewport already exists");
+            console.warn("Viewport already exists.");
             return;
         }
-        this.viewport = this.viewportCtor(this.container, params);
+        this.viewport = this.viewportCtor(params);
     }
 
     public getMainStage(): ILayer {
+        if (!this.viewport) {
+            console.warn("Viewport does not exist.");
+            return;
+        }
         return this.viewport.getMainStage();
     }
 }

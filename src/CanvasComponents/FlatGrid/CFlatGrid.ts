@@ -9,12 +9,9 @@ export class CFlatGrid extends AbstractCanvasComponent {
     protected viewport: CFlatGridViewport;
     protected viewportCtor: ViewportCtor<CFlatGridViewport>;
 
-    constructor(container: HTMLElement, delayViewportCreation?: boolean) {
-        super(container);
+    constructor() {
+        super();
         this.model = new CFlatGridModel();
-        this.viewportCtor = (c, p?) => new CFlatGridViewport(c, p);
-        if (!delayViewportCreation) {
-            this.viewport = this.viewportCtor(container);
-        }
+        this.viewportCtor = (params) => new CFlatGridViewport(params);
     }
 }

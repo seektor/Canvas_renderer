@@ -8,4 +8,8 @@ export class Utils {
             width: element.offsetWidth,
         }
     }
+
+    public static noop(): void {
+        return undefined;
+    }
 }
