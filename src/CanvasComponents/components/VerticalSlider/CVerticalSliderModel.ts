@@ -1,4 +1,4 @@
-import { AbstractCanvasModel } from "../../../CanvasRenderer/AbstractCanvasModel";
+import { AbstractCanvasModel } from '../../../CanvasRenderer/AbstractCanvasModel';
 
 export class CVerticalSliderModel extends AbstractCanvasModel {
 

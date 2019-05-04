@@ -1,4 +1,4 @@
-import { Utils } from "../../utils/Utils";
+import { Utils } from '../../utils/Utils';
 
 export class Footer {
 
@@ -8,8 +8,8 @@ export class Footer {
         this.construct(container);
     }
 
-    private construct(hostElement: HTMLElement) {
-        const template: string = require("./footer.html");
+    private construct(hostElement: HTMLElement): void {
+        const template: string = require('./footer.html');
         const templateFragment: DocumentFragment = Utils.convertToDocumentFragment(template);
         this.footerElement = templateFragment.firstChild as HTMLElement;
         hostElement.append(this.footerElement);

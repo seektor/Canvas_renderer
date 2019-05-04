@@ -1,6 +1,6 @@
-import { AbstractCanvasBaseLayer } from "../../../CanvasRenderer/AbstractCanvasBaseLayer";
-import { TCRectBaseLayerParams } from "./structures/TCRectBaseLayerParams";
-import { ILayerHost } from "../../../CanvasRenderer/interfaces/ILayerHost";
+import { AbstractCanvasBaseLayer } from '../../../CanvasRenderer/AbstractCanvasBaseLayer';
+import { TCRectBaseLayerParams } from './structures/TCRectBaseLayerParams';
+import { ILayerHost } from '../../../CanvasRenderer/interfaces/ILayerHost';
 
 export class CRectBaseLayer extends AbstractCanvasBaseLayer {
 
@@ -12,7 +12,7 @@ export class CRectBaseLayer extends AbstractCanvasBaseLayer {
         this.renderSelf();
     }
 
-    protected renderSelf() {
+    protected renderSelf(): void {
         this.layerContext.fillStyle = this.backgroundColor;
         this.layerContext.fillRect(0, 0, this.layerWidth, this.layerHeight);
     }

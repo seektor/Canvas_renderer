@@ -15,7 +15,7 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
         this.renderMainStage();
     }
 
-    private setResizeService() {
+    private setResizeService(): void {
         if (!this.isHosted) {
             ResizeService.subscribeToWindow(this.container, () => requestAnimationFrame(() => {
                 this.onResize();
