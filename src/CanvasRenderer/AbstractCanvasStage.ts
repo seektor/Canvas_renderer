@@ -12,8 +12,8 @@ export abstract class AbstractCanvasStage extends AbstractCanvasBaseLayer implem
     private subLayersRelativePosAndDimExtractorsMap: WeakMap<ILayer, ILayerPosAndDimExtractor>;
     private subLayersComponentsMap: WeakMap<ILayer, AbstractCanvasComponent>;
 
-    constructor(layerHost: ILayerHost, layerParams: TRenderLayer) {
-        super(layerHost, layerParams);
+    constructor(layerHost: ILayerHost, params: TRenderLayer) {
+        super(layerHost, params);
         this.subLayers = [];
         this.subLayersRelativePosAndDimExtractorsMap = new WeakMap();
         this.subLayersComponentsMap = new WeakMap();
@@ -27,7 +27,7 @@ export abstract class AbstractCanvasStage extends AbstractCanvasBaseLayer implem
         return this.layerHost.getDisplayCanvas();
     }
 
-    public render(context: CanvasRenderingContext2D) {
+    public render(context: CanvasRenderingContext2D): void {
         super.render(context);
     }
 

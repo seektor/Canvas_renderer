@@ -20,7 +20,7 @@ export abstract class AbstractCanvasBaseLayer implements ILayer {
     protected dWidth: number;
     protected dHeight: number;
 
-    protected layerHost: ILayerHost;
+    public layerHost: ILayerHost;
 
     constructor(layerHost: ILayerHost, layerParams: TRenderLayer) {
         this.layerHost = layerHost;

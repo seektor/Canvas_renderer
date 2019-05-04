@@ -1,18 +1,20 @@
 import { AbstractCanvasModel } from './AbstractCanvasModel';
 import { AbstractCanvasViewport } from './AbstractCanvasViewport';
 import { ViewportCtor } from './interfaces/ViewportCtor';
-import { TViewportParams } from './structures/TViewportParams';
+import { TAbstractViewportParams, TViewportParams } from './structures/TViewportParams';
 import { ILayer } from './interfaces/ILayer';
 
 export abstract class AbstractCanvasComponent {
 
     protected abstract model: AbstractCanvasModel;
     protected abstract viewport: AbstractCanvasViewport;
-    protected abstract viewportCtor: ViewportCtor<AbstractCanvasViewport>;
+    private viewportCtor: ViewportCtor<AbstractCanvasViewport>;
 
-    constructor() { }
+    constructor(viewportCtor: ViewportCtor<AbstractCanvasViewport>) {
+        this.viewportCtor = viewportCtor;
+    }
 
-    public createViewport(params: TViewportParams) {
+    public createViewport(params: TViewportParams): void {
         if (this.viewport) {
             console.warn('Viewport already exists.');
             return;

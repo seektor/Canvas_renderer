@@ -1,5 +1,5 @@
 import { AbstractCanvasViewport } from '../../CanvasRenderer/AbstractCanvasViewport';
-import { TViewportParams } from '../../CanvasRenderer/structures/TViewportParams';
+import { TAbstractViewportParams, TViewportParams } from '../../CanvasRenderer/structures/TViewportParams';
 import ResizeService from '../../app/services/resizeService/ResizeService';
 import { CVerticalSliderMainStage } from './layers/CVerticalSliderMainStage';
 
@@ -8,13 +8,13 @@ export class CVerticalSliderViewport extends AbstractCanvasViewport {
     protected mainStage: CVerticalSliderMainStage;
 
     constructor(params: TViewportParams) {
-        super(params);
-        this.mainStage = new CVerticalSliderMainStage(this, this.getMainStagePosAndDim());
+        const abstractParams: TAbstractViewportParams<CVerticalSliderMainStage> = { ...params, mainStageCtor: (l, p) => new CVerticalSliderMainStage(l, p) }
+        super(abstractParams);
         this.setResizeService();
         this.renderMainStage();
     }
 
-    private setResizeService() {
+    private setResizeService(): void {
         if (!this.isHosted) {
             ResizeService.subscribeToWindow(this.container, () => requestAnimationFrame(() => {
                 this.onResize();

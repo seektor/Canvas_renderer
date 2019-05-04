@@ -1,16 +1,16 @@
-import { AbstractCanvasViewport } from "../../CanvasRenderer/AbstractCanvasViewport";
-import { TViewportParams } from "../../CanvasRenderer/structures/TViewportParams";
-import ResizeService from "../../app/services/resizeService/ResizeService";
-import { ILayerHost } from "../../CanvasRenderer/interfaces/ILayerHost";
-import { CFlatGridMainStage } from "./layers/CFlatGridMainStage";
+import { AbstractCanvasViewport } from '../../CanvasRenderer/AbstractCanvasViewport';
+import { TViewportParams, TAbstractViewportParams } from '../../CanvasRenderer/structures/TViewportParams';
+import ResizeService from '../../app/services/resizeService/ResizeService';
+import { ILayerHost } from '../../CanvasRenderer/interfaces/ILayerHost';
+import { CFlatGridMainStage } from './layers/CFlatGridMainStage';
 
 export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerHost {
 
     protected mainStage: CFlatGridMainStage;
 
     constructor(params: TViewportParams) {
-        super(params);
-        this.mainStage = new CFlatGridMainStage(this, this.getMainStagePosAndDim());
+        const abstractParams: TAbstractViewportParams<CFlatGridMainStage> = { ...params, mainStageCtor: (l, p) => new CFlatGridMainStage(l, p) }
+        super(abstractParams);
         this.setResizeService();
         this.renderMainStage();
     }
