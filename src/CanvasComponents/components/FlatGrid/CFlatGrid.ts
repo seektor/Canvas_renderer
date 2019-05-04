@@ -1,7 +1,7 @@
 import { CFlatGridModel } from './CFlatGridModel';
 import { CFlatGridViewport } from './CFlatGridViewport';
-import { AbstractCanvasComponent } from '../../CanvasRenderer/AbstractCanvasComponent';
-import { ViewportCtor } from '../../CanvasRenderer/interfaces/ViewportCtor';
+import { AbstractCanvasComponent } from '../../../CanvasRenderer/AbstractCanvasComponent';
+import { ViewportCtor } from '../../../CanvasRenderer/interfaces/ViewportCtor';
 
 export class CFlatGrid extends AbstractCanvasComponent {
 

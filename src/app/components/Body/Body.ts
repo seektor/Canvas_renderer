@@ -1,6 +1,6 @@
 import { Utils } from "../../utils/Utils";
 import { PointerEventHandler } from "../../../CanvasRenderer/utils/pointer-event-handler/PointerEventHandler";
-import { CFlatGrid } from "../../../CanvasComponents/FlatGrid/CFlatGrid";
+import { CFlatGrid } from "../../../CanvasComponents/components/FlatGrid/CFlatGrid";
 
 export class Body {
 

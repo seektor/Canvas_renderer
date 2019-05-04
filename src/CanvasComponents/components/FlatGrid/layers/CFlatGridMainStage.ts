@@ -1,10 +1,10 @@
-import { AbstractCanvasStage } from "../../../CanvasRenderer/AbstractCanvasStage";
-import { ILayerHost } from "../../../CanvasRenderer/interfaces/ILayerHost";
-import { TRenderLayer } from "../../../CanvasRenderer/structures/TRenderLayer";
-import { ILayer } from "../../../CanvasRenderer/interfaces/ILayer";
-import { CRectBaseLayer } from "../../testLayers/RectBaseLayer/CRectBaseLayer";
-import Colors from "../../../UIHelpers/Colors";
-import { ILayerPosAndDimExtractor } from "../../../CanvasRenderer/interfaces/ILayerPosAndDimExtractor";
+import { AbstractCanvasStage } from "../../../../CanvasRenderer/AbstractCanvasStage";
+import { ILayerHost } from "../../../../CanvasRenderer/interfaces/ILayerHost";
+import { TRenderLayer } from "../../../../CanvasRenderer/structures/TRenderLayer";
+import { ILayer } from "../../../../CanvasRenderer/interfaces/ILayer";
+import { CRectBaseLayer } from "../../../testLayers/RectBaseLayer/CRectBaseLayer";
+import Colors from "../../../../UIHelpers/Colors";
+import { ILayerPosAndDimExtractor } from "../../../../CanvasRenderer/interfaces/ILayerPosAndDimExtractor";
 import { CVerticalSlider } from "../../VerticalSlider/CVerticalSlider";
 
 export class CFlatGridMainStage extends AbstractCanvasStage {

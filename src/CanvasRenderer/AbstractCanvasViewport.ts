@@ -8,7 +8,7 @@ import { TStageParams } from './structures/TStageParams';
 import { TPosAndDim } from './structures/TPosAndDim';
 import { ILayerPosAndDimExtractor } from './interfaces/ILayerPosAndDimExtractor';
 import { PointerEventHandler } from './utils/pointer-event-handler/PointerEventHandler';
-import { CVerticalSliderMainStage } from '../CanvasComponents/VerticalSlider/layers/CVerticalSliderMainStage';
+import { CVerticalSliderMainStage } from '../CanvasComponents/components/VerticalSlider/layers/CVerticalSliderMainStage';
 
 export abstract class AbstractCanvasViewport implements ILayerHost {
 
