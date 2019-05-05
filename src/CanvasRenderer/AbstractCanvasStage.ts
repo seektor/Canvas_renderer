@@ -1,30 +1,19 @@
 import { ILayer } from './interfaces/ILayer';
 import { ILayerHost } from './interfaces/ILayerHost';
-import { AbstractCanvasBaseLayer } from './AbstractCanvasBaseLayer';
-import { TRenderLayer } from './structures/TRenderLayer';
-import { TPosAndDim } from './structures/TPosAndDim';
-import { ILayerPosAndDimExtractor } from './interfaces/ILayerPosAndDimExtractor';
+import { AbstractCanvasLayer } from './AbstractCanvasLayer';
+import { TLayer } from './structures/TLayer';
 import { AbstractCanvasComponent } from './AbstractCanvasComponent';
+import { AbstractCanvasModel } from './AbstractCanvasModel';
 
-export abstract class AbstractCanvasStage extends AbstractCanvasBaseLayer implements ILayerHost {
+export abstract class AbstractCanvasStage extends AbstractCanvasLayer implements ILayerHost {
 
     private subLayers: ILayer[];
-    private subLayersRelativePosAndDimExtractorsMap: WeakMap<ILayer, ILayerPosAndDimExtractor>;
     private subLayersComponentsMap: WeakMap<ILayer, AbstractCanvasComponent>;
 
-    constructor(layerHost: ILayerHost, params: TRenderLayer) {
-        super(layerHost, params);
+    constructor(layerHost: ILayerHost, model: AbstractCanvasModel, params: TLayer) {
+        super(layerHost, model, params);
         this.subLayers = [];
-        this.subLayersRelativePosAndDimExtractorsMap = new WeakMap();
         this.subLayersComponentsMap = new WeakMap();
-    }
-
-    public getContainerElement(): HTMLElement {
-        return this.layerHost.getContainerElement();
-    }
-
-    public getDisplayCanvas(): HTMLCanvasElement {
-        return this.layerHost.getDisplayCanvas();
     }
 
     public render(context: CanvasRenderingContext2D): void {
@@ -32,26 +21,19 @@ export abstract class AbstractCanvasStage extends AbstractCanvasBaseLayer implem
     }
 
     public onResize(): void {
-        this.updateLayerDimensions();
         this.subLayers.forEach(layer => layer.onResize());
         this.renderSelf();
     }
 
-    public getSubLayerRelativePosAndDim(subLayer: ILayer): TPosAndDim {
-        const layerExtractor: ILayerPosAndDimExtractor = this.subLayersRelativePosAndDimExtractorsMap.get(subLayer);
-        return layerExtractor(subLayer);
-    }
-
     protected abstract createLayers(): void;
 
-    protected addLayer(layer: ILayer, layerPositionExtractor: ILayerPosAndDimExtractor): void {
+    protected addLayer(layer: ILayer): void {
         this.subLayers.push(layer);
-        this.subLayersRelativePosAndDimExtractorsMap.set(layer, layerPositionExtractor);
     }
 
-    protected addComponent(component: AbstractCanvasComponent, layerPositionExtractor: ILayerPosAndDimExtractor): void {
+    protected addComponent(component: AbstractCanvasComponent): void {
         const layer: ILayer = component.getMainStage();
-        this.addLayer(layer, layerPositionExtractor);
+        this.addLayer(layer);
         this.subLayersComponentsMap.set(layer, component);
     }
 

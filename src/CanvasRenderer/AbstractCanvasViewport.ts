@@ -1,55 +1,44 @@
 import { AbstractCanvasStage } from './AbstractCanvasStage';
-import { ILayer } from './interfaces/ILayer';
 import { TDimensions } from './structures/TDimensions';
 import { Utils } from './utils/Utils';
 import { TAbstractViewportParams } from './structures/TViewportParams';
 import { ILayerHost } from './interfaces/ILayerHost';
-import { TStageParams } from './structures/TStageParams';
-import { TPosAndDim } from './structures/TPosAndDim';
-import { ILayerPosAndDimExtractor } from './interfaces/ILayerPosAndDimExtractor';
 import { PointerEventHandler } from './utils/pointer-event-handler/PointerEventHandler';
-import { CVerticalSliderMainStage } from '../CanvasComponents/components/VerticalSlider/layers/CVerticalSliderMainStage';
+import { AbstractCanvasModel } from './AbstractCanvasModel';
+import { TLayerRect } from './structures/TLayerRect';
+import { ILayerRectExtractor } from './interfaces/ILayerRectExtractor';
 
 export abstract class AbstractCanvasViewport implements ILayerHost {
 
     protected container: HTMLElement;
+    protected model: AbstractCanvasModel;
 
     protected isHosted: boolean;
     protected mainStage: AbstractCanvasStage;
     private displayCanvas: HTMLCanvasElement;
     private displayCanvasContext: CanvasRenderingContext2D;
-    private mainStagePosAndDimExtractor: ILayerPosAndDimExtractor;
+    private displayLayerRectExtractor: ILayerRectExtractor;
     private pointerEventHandler: PointerEventHandler;
 
-    constructor(params: TAbstractViewportParams<AbstractCanvasStage>) {
+    constructor(params: TAbstractViewportParams<AbstractCanvasStage, AbstractCanvasModel>) {
         this.container = params.container;
+        this.model = params.model;
+        this.model.setViewport(this);
         this.pointerEventHandler = new PointerEventHandler();
         this.construct(params);
         this.setBaseEvents();
-    }
-
-    public getSubLayerRelativePosAndDim(subLayer: ILayer): TPosAndDim {
-        return this.mainStagePosAndDimExtractor(subLayer);
-    }
-
-    public getDisplayCanvas(): HTMLCanvasElement {
-        return this.displayCanvas;
-    }
-
-    public getContainerElement(): HTMLElement {
-        return this.container;
     }
 
     public getMainStage(): AbstractCanvasStage {
         return this.mainStage;
     }
 
-    protected getContainerDimensions(): TDimensions {
-        return Utils.getElementDimensions(this.container);
+    public getDisplayLayerRect(): TLayerRect {
+        return this.displayLayerRectExtractor();
     }
 
-    protected getMainStagePosAndDim(): TPosAndDim {
-        return this.mainStagePosAndDimExtractor(this.mainStage);
+    protected getContainerDimensions(): TDimensions {
+        return Utils.getElementDimensions(this.container);
     }
 
     protected renderMainStage(): void {
@@ -64,19 +53,19 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         this.renderMainStage();
     }
 
-    private construct(params: TAbstractViewportParams<AbstractCanvasStage>): void {
-        if (params.stageParams) {
+    private construct(params: TAbstractViewportParams<AbstractCanvasStage, AbstractCanvasModel>): void {
+        if (params.hostingParams) {
             this.isHosted = true;
-            this.mainStagePosAndDimExtractor = () => params.stageParams.layerHost.getSubLayerRelativePosAndDim(this.mainStage);
-            this.displayCanvas = params.stageParams.displayCanvas;
+            this.displayLayerRectExtractor = params.hostingParams.displayLayerRectExtractor;
+            this.displayCanvas = params.hostingParams.displayCanvas;
             this.displayCanvasContext = this.displayCanvas.getContext('2d');
-            this.mainStage = params.mainStageCtor(params.stageParams.layerHost, params.stageParams.layerPosAndDim);
+            this.mainStage = params.mainStageCtor(params.hostingParams.layerHost, params.model, params.hostingParams.displayLayerRectExtractor());
         } else {
             this.isHosted = false;
             const containerDimensions: TDimensions = this.getContainerDimensions();
-            this.mainStagePosAndDimExtractor = (layer: ILayer) => ({ dX: 0, dY: 0, ...this.getContainerDimensions() });
+            this.displayLayerRectExtractor = () => ({ dX: 0, dY: 0, ...this.getContainerDimensions() });
             this.createDisplayCanvas(containerDimensions);
-            this.mainStage = params.mainStageCtor(this, { ...this.getContainerDimensions() });
+            this.mainStage = params.mainStageCtor(this, this.model, this.displayLayerRectExtractor());
             params.container.appendChild(this.displayCanvas);
         }
     }

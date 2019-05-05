@@ -1,6 +1,6 @@
 import { Utils } from '../../utils/Utils';
 import { PointerEventHandler } from '../../../CanvasRenderer/utils/pointer-event-handler/PointerEventHandler';
-import { CFlatGrid } from '../../../CanvasComponents/components/FlatGrid/CFlatGrid';
+import { CVerticalSlider } from '../../../CanvasComponents/components/VerticalSlider/CVerticalSlider';
 
 export class Body {
 
@@ -16,8 +16,10 @@ export class Body {
         // CommunicationService.setDataProvider(reduxTestDb.getStore());
         // CommunicationService.createAvgSummaryTable("main", "country", "price");
 
-        const canvasFlatGridComponent: CFlatGrid = new CFlatGrid();
-        canvasFlatGridComponent.createViewport({ container: this.bodyElement });
+        // const canvasFlatGridComponent: CFlatGrid = new CFlatGrid();
+        // canvasFlatGridComponent.createViewport({ container: this.bodyElement });
+        const verticalSliderComponent: CVerticalSlider = new CVerticalSlider();
+        verticalSliderComponent.createViewport(this.bodyElement);
     }
 
     private construct(container: HTMLElement): void {

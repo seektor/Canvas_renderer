@@ -1,14 +1,16 @@
 import { AbstractCanvasViewport } from '../../../CanvasRenderer/AbstractCanvasViewport';
 import { TAbstractViewportParams, TViewportParams } from '../../../CanvasRenderer/structures/TViewportParams';
 import ResizeService from '../../../app/services/resizeService/ResizeService';
-import { CVerticalSliderMainStage } from './layers/CVerticalSliderMainStage';
+import { CVerticalSliderMainStage } from './stages/CVerticalSliderMainStage';
+import { CVerticalSliderModel } from './CVerticalSliderModel';
 
 export class CVerticalSliderViewport extends AbstractCanvasViewport {
 
     protected mainStage: CVerticalSliderMainStage;
+    protected model: CVerticalSliderModel;
 
-    constructor(params: TViewportParams) {
-        const abstractParams: TAbstractViewportParams<CVerticalSliderMainStage> = { ...params, mainStageCtor: (l, p) => new CVerticalSliderMainStage(l, p) }
+    constructor(params: TViewportParams<CVerticalSliderModel>) {
+        const abstractParams: TAbstractViewportParams<CVerticalSliderMainStage, CVerticalSliderModel> = { ...params, mainStageCtor: (l, m, p) => new CVerticalSliderMainStage(l, m, p) };
         super(abstractParams);
         this.setResizeService();
         this.renderMainStage();

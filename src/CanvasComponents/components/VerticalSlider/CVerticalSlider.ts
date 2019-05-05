@@ -9,7 +9,7 @@ export class CVerticalSlider extends AbstractCanvasComponent {
     protected viewport: CVerticalSliderViewport;
 
     constructor() {
-        const viewportCtor: ViewportCtor<CVerticalSliderViewport> = (params) => new CVerticalSliderViewport(params);
+        const viewportCtor: ViewportCtor<CVerticalSliderViewport, CVerticalSliderModel> = (params) => new CVerticalSliderViewport(params);
         super(viewportCtor);
         this.model = new CVerticalSliderModel();
     }

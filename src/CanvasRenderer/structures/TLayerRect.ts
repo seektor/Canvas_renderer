@@ -1,4 +1,4 @@
-export interface TPosAndDim {
+export interface TLayerRect {
     dX: number;
     dY: number;
     width: number;

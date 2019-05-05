@@ -1,9 +1,9 @@
 import { ILayer } from './interfaces/ILayer';
-import { TRenderLayer } from './structures/TRenderLayer';
+import { TLayer } from './structures/TLayer';
 import { ILayerHost } from './interfaces/ILayerHost';
-import { TPosAndDim } from './structures/TPosAndDim';
+import { AbstractCanvasModel } from './AbstractCanvasModel';
 
-export abstract class AbstractCanvasBaseLayer implements ILayer {
+export abstract class AbstractCanvasLayer implements ILayer {
 
     protected layer: HTMLCanvasElement;
     protected layerContext: CanvasRenderingContext2D;
@@ -20,11 +20,14 @@ export abstract class AbstractCanvasBaseLayer implements ILayer {
     protected dWidth: number;
     protected dHeight: number;
 
+    protected model: AbstractCanvasModel;
     public layerHost: ILayerHost;
 
-    constructor(layerHost: ILayerHost, layerParams: TRenderLayer) {
+
+    constructor(layerHost: ILayerHost, model: AbstractCanvasModel, params: TLayer) {
         this.layerHost = layerHost;
-        this.initializeParameters(layerParams);
+        this.model = model;
+        this.initializeParameters(params);
         this.createDrawBufferCanvas();
     }
 
@@ -33,27 +36,36 @@ export abstract class AbstractCanvasBaseLayer implements ILayer {
     }
 
     public onResize(): void {
-        this.updateLayerDimensions();
-        this.renderSelf();
+
     }
 
-    protected updateLayerDimensions(): void {
-        const layerPosAndDim: TPosAndDim = this.layerHost.getSubLayerRelativePosAndDim(this);
-        this.layer.height = layerPosAndDim.height;
-        this.layer.width = layerPosAndDim.width;
-        this.layerHeight = layerPosAndDim.height;
-        this.layerWidth = layerPosAndDim.width;
-        this.dX = layerPosAndDim.dX;
-        this.dY = layerPosAndDim.dY;
-        this.sWidth = layerPosAndDim.width;
-        this.sHeight = layerPosAndDim.height;
-        this.dWidth = layerPosAndDim.width;
-        this.dHeight = layerPosAndDim.height;
+    protected updateLayer(params: TLayer, fitToView: boolean): void {
+        this.layer.height = params.height;
+        this.layer.width = params.width;
+        this.layerHeight = params.height;
+        this.layerWidth = params.width;
+        this.dX = params.dX;
+        this.dY = params.dY;
+        if (fitToView) {
+            this.sX = params.sX || 0;
+            this.sY = params.sY || 0;
+            this.sWidth = params.sWidth || params.width;
+            this.sHeight = params.sHeight || params.height;
+            this.dWidth = params.dWidth || params.width;
+            this.dHeight = params.dHeight || params.height;
+        } else {
+            this.sX = params.sX || this.sX;
+            this.sY = params.sY || this.sY;
+            this.sWidth = params.sWidth || this.sWidth;
+            this.sHeight = params.sHeight || this.sHeight;
+            this.dWidth = params.dWidth || this.dWidth;
+            this.dHeight = params.dHeight || this.dHeight;
+        }
     }
 
     protected abstract renderSelf(): void;
 
-    private initializeParameters(layerParameters: TRenderLayer): void {
+    private initializeParameters(layerParameters: TLayer): void {
         this.layerWidth = layerParameters.width;
         this.layerHeight = layerParameters.height;
         this.dX = layerParameters.dX || 0;
