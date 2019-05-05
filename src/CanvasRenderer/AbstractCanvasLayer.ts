@@ -1,7 +1,8 @@
 import { ILayer } from './interfaces/ILayer';
-import { TLayer } from './structures/TLayer';
+import { TLayerParams } from './structures/TLayerParams';
 import { ILayerHost } from './interfaces/ILayerHost';
 import { AbstractCanvasModel } from './AbstractCanvasModel';
+import { ILayerParamsExtractor } from './interfaces/ILayerParamsExtractor';
 
 export abstract class AbstractCanvasLayer implements ILayer {
 
@@ -22,12 +23,14 @@ export abstract class AbstractCanvasLayer implements ILayer {
 
     protected model: AbstractCanvasModel;
     public layerHost: ILayerHost;
+    protected layerParamsExtractor: ILayerParamsExtractor;
 
 
-    constructor(layerHost: ILayerHost, model: AbstractCanvasModel, params: TLayer) {
+    constructor(layerHost: ILayerHost, model: AbstractCanvasModel, layerParamsExtractor: ILayerParamsExtractor) {
         this.layerHost = layerHost;
         this.model = model;
-        this.initializeParameters(params);
+        this.layerParamsExtractor = layerParamsExtractor;
+        this.initializeParameters(layerParamsExtractor);
         this.createDrawBufferCanvas();
     }
 
@@ -36,10 +39,12 @@ export abstract class AbstractCanvasLayer implements ILayer {
     }
 
     public onResize(): void {
-
+        const layerParams: TLayerParams = this.layerParamsExtractor(this);
+        this.updateLayer(layerParams, true);
+        this.renderSelf();
     }
 
-    protected updateLayer(params: TLayer, fitToView: boolean): void {
+    protected updateLayer(params: TLayerParams, fitToView: boolean): void {
         this.layer.height = params.height;
         this.layer.width = params.width;
         this.layerHeight = params.height;
@@ -65,17 +70,18 @@ export abstract class AbstractCanvasLayer implements ILayer {
 
     protected abstract renderSelf(): void;
 
-    private initializeParameters(layerParameters: TLayer): void {
-        this.layerWidth = layerParameters.width;
-        this.layerHeight = layerParameters.height;
-        this.dX = layerParameters.dX || 0;
-        this.dY = layerParameters.dY || 0;
-        this.dHeight = layerParameters.dHeight || layerParameters.height;
-        this.dWidth = layerParameters.dWidth || layerParameters.width;
-        this.sX = layerParameters.sX || 0;
-        this.sY = layerParameters.sY || 0;
-        this.sHeight = layerParameters.sHeight || layerParameters.height;
-        this.sWidth = layerParameters.sWidth || layerParameters.width;
+    private initializeParameters(paramsExtractor: ILayerParamsExtractor): void {
+        const layerParams: TLayerParams = paramsExtractor(this);
+        this.layerWidth = layerParams.width;
+        this.layerHeight = layerParams.height;
+        this.dX = layerParams.dX || 0;
+        this.dY = layerParams.dY || 0;
+        this.dHeight = layerParams.dHeight || layerParams.height;
+        this.dWidth = layerParams.dWidth || layerParams.width;
+        this.sX = layerParams.sX || 0;
+        this.sY = layerParams.sY || 0;
+        this.sHeight = layerParams.sHeight || layerParams.height;
+        this.sWidth = layerParams.sWidth || layerParams.width;
     }
 
     private createDrawBufferCanvas(): void {

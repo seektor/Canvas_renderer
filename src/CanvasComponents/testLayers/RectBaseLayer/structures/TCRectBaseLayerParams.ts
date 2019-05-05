@@ -1,5 +1,5 @@
-import { TLayer } from "../../../../CanvasRenderer/structures/TLayer";
+import { TLayerParams } from "../../../../CanvasRenderer/structures/TLayerParams";
 
-export interface TCRectBaseLayerParams extends TLayer {
+export interface TCRectBaseLayerParams extends TLayerParams {
     backgroundColor: string;
 }

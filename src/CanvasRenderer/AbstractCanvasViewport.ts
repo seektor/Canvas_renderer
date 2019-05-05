@@ -6,7 +6,7 @@ import { ILayerHost } from './interfaces/ILayerHost';
 import { PointerEventHandler } from './utils/pointer-event-handler/PointerEventHandler';
 import { AbstractCanvasModel } from './AbstractCanvasModel';
 import { TLayerRect } from './structures/TLayerRect';
-import { ILayerRectExtractor } from './interfaces/ILayerRectExtractor';
+import { ILayerParamsExtractor } from './interfaces/ILayerParamsExtractor';
 
 export abstract class AbstractCanvasViewport implements ILayerHost {
 
@@ -17,7 +17,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     protected mainStage: AbstractCanvasStage;
     private displayCanvas: HTMLCanvasElement;
     private displayCanvasContext: CanvasRenderingContext2D;
-    private displayLayerRectExtractor: ILayerRectExtractor;
+    private displayLayerRectExtractor: ILayerParamsExtractor;
     private pointerEventHandler: PointerEventHandler;
 
     constructor(params: TAbstractViewportParams<AbstractCanvasStage, AbstractCanvasModel>) {
@@ -34,7 +34,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     }
 
     public getDisplayLayerRect(): TLayerRect {
-        return this.displayLayerRectExtractor();
+        return this.displayLayerRectExtractor(this.mainStage);
     }
 
     protected getContainerDimensions(): TDimensions {
@@ -59,13 +59,13 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
             this.displayLayerRectExtractor = params.hostingParams.displayLayerRectExtractor;
             this.displayCanvas = params.hostingParams.displayCanvas;
             this.displayCanvasContext = this.displayCanvas.getContext('2d');
-            this.mainStage = params.mainStageCtor(params.hostingParams.layerHost, params.model, params.hostingParams.displayLayerRectExtractor());
+            this.mainStage = params.mainStageCtor(params.hostingParams.layerHost, params.model, () => params.hostingParams.displayLayerRectExtractor(this.mainStage));
         } else {
             this.isHosted = false;
             const containerDimensions: TDimensions = this.getContainerDimensions();
             this.displayLayerRectExtractor = () => ({ dX: 0, dY: 0, ...this.getContainerDimensions() });
             this.createDisplayCanvas(containerDimensions);
-            this.mainStage = params.mainStageCtor(this, this.model, this.displayLayerRectExtractor());
+            this.mainStage = params.mainStageCtor(this, this.model, () => this.displayLayerRectExtractor(this.mainStage));
             params.container.appendChild(this.displayCanvas);
         }
     }

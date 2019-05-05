@@ -1,8 +1,8 @@
 import { ILayerHost } from '../interfaces/ILayerHost';
-import { ILayerRectExtractor } from '../interfaces/ILayerRectExtractor';
+import { ILayerParamsExtractor } from '../interfaces/ILayerParamsExtractor';
 
 export interface TLayerHostingParams {
     displayCanvas: HTMLCanvasElement;
     layerHost: ILayerHost;
-    displayLayerRectExtractor: ILayerRectExtractor;
+    displayLayerRectExtractor: ILayerParamsExtractor;
 }
