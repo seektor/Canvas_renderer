@@ -1,11 +1,28 @@
 import { TRect } from '../../structures/TRect';
 import { TCanvasStyles } from './structures/TCanvasStyles';
-import { TFillRectStyles, TRoundRectParams } from './structures/CanvasPainterTypes';
+import { TFillRectStyles, TRoundRectParams, TLineStyles } from './structures/CanvasPainterTypes';
+import { TCoords } from '../../structures/TCoords';
 
 export class BaseCanvasPainter {
 
+    public drawLines(ctx: CanvasRenderingContext2D, points: TCoords[], styles: Partial<TLineStyles>): void {
+        if (points.length === 0) {
+            return;
+        }
+        const savedStyles: Partial<TCanvasStyles> = this.extractStyles(ctx, Object.keys(styles) as Array<(keyof TCanvasStyles)>);
+        this.applyStyles(ctx, styles);
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+        points.forEach((point) => {
+            ctx.lineTo(point.x, point.y);
+        });
+        ctx.stroke();
+        this.applyStyles(ctx, savedStyles);
+    }
+
     public roundRect(ctx: CanvasRenderingContext2D, rect: TRect, radius: number, stroke: boolean, fill: boolean, styles: Partial<TRoundRectParams>): void {
         const savedStyles: Partial<TCanvasStyles> = this.extractStyles(ctx, Object.keys(styles) as Array<(keyof TCanvasStyles)>);
+        this.applyStyles(ctx, styles);
         const { x, y, width, height } = rect;
         ctx.beginPath();
         ctx.moveTo(x + radius, y);

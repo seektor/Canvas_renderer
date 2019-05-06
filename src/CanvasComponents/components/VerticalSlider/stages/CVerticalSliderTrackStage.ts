@@ -7,9 +7,9 @@ import Colors from '../../../../UIHelpers/Colors';
 import { CVerticalSliderModel } from '../CVerticalSliderModel';
 import { CVerticalSliderBaseLayer } from '../layers/CVerticalSliderBaseLayer';
 import { ILayerParamsExtractor } from '../../../../CanvasRenderer/interfaces/ILayerParamsExtractor';
-import { CVerticalSliderTrackStage } from './CVerticalSliderTrackStage';
+import { CVerticalSliderHandlerLayer } from '../layers/CVerticalSliderHandleLayer';
 
-export class CVerticalSliderMainStage extends AbstractCanvasStage {
+export class CVerticalSliderTrackStage extends AbstractCanvasStage {
 
     protected model: CVerticalSliderModel;
 
@@ -20,10 +20,7 @@ export class CVerticalSliderMainStage extends AbstractCanvasStage {
     }
 
     protected createLayers(): void {
-        const baseLayer: ILayer = new CVerticalSliderBaseLayer(this, this.model, (_layer) => this.model.getViewState().sliderRect);
-        this.addLayer(baseLayer);
-
-        const trackStage: ILayer = new CVerticalSliderTrackStage(this, this.model, (_layer) => this.model.getViewState().trackRect);
-        this.addLayer(trackStage);
+        const handleLayer: ILayer = new CVerticalSliderHandlerLayer(this, this.model, (_layer) => this.model.getViewState().handleRect);
+        this.addLayer(handleLayer);
     }
 }

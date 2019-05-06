@@ -23,7 +23,6 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     constructor(params: TAbstractViewportParams<AbstractCanvasStage, AbstractCanvasModel>) {
         this.container = params.container;
         this.model = params.model;
-        this.model.setViewport(this);
         this.pointerEventHandler = new PointerEventHandler();
         this.construct(params);
         this.setBaseEvents();
@@ -49,6 +48,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         const containerDimensions: TDimensions = this.getContainerDimensions();
         this.displayCanvas.width = containerDimensions.width;
         this.displayCanvas.height = containerDimensions.height;
+        this.model.onResize();
         this.mainStage.onResize();
         this.renderMainStage();
     }
@@ -59,15 +59,18 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
             this.displayLayerRectExtractor = params.hostingParams.displayLayerRectExtractor;
             this.displayCanvas = params.hostingParams.displayCanvas;
             this.displayCanvasContext = this.displayCanvas.getContext('2d');
+            this.model.setViewport(this);
             this.mainStage = params.mainStageCtor(params.hostingParams.layerHost, params.model, () => params.hostingParams.displayLayerRectExtractor(this.mainStage));
         } else {
             this.isHosted = false;
             const containerDimensions: TDimensions = this.getContainerDimensions();
             this.displayLayerRectExtractor = () => ({ dX: 0, dY: 0, ...this.getContainerDimensions() });
             this.createDisplayCanvas(containerDimensions);
+            this.model.setViewport(this);
             this.mainStage = params.mainStageCtor(this, this.model, () => this.displayLayerRectExtractor(this.mainStage));
             params.container.appendChild(this.displayCanvas);
         }
+        this.model.onMainStageCreation();
     }
 
     private createDisplayCanvas(dimensions: TDimensions): void {
