@@ -1,7 +1,7 @@
 import { AbstractCanvasViewport } from '../AbstractCanvasViewport';
-import { TViewportParams } from '../structures/TViewportParams';
+import { TCanvasViewportParams } from '../structures/TCanvasViewportParams';
 import { AbstractCanvasModel } from '../AbstractCanvasModel';
 
 export interface ViewportCtor<T extends AbstractCanvasViewport, U extends AbstractCanvasModel> {
-    (params: TViewportParams<U>): T;
+    (params: TCanvasViewportParams<U>): T;
 }

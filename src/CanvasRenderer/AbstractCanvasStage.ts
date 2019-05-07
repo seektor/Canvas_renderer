@@ -5,8 +5,11 @@ import { TLayerParams } from './structures/TLayerParams';
 import { AbstractCanvasComponent } from './AbstractCanvasComponent';
 import { AbstractCanvasModel } from './AbstractCanvasModel';
 import { ILayerParamsExtractor } from './interfaces/ILayerParamsExtractor';
+import { LayerType } from './structures/LayerType';
 
 export abstract class AbstractCanvasStage extends AbstractCanvasLayer implements ILayerHost {
+
+    public readonly type: LayerType = LayerType.Stage;
 
     private subLayers: ILayer[];
     private subLayersComponentsMap: WeakMap<ILayer, AbstractCanvasComponent>;
@@ -19,6 +22,10 @@ export abstract class AbstractCanvasStage extends AbstractCanvasLayer implements
 
     public render(context: CanvasRenderingContext2D): void {
         super.render(context);
+    }
+
+    public getSublayers(): ReadonlyArray<ILayer> {
+        return this.subLayers;
     }
 
     public onResize(): void {

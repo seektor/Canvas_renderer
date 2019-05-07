@@ -4,8 +4,13 @@ import { ILayerHost } from './interfaces/ILayerHost';
 import { AbstractCanvasModel } from './AbstractCanvasModel';
 import { ILayerParamsExtractor } from './interfaces/ILayerParamsExtractor';
 import { TRect } from './structures/TRect';
+import { LayerType } from './structures/LayerType';
+import { TCoords } from './structures/TCoords';
+import { TParentRelativeTranslations } from './structures/TParentRelativeTranslations';
 
 export abstract class AbstractCanvasLayer implements ILayer {
+
+    public readonly type: LayerType = LayerType.Base;
 
     protected layer: HTMLCanvasElement;
     protected layerContext: CanvasRenderingContext2D;
@@ -43,6 +48,10 @@ export abstract class AbstractCanvasLayer implements ILayer {
         const layerParams: TLayerParams = this.layerParamsExtractor(this);
         this.updateLayer(layerParams, true);
         this.renderSelf();
+    }
+
+    public getParentRelativeTranslations(): TParentRelativeTranslations {
+        return { dX: this.dX, dY: this.dY };
     }
 
     protected updateLayer(params: TLayerParams, fitToView: boolean): void {
@@ -114,6 +123,14 @@ export abstract class AbstractCanvasLayer implements ILayer {
             x: this.sX,
             y: this.sY
         }
+    }
+
+    private isBetween(value: number, min: number, max: number): boolean {
+        return value > min && value <= max;
+    }
+
+    public isPierced(coords: TCoords): boolean {
+        return this.isBetween(coords.x, this.sX, this.sX + this.sWidth) && this.isBetween(coords.y, this.sY, this.sY + this.sHeight);
     }
 
 }
