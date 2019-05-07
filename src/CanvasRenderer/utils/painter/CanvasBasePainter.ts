@@ -3,7 +3,7 @@ import { TCanvasStyles } from './structures/TCanvasStyles';
 import { TFillRectStyles, TRoundRectParams, TLineStyles } from './structures/CanvasPainterTypes';
 import { TCoords } from '../../structures/TCoords';
 
-export class BaseCanvasPainter {
+export class CanvasBasePainter {
 
     public drawLines(ctx: CanvasRenderingContext2D, points: TCoords[], styles: Partial<TLineStyles>): void {
         if (points.length === 0) {

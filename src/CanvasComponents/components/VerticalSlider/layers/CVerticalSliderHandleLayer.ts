@@ -1,15 +1,15 @@
 import { AbstractCanvasLayer } from '../../../../CanvasRenderer/AbstractCanvasLayer';
 import { CVerticalSliderModel } from '../CVerticalSliderModel';
 import { ILayerHost } from '../../../../CanvasRenderer/interfaces/ILayerHost';
-import { BaseCanvasPainter } from '../../../../CanvasRenderer/utils/painter/BaseCanvasPainter';
+import { CanvasBasePainter } from '../../../../CanvasRenderer/utils/painter/CanvasBasePainter';
 import { ILayerParamsExtractor } from '../../../../CanvasRenderer/interfaces/ILayerParamsExtractor';
-import { VerticalSliderCanvasPainter } from '../styles/VerticalSliderCanvasPainter';
+import { CVerticalSliderPainter } from '../styles/CVerticalSliderPainter';
 import { TVerticalSliderViewState } from '../structures/TVerticalSliderViewState';
 
 export class CVerticalSliderHandlerLayer extends AbstractCanvasLayer {
 
     protected model: CVerticalSliderModel;
-    private painter: VerticalSliderCanvasPainter;
+    private painter: CVerticalSliderPainter;
 
     constructor(layerHost: ILayerHost, model: CVerticalSliderModel, layerParamsExtractor: ILayerParamsExtractor) {
         super(layerHost, model, layerParamsExtractor);
@@ -18,7 +18,6 @@ export class CVerticalSliderHandlerLayer extends AbstractCanvasLayer {
     }
 
     public renderSelf(): void {
-        const viewState: TVerticalSliderViewState = this.model.getViewState();
-        this.painter.drawHandle(this.layerContext, { height: this.layerHeight, width: this.layerWidth, x: this.sX, y: this.sY });
+        this.painter.drawHandle(this.layerContext, this.getLayerRect());
     }
 }

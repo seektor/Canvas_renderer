@@ -1,30 +1,30 @@
-{
-    "rules": {
-        "typedef": [
-            true,
-            "call-signature"
-        ],
-        "quotemark": [
-            true,
-            "single"
-        ],
-        "no-unused-variable": true,
-        "member-ordering": [
-            true,
-            {
-                "order": [
-                    "public-static-field",
-                    "public-instance-field",
-                    "private-static-field",
-                    "private-instance-field",
-                    "public-constructor",
-                    "private-constructor",
-                    "public-instance-method",
-                    "protected-instance-method",
-                    "private-instance-method"
-                ],
-                "alphabetize": false
-            }
-        ]
-    }
-}
+// {
+//     "rules": {
+//         "typedef": [
+//             true,
+//             "call-signature"
+//         ],
+//         "quotemark": [
+//             true,
+//             "single"
+//         ],
+//         "no-unused-variable": true,
+//         "member-ordering": [
+//             true,
+//             {
+//                 "order": [
+//                     "public-static-field",
+//                     "public-instance-field",
+//                     "private-static-field",
+//                     "private-instance-field",
+//                     "public-constructor",
+//                     "private-constructor",
+//                     "public-instance-method",
+//                     "protected-instance-method",
+//                     "private-instance-method"
+//                 ],
+//                 "alphabetize": false
+//             }
+//         ]
+//     }
+// }

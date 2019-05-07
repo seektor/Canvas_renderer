@@ -1,11 +1,11 @@
-import { BaseCanvasPainter } from '../../../../CanvasRenderer/utils/painter/BaseCanvasPainter';
+import { CanvasBasePainter } from '../../../../CanvasRenderer/utils/painter/CanvasBasePainter';
 import { TVerticalSliderStyles } from './VerticalSliderStyles';
 import { TRect } from '../../../../CanvasRenderer/structures/TRect';
 import { Direction } from '../../../../CanvasRenderer/structures/Direction';
 import { TLineStyles } from '../../../../CanvasRenderer/utils/painter/structures/CanvasPainterTypes';
 import { TCoords } from '../../../../CanvasRenderer/structures/TCoords';
 
-export class VerticalSliderCanvasPainter extends BaseCanvasPainter {
+export class CVerticalSliderPainter extends CanvasBasePainter {
 
     private styles: TVerticalSliderStyles;
 
@@ -14,15 +14,20 @@ export class VerticalSliderCanvasPainter extends BaseCanvasPainter {
         this.styles = styles;
     }
 
-    public drawBackground(ctx: CanvasRenderingContext2D, rect: TRect, borderWidth: number): void {
+    public getSliderBorderWidth(displayWidth: number): number {
+        return Math.round(displayWidth * 0.2);
+    }
+
+    public drawBackground(ctx: CanvasRenderingContext2D, rect: TRect): void {
         const radius: number = Math.round(rect.width * 0.5);
+        const borderWidth: number = this.getSliderBorderWidth(rect.width);
         this.roundRect(ctx, rect, radius, false, true, { fillStyle: this.styles.colorBackground });
         this.roundRect(ctx, {
             x: rect.x + borderWidth,
             y: rect.y + borderWidth,
             height: rect.height - borderWidth * 2,
             width: rect.width - borderWidth * 2,
-        }, radius * 0.8, false, true, { fillStyle: this.styles.colorTrack });
+        }, radius * 0.6, false, true, { fillStyle: this.styles.colorTrack });
     }
 
     public drawHandle(ctx: CanvasRenderingContext2D, rect: TRect): void {
@@ -34,9 +39,9 @@ export class VerticalSliderCanvasPainter extends BaseCanvasPainter {
     }
 
     public drawArrowButton(ctx: CanvasRenderingContext2D, rect: TRect, direction: Direction.Up | Direction.Down): void {
-        const horizontalPadding: number = Math.round(rect.width * 0.8);
+        const horizontalPadding: number = this.getSliderBorderWidth(rect.width);
         const pointerPadding: number = Math.round(rect.height * 0.4);
-        const contraryPointerPadding: number = Math.round(rect.height * 0.2);
+        const contraryPointerPadding: number = Math.round(rect.height * 0.25);
         const styles: Partial<TLineStyles> = {
             strokeStyle: this.styles.colorInteractiveElement_2,
             lineWidth: 2

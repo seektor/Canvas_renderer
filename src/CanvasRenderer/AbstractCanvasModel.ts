@@ -1,11 +1,11 @@
 import { AbstractCanvasViewport } from './AbstractCanvasViewport';
 import { TLayerRect } from './structures/TLayerRect';
-import { BaseCanvasPainter } from './utils/painter/BaseCanvasPainter';
+import { CanvasBasePainter } from './utils/painter/CanvasBasePainter';
 
 export abstract class AbstractCanvasModel {
 
     protected viewport: AbstractCanvasViewport;
-    protected canvasPainter: BaseCanvasPainter;
+    protected canvasPainter: CanvasBasePainter;
 
     public setViewport(viewport: AbstractCanvasViewport): void {
         this.viewport = viewport;
@@ -20,9 +20,9 @@ export abstract class AbstractCanvasModel {
         return this.viewport.getDisplayLayerRect();
     }
 
-    public getCanvasPainter(): BaseCanvasPainter {
+    public getCanvasPainter(): CanvasBasePainter {
         if (!this.canvasPainter) {
-            this.canvasPainter = new BaseCanvasPainter();
+            this.canvasPainter = new CanvasBasePainter();
         }
         return this.canvasPainter;
     }

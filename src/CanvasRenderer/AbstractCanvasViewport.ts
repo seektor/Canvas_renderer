@@ -7,6 +7,7 @@ import { PointerEventHandler } from './utils/pointer-event-handler/PointerEventH
 import { AbstractCanvasModel } from './AbstractCanvasModel';
 import { TLayerRect } from './structures/TLayerRect';
 import { ILayerParamsExtractor } from './interfaces/ILayerParamsExtractor';
+import { TLayerParams } from './structures/TLayerParams';
 
 export abstract class AbstractCanvasViewport implements ILayerHost {
 
@@ -33,7 +34,8 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     }
 
     public getDisplayLayerRect(): TLayerRect {
-        return this.displayLayerRectExtractor(this.mainStage);
+        const displayLayerParams: TLayerParams = this.displayLayerRectExtractor(this.mainStage);
+        return { height: displayLayerParams.height, width: displayLayerParams.width, y: displayLayerParams.dY, x: displayLayerParams.dX };
     }
 
     protected getContainerDimensions(): TDimensions {

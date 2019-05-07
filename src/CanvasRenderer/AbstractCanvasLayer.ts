@@ -3,6 +3,7 @@ import { TLayerParams } from './structures/TLayerParams';
 import { ILayerHost } from './interfaces/ILayerHost';
 import { AbstractCanvasModel } from './AbstractCanvasModel';
 import { ILayerParamsExtractor } from './interfaces/ILayerParamsExtractor';
+import { TRect } from './structures/TRect';
 
 export abstract class AbstractCanvasLayer implements ILayer {
 
@@ -95,6 +96,24 @@ export abstract class AbstractCanvasLayer implements ILayer {
 
     private drawImage(context: CanvasRenderingContext2D): void {
         context.drawImage(this.layer, this.sX, this.sY, this.sWidth, this.sHeight, this.dX, this.dY, this.dWidth, this.dHeight);
+    }
+
+    protected getLayerRect(): TRect {
+        return {
+            height: this.layerHeight,
+            width: this.layerWidth,
+            x: 0,
+            y: 0
+        }
+    }
+
+    protected getLayerRenderRect(): TRect {
+        return {
+            height: this.sHeight,
+            width: this.sWidth,
+            x: this.sX,
+            y: this.sY
+        }
     }
 
 }

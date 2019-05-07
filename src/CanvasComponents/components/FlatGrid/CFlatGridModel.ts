@@ -1,5 +1,5 @@
-// import { AbstractCanvasModel } from '../../../CanvasRenderer/AbstractCanvasModel';
+import { AbstractCanvasModel } from '../../../CanvasRenderer/AbstractCanvasModel';
 
-// export class CFlatGridModel extends AbstractCanvasModel {
+export class CFlatGridModel extends AbstractCanvasModel {
 
-// }
+}

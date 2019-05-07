@@ -1,24 +1,25 @@
 import { AbstractCanvasLayer } from '../../../../CanvasRenderer/AbstractCanvasLayer';
-import { CVerticalSliderModel } from '../CVerticalSliderModel';
 import { ILayerHost } from '../../../../CanvasRenderer/interfaces/ILayerHost';
 import { ILayerParamsExtractor } from '../../../../CanvasRenderer/interfaces/ILayerParamsExtractor';
-import { CVerticalSliderPainter } from '../styles/CVerticalSliderPainter';
-import { TVerticalSliderViewState } from '../structures/TVerticalSliderViewState';
 import { Direction } from '../../../../CanvasRenderer/structures/Direction';
 import { TLayerRect } from '../../../../CanvasRenderer/structures/TLayerRect';
+import { CFlatGridModel } from '../CFlatGridModel';
+import { CanvasBasePainter } from '../../../../CanvasRenderer/utils/painter/CanvasBasePainter';
 
-export class CVerticalSliderBaseLayer extends AbstractCanvasLayer {
+export class CFlatGridHeaderLayer extends AbstractCanvasLayer {
 
-    protected model: CVerticalSliderModel;
-    private painter: CVerticalSliderPainter;
+    protected model: CFlatGridModel;
+    private painter: CanvasBasePainter;
 
-    constructor(layerHost: ILayerHost, model: CVerticalSliderModel, layerParamsExtractor: ILayerParamsExtractor) {
+    constructor(layerHost: ILayerHost, model: CFlatGridModel, layerParamsExtractor: ILayerParamsExtractor) {
         super(layerHost, model, layerParamsExtractor);
         this.painter = this.model.getCanvasPainter();
         this.renderSelf();
     }
 
     public renderSelf(): void {
-        this.painter.drawBackground(this.layerContext, this.getLayerRect());
+        this.painter.fillRect(this.layerContext, { y: this.sY, x: this.sX, height: this.layerHeight, width: this.layerWidth }, {
+            fillStyle: "blue"
+        })
     }
 }

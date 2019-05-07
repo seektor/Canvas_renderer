@@ -20,7 +20,12 @@ export class CVerticalSliderTrackStage extends AbstractCanvasStage {
     }
 
     protected createLayers(): void {
-        const handleLayer: ILayer = new CVerticalSliderHandlerLayer(this, this.model, (_layer) => this.model.getViewState().handleRect);
+        const handleLayer: ILayer = new CVerticalSliderHandlerLayer(this, this.model, (_layer) => ({
+            dX: 0,
+            dY: 0,
+            height: this.layerHeight * 0.25,
+            width: this.layerWidth
+        }));
         this.addLayer(handleLayer);
     }
 }
