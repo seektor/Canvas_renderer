@@ -38,12 +38,12 @@ export class CVerticalSliderPainter extends CanvasBasePainter {
         this.roundRect(ctx, rect, radius, false, true, { fillStyle: gradient });
     }
 
-    public drawArrowButton(ctx: CanvasRenderingContext2D, rect: TRect, direction: Direction.Up | Direction.Down): void {
+    public drawArrowButton(ctx: CanvasRenderingContext2D, rect: TRect, direction: Direction.Up | Direction.Down, active?: boolean): void {
         const horizontalPadding: number = this.getSliderBorderWidth(rect.width);
         const pointerPadding: number = Math.round(rect.height * 0.4);
         const contraryPointerPadding: number = Math.round(rect.height * 0.25);
         const styles: Partial<TLineStyles> = {
-            strokeStyle: this.styles.colorInteractiveElement_2,
+            strokeStyle: active ? this.styles.colorInteractiveElement_1 : this.styles.colorInteractiveElement_2,
             lineWidth: 2
         };
         const point0: TCoords = {

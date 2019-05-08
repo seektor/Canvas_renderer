@@ -6,6 +6,7 @@ import { AbstractCanvasComponent } from './AbstractCanvasComponent';
 import { AbstractCanvasModel } from './AbstractCanvasModel';
 import { ILayerParamsExtractor } from './interfaces/ILayerParamsExtractor';
 import { LayerType } from './structures/LayerType';
+import { ILayerViewport } from './interfaces/ILayerViewport';
 
 export abstract class AbstractCanvasStage extends AbstractCanvasLayer implements ILayerHost {
 
@@ -14,8 +15,8 @@ export abstract class AbstractCanvasStage extends AbstractCanvasLayer implements
     private subLayers: ILayer[];
     private subLayersComponentsMap: WeakMap<ILayer, AbstractCanvasComponent>;
 
-    constructor(layerHost: ILayerHost, model: AbstractCanvasModel, layerParamsExtractor: ILayerParamsExtractor) {
-        super(layerHost, model, layerParamsExtractor);
+    constructor(layerHost: ILayerHost, globalViewport: ILayerViewport, model: AbstractCanvasModel, layerParamsExtractor: ILayerParamsExtractor) {
+        super(layerHost, globalViewport, model, layerParamsExtractor);
         this.subLayers = [];
         this.subLayersComponentsMap = new WeakMap();
     }

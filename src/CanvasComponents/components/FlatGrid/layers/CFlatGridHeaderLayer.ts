@@ -11,8 +11,8 @@ export class CFlatGridHeaderLayer extends AbstractCanvasLayer {
     protected model: CFlatGridModel;
     private painter: CanvasBasePainter;
 
-    constructor(layerHost: ILayerHost, model: CFlatGridModel, layerParamsExtractor: ILayerParamsExtractor) {
-        super(layerHost, model, layerParamsExtractor);
+    constructor(layerHost: ILayerHost, globalViewport, model: CFlatGridModel, layerParamsExtractor: ILayerParamsExtractor) {
+        super(layerHost, globalViewport, model, layerParamsExtractor);
         this.painter = this.model.getCanvasPainter();
         this.renderSelf();
     }

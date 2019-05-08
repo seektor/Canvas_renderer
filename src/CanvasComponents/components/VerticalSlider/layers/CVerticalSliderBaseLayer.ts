@@ -6,14 +6,15 @@ import { CVerticalSliderPainter } from '../styles/CVerticalSliderPainter';
 import { TVerticalSliderViewState } from '../structures/TVerticalSliderViewState';
 import { Direction } from '../../../../CanvasRenderer/structures/Direction';
 import { TLayerRect } from '../../../../CanvasRenderer/structures/TLayerRect';
+import { ILayerViewport } from '../../../../CanvasRenderer/interfaces/ILayerViewport';
 
 export class CVerticalSliderBaseLayer extends AbstractCanvasLayer {
 
     protected model: CVerticalSliderModel;
     private painter: CVerticalSliderPainter;
 
-    constructor(layerHost: ILayerHost, model: CVerticalSliderModel, layerParamsExtractor: ILayerParamsExtractor) {
-        super(layerHost, model, layerParamsExtractor);
+    constructor(layerHost: ILayerHost, globalViewport: ILayerViewport, model: CVerticalSliderModel, layerParamsExtractor: ILayerParamsExtractor) {
+        super(layerHost, globalViewport, model, layerParamsExtractor);
         this.painter = this.model.getCanvasPainter();
         this.renderSelf();
     }

@@ -1,26 +1,23 @@
 import { AbstractCanvasStage } from '../../../../CanvasRenderer/AbstractCanvasStage';
 import { ILayerHost } from '../../../../CanvasRenderer/interfaces/ILayerHost';
-import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
 import { ILayer } from '../../../../CanvasRenderer/interfaces/ILayer';
-import { CRectBaseLayer } from '../../../testLayers/RectBaseLayer/CRectBaseLayer';
-import Colors from '../../../../UIHelpers/Colors';
 import { CVerticalSliderModel } from '../CVerticalSliderModel';
-import { CVerticalSliderBaseLayer } from '../layers/CVerticalSliderBaseLayer';
 import { ILayerParamsExtractor } from '../../../../CanvasRenderer/interfaces/ILayerParamsExtractor';
 import { CVerticalSliderHandlerLayer } from '../layers/CVerticalSliderHandleLayer';
+import { ILayerViewport } from '../../../../CanvasRenderer/interfaces/ILayerViewport';
 
 export class CVerticalSliderTrackStage extends AbstractCanvasStage {
 
     protected model: CVerticalSliderModel;
 
-    constructor(layerHost: ILayerHost, model: CVerticalSliderModel, layerParamsExtractor: ILayerParamsExtractor) {
-        super(layerHost, model, layerParamsExtractor);
+    constructor(layerHost: ILayerHost, globalViewport: ILayerViewport, model: CVerticalSliderModel, layerParamsExtractor: ILayerParamsExtractor) {
+        super(layerHost, globalViewport, model, layerParamsExtractor);
         this.createLayers();
         this.renderSelf();
     }
 
     protected createLayers(): void {
-        const handleLayer: ILayer = new CVerticalSliderHandlerLayer(this, this.model, (_layer) => ({
+        const handleLayer: ILayer = new CVerticalSliderHandlerLayer(this, this.globalViewport, this.model, (_layer) => ({
             dX: 0,
             dY: 0,
             height: this.layerHeight * 0.25,

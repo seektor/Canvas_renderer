@@ -5,6 +5,8 @@ import { ILayerParamsExtractor } from '../../../../CanvasRenderer/interfaces/ILa
 import { CVerticalSliderPainter } from '../styles/CVerticalSliderPainter';
 import { Direction } from '../../../../CanvasRenderer/structures/Direction';
 import { TVerticalSliderButtonParams } from '../structures/TVerticalSliderButtonParams';
+import { CursorType } from '../../../../CanvasRenderer/structures/CursorType';
+import { ILayerViewport } from '../../../../CanvasRenderer/interfaces/ILayerViewport';
 
 export class CVerticalSliderButtonLayer extends AbstractCanvasLayer {
 
@@ -12,14 +14,24 @@ export class CVerticalSliderButtonLayer extends AbstractCanvasLayer {
     private painter: CVerticalSliderPainter;
     private direction: Direction.Up | Direction.Down;
 
-    constructor(layerHost: ILayerHost, model: CVerticalSliderModel, layerParamsExtractor: ILayerParamsExtractor, params: TVerticalSliderButtonParams) {
-        super(layerHost, model, layerParamsExtractor);
+    constructor(layerHost: ILayerHost, globalViewport: ILayerViewport, model: CVerticalSliderModel, layerParamsExtractor: ILayerParamsExtractor, params: TVerticalSliderButtonParams) {
+        super(layerHost, globalViewport, model, layerParamsExtractor);
         this.direction = params.direction;
         this.painter = this.model.getCanvasPainter();
-        this.renderSelf();
+        this.renderSelf(false);
     }
 
-    public renderSelf(): void {
-        this.painter.drawArrowButton(this.layerContext, this.getLayerRect(), this.direction);
+    public renderSelf(isActive: boolean): void {
+        this.painter.drawArrowButton(this.layerContext, this.getLayerRect(), this.direction, isActive);
+    }
+
+    public onActionEnter() {
+        this.painter.drawArrowButton(this.layerContext, this.getLayerRect(), this.direction, true);
+        this.globalViewport.setCursor(CursorType.Pointer);
+    }
+
+    public onActionOut() {
+        this.painter.drawArrowButton(this.layerContext, this.getLayerRect(), this.direction, false);
+        this.globalViewport.setCursor(CursorType.Auto);
     }
 }

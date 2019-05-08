@@ -7,6 +7,7 @@ import { TRect } from './structures/TRect';
 import { LayerType } from './structures/LayerType';
 import { TCoords } from './structures/TCoords';
 import { TLayerCoords } from './structures/TLayerCoords';
+import { ILayerViewport } from './interfaces/ILayerViewport';
 
 export abstract class AbstractCanvasLayer implements ILayer {
 
@@ -27,13 +28,14 @@ export abstract class AbstractCanvasLayer implements ILayer {
     protected dWidth: number;
     protected dHeight: number;
 
-    protected model: AbstractCanvasModel;
     public layerHost: ILayerHost;
+    protected model: AbstractCanvasModel;
+    protected globalViewport: ILayerViewport;
     protected layerParamsExtractor: ILayerParamsExtractor;
 
-
-    constructor(layerHost: ILayerHost, model: AbstractCanvasModel, layerParamsExtractor: ILayerParamsExtractor) {
+    constructor(layerHost: ILayerHost, globalViewport: ILayerViewport, model: AbstractCanvasModel, layerParamsExtractor: ILayerParamsExtractor) {
         this.layerHost = layerHost;
+        this.globalViewport = globalViewport;
         this.model = model;
         this.layerParamsExtractor = layerParamsExtractor;
         this.initializeParameters(layerParamsExtractor);
@@ -50,7 +52,7 @@ export abstract class AbstractCanvasLayer implements ILayer {
         this.renderSelf();
     }
 
-    public getParentRelativeTranslations(): TLayerCoords {
+    public getParentRelativeCoords(): TLayerCoords {
         return { x: this.dX, y: this.dY };
     }
 
@@ -78,7 +80,7 @@ export abstract class AbstractCanvasLayer implements ILayer {
         }
     }
 
-    protected abstract renderSelf(): void;
+    protected abstract renderSelf(...params: unknown[]): void;
 
     private initializeParameters(paramsExtractor: ILayerParamsExtractor): void {
         const layerParams: TLayerParams = paramsExtractor(this);
@@ -131,6 +133,26 @@ export abstract class AbstractCanvasLayer implements ILayer {
 
     public isPierced(coords: TCoords): boolean {
         return this.isBetween(coords.x, this.sX, this.sX + this.sWidth) && this.isBetween(coords.y, this.sY, this.sY + this.sHeight);
+    }
+
+    public onActionEnter(coords: TCoords): void {
+
+    };
+
+    public onActionStart(coords: TCoords): void {
+
+    }
+
+    public onActionMove(coords: TCoords): void {
+
+    }
+
+    public onActionEnd(coords: TCoords): void {
+
+    }
+
+    public onActionOut(): void {
+
     }
 
 }

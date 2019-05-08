@@ -3,15 +3,14 @@ import { ILayerHost } from '../../../../CanvasRenderer/interfaces/ILayerHost';
 import { ILayer } from '../../../../CanvasRenderer/interfaces/ILayer';
 import { CFlatGridModel } from '../CFlatGridModel';
 import { ILayerParamsExtractor } from '../../../../CanvasRenderer/interfaces/ILayerParamsExtractor';
-import { CFlatGridHeaderLayer } from '../layers/CFlatGridHeaderLayer';
-import { CFLatGridStage } from './CFlatGridStage';
+import { ILayerViewport } from '../../../../CanvasRenderer/interfaces/ILayerViewport';
 
 export class CFlatGridMainStage extends AbstractCanvasStage {
 
     protected model: CFlatGridModel;
 
-    constructor(layerHost: ILayerHost, model: CFlatGridModel, layerParamsExtractor: ILayerParamsExtractor) {
-        super(layerHost, model, layerParamsExtractor);
+    constructor(layerHost: ILayerHost, globalViewport: ILayerViewport, model: CFlatGridModel, layerParamsExtractor: ILayerParamsExtractor) {
+        super(layerHost, globalViewport, model, layerParamsExtractor);
         this.createLayers();
         this.renderSelf();
     }

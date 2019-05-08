@@ -4,12 +4,12 @@ import { CanvasBasePainter } from './utils/painter/CanvasBasePainter';
 
 export abstract class AbstractCanvasModel {
 
-    protected viewport: AbstractCanvasViewport;
+    protected ownViewport: AbstractCanvasViewport;
     protected canvasPainter: CanvasBasePainter;
 
     public setViewport(viewport: AbstractCanvasViewport): void {
-        this.viewport = viewport;
-        this.onViewportInit();
+        this.ownViewport = viewport;
+        this.onGlobalViewportInit();
     }
 
     public onMainStageCreation(): void { }
@@ -17,7 +17,7 @@ export abstract class AbstractCanvasModel {
     public onResize(): void { };
 
     public getDisplayRect(): TLayerRect {
-        return this.viewport.getDisplayLayerRect();
+        return this.ownViewport.getDisplayLayerRect();
     }
 
     public getCanvasPainter(): CanvasBasePainter {
@@ -27,7 +27,7 @@ export abstract class AbstractCanvasModel {
         return this.canvasPainter;
     }
 
-    protected onViewportInit(): void { };
+    protected onGlobalViewportInit(): void { };
 
 
 }
