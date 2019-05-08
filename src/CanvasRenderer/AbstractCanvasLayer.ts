@@ -6,7 +6,7 @@ import { ILayerParamsExtractor } from './interfaces/ILayerParamsExtractor';
 import { TRect } from './structures/TRect';
 import { LayerType } from './structures/LayerType';
 import { TCoords } from './structures/TCoords';
-import { TParentRelativeTranslations } from './structures/TParentRelativeTranslations';
+import { TLayerCoords } from './structures/TLayerCoords';
 
 export abstract class AbstractCanvasLayer implements ILayer {
 
@@ -50,8 +50,8 @@ export abstract class AbstractCanvasLayer implements ILayer {
         this.renderSelf();
     }
 
-    public getParentRelativeTranslations(): TParentRelativeTranslations {
-        return { dX: this.dX, dY: this.dY };
+    public getParentRelativeTranslations(): TLayerCoords {
+        return { x: this.dX, y: this.dY };
     }
 
     protected updateLayer(params: TLayerParams, fitToView: boolean): void {

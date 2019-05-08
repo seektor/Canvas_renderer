@@ -15,7 +15,9 @@ import { TCoords } from './structures/TCoords';
 import { ILayer } from './interfaces/ILayer';
 import { LayerType } from './structures/LayerType';
 import { IStage } from './interfaces/IStage';
-import { TParentRelativeTranslations } from './structures/TParentRelativeTranslations';
+import { TLayerCoords } from './structures/TLayerCoords';
+import { TLayerPlacement } from './structures/TLayerPlacement';
+import { LayerRelativity } from './structures/LayerRelativity';
 
 export abstract class AbstractCanvasViewport implements ILayerHost {
 
@@ -27,15 +29,18 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     private displayCanvas: HTMLCanvasElement;
     private displayCanvasContext: CanvasRenderingContext2D;
     private displayLayerRectExtractor: ILayerParamsExtractor;
-    private pointerEventHandler: PointerEventHandler;
     private eventsData: TCanvasViewportEventsData;
 
     constructor(params: TAbstractCanvasViewportParams<AbstractCanvasStage, AbstractCanvasModel>) {
         this.container = params.container;
         this.model = params.model;
-        this.pointerEventHandler = new PointerEventHandler();
+        this.bindMethods();
         this.construct(params);
         this.setBaseEvents();
+    }
+
+    private bindMethods(): void {
+        this.onActionMove = this.onActionMove.bind(this);
     }
 
     public getMainStage(): AbstractCanvasStage {
@@ -106,34 +111,44 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         return arg.type === LayerType.Stage;
     }
 
-    private getTopActiveLayerFromCoords(coords: TCoords): ILayer {
-        let topActivePlane: ILayer = this.mainStage;
-        const visitor: (layers: ReadonlyArray<ILayer>, layerCoords: TCoords) => void = (layers, layerCoords) => {
+    private findTopActiveLayerDataFromCoords(coords: TCoords): TLayerPlacement {
+        let topLayerPlacement: TLayerPlacement = {
+            layer: this.mainStage,
+            relativity: LayerRelativity.MainViewport,
+            x: coords.x,
+            y: coords.y
+        }
+        const layerExtractor: (layers: ReadonlyArray<ILayer>, layerCoords: TCoords) => void = (layers, layerCoords) => {
             for (let i = layers.length - 1; i >= 0; i--) {
                 const layer: ILayer = layers[i];
-                const rTranslations: TParentRelativeTranslations = layer.getParentRelativeTranslations();
-                const localCoords: TCoords = { x: layerCoords.x - rTranslations.dX, y: layerCoords.y - rTranslations.dY };
+                const rTranslations: TLayerCoords = layer.getParentRelativeTranslations();
+                const localCoords: TCoords = { x: layerCoords.x - rTranslations.x, y: layerCoords.y - rTranslations.y };
                 if (layer.isPierced(localCoords)) {
+                    topLayerPlacement.layer = layer;
+                    topLayerPlacement.x = coords.x - localCoords.x;
+                    topLayerPlacement.y = coords.y - localCoords.y;
                     if (this.isStage(layer)) {
-                        topActivePlane = layer;
-                        visitor(layer.getSublayers(), localCoords);
-                    } else {
-                        topActivePlane = layer;
+                        layerExtractor(layer.getSublayers(), localCoords);
                     }
                     break;
                 }
             }
         }
-        visitor([topActivePlane], coords);
-        return topActivePlane;
+        layerExtractor([topLayerPlacement.layer], coords);
+        return topLayerPlacement;
     }
 
     private setBaseEvents(): void {
-        const mapToDisplayCoords: (e: SyntheticEvent) => TCoords = (e: SyntheticEvent) => ({ x: e.clientX - this.eventsData.displayOffsetLeft, y: e.clientY - this.eventsData.displayOffsetTop });
-        this.pointerEventHandler.addEventListener(this.displayCanvas, PointerEventType.ActionMove, (e) => {
-            const displayCoords: TCoords = mapToDisplayCoords(e);
-            console.log(this.getTopActiveLayerFromCoords(displayCoords));
-        })
+        this.displayCanvas.addEventListener('mousemove', this.onActionMove);
+    }
+
+    private mapToDisplayCoords(e: MouseEvent): TCoords {
+        return { x: e.clientX - this.eventsData.displayOffsetLeft, y: e.clientY - this.eventsData.displayOffsetTop };
+    }
+
+    private onActionMove(e: MouseEvent): void {
+        const displayCoords: TCoords = this.mapToDisplayCoords(e);
+        const layerPlacement: TLayerPlacement = this.findTopActiveLayerDataFromCoords(displayCoords);
     }
 
 }
