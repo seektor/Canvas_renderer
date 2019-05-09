@@ -12,7 +12,6 @@ export class CFlatGridMainStage extends AbstractCanvasStage {
     constructor(layerHost: ILayerHost, globalViewport: ILayerViewport, model: CFlatGridModel, layerParamsExtractor: ILayerParamsExtractor) {
         super(layerHost, globalViewport, model, layerParamsExtractor);
         this.createLayers();
-        this.renderSelf();
     }
 
     protected createLayers(): void {

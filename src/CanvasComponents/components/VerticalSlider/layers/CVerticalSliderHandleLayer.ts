@@ -7,7 +7,7 @@ import { CVerticalSliderPainter } from '../styles/CVerticalSliderPainter';
 import { TVerticalSliderViewState } from '../structures/TVerticalSliderViewState';
 import { ILayerViewport } from '../../../../CanvasRenderer/interfaces/ILayerViewport';
 
-export class CVerticalSliderHandlerLayer extends AbstractCanvasLayer {
+export class CVerticalSliderHandleLayer extends AbstractCanvasLayer {
 
     protected model: CVerticalSliderModel;
     private painter: CVerticalSliderPainter;
@@ -20,5 +20,6 @@ export class CVerticalSliderHandlerLayer extends AbstractCanvasLayer {
 
     public renderSelf(): void {
         this.painter.drawHandle(this.layerContext, this.getLayerRect());
+        this.notifyRenderChanges();
     }
 }

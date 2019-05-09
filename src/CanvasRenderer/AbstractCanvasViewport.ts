@@ -3,14 +3,11 @@ import { TDimensions } from './structures/TDimensions';
 import { Utils } from './utils/Utils';
 import { TAbstractCanvasViewportParams } from './structures/TCanvasViewportParams';
 import { ILayerHost } from './interfaces/ILayerHost';
-import { PointerEventHandler } from './utils/pointer-event-handler/PointerEventHandler';
 import { AbstractCanvasModel } from './AbstractCanvasModel';
 import { TLayerRect } from './structures/TLayerRect';
 import { ILayerParamsExtractor } from './interfaces/ILayerParamsExtractor';
 import { TLayerParams } from './structures/TLayerParams';
-import { PointerEventType } from './utils/pointer-event-handler/structures/PointerEventType';
 import { TCanvasViewportEventsData } from './structures/TCanvasViewportEventsData';
-import { SyntheticEvent } from './utils/pointer-event-handler/structures/SyntheticEvent';
 import { TCoords } from './structures/TCoords';
 import { ILayer } from './interfaces/ILayer';
 import { LayerType } from './structures/LayerType';
@@ -19,6 +16,7 @@ import { TLayerCoords } from './structures/TLayerCoords';
 import { TLayerPlacement } from './structures/TLayerPlacement';
 import { LayerRelativity } from './structures/LayerRelativity';
 import { CursorType } from './structures/CursorType';
+import Colors from '../UIHelpers/Colors';
 
 export abstract class AbstractCanvasViewport implements ILayerHost {
 
@@ -31,10 +29,13 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     private displayCanvasContext: CanvasRenderingContext2D;
     private displayLayerRectExtractor: ILayerParamsExtractor;
     private eventsData: TCanvasViewportEventsData;
+    private hasRenderChanges: boolean;
 
     constructor(params: TAbstractCanvasViewportParams<AbstractCanvasStage, AbstractCanvasModel>) {
         this.container = params.container;
         this.model = params.model;
+        this.hasRenderChanges = true;
+
         this.bindMethods();
         this.construct(params);
         this.setBaseEvents();
@@ -63,7 +64,11 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     }
 
     protected renderMainStage(): void {
-        this.mainStage.render(this.displayCanvasContext);
+        console.log("%c ===== RENDER MAIN STAGE =====", `color: ${Colors.GREEN}`);
+        if (this.hasRenderChanges) {
+            this.mainStage.render(this.displayCanvasContext);
+            this.hasRenderChanges = false;
+        }
     }
 
     protected onResize(): void {
@@ -98,6 +103,10 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         };
         this.updateEventsData();
         this.model.onMainStageCreation();
+    }
+
+    public notifyRenderChanges() {
+        this.hasRenderChanges = true;
     }
 
     private createDisplayCanvas(dimensions: TDimensions): void {
@@ -169,6 +178,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
             this.eventsData.topActiveLayerPlacement = currentLayerPlacement;
         }
         currentLayerPlacement.layer.onActionMove(currentLayerPlacement);
+        this.renderMainStage();
     }
 
     private onActionEnd(e: MouseEvent): void {
@@ -181,5 +191,6 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         this.eventsData.topActiveLayerPlacement.layer = this.mainStage;
         this.eventsData.topActiveLayerPlacement.x = 0;
         this.eventsData.topActiveLayerPlacement.y = 0;
+        this.renderMainStage();
     }
 }

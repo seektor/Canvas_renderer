@@ -23,15 +23,16 @@ export class CVerticalSliderButtonLayer extends AbstractCanvasLayer {
 
     public renderSelf(isActive: boolean): void {
         this.painter.drawArrowButton(this.layerContext, this.getLayerRect(), this.direction, isActive);
+        this.notifyRenderChanges();
     }
 
     public onActionEnter() {
-        this.painter.drawArrowButton(this.layerContext, this.getLayerRect(), this.direction, true);
+        this.renderSelf(true);
         this.globalViewport.setCursor(CursorType.Pointer);
     }
 
     public onActionOut() {
-        this.painter.drawArrowButton(this.layerContext, this.getLayerRect(), this.direction, false);
+        this.renderSelf(false);
         this.globalViewport.setCursor(CursorType.Auto);
     }
 }

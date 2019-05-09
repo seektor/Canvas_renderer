@@ -22,7 +22,6 @@ export class CVerticalSliderMainStage extends AbstractCanvasStage {
         super(layerHost, globalViewport, model, layerParamsExtractor);
         this.painter = this.model.getCanvasPainter();
         this.createLayers();
-        this.renderSelf();
     }
 
     private getMainStageLayerParams(): TLayerParams {

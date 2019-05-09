@@ -8,6 +8,7 @@ import { LayerType } from './structures/LayerType';
 import { TCoords } from './structures/TCoords';
 import { TLayerCoords } from './structures/TLayerCoords';
 import { ILayerViewport } from './interfaces/ILayerViewport';
+import Colors from '../UIHelpers/Colors';
 
 export abstract class AbstractCanvasLayer implements ILayer {
 
@@ -106,6 +107,7 @@ export abstract class AbstractCanvasLayer implements ILayer {
     }
 
     private drawImage(context: CanvasRenderingContext2D): void {
+        console.log(`%c Drawing: ${this.constructor.name}`, `color: ${Colors.BLUE}`);
         context.drawImage(this.layer, this.sX, this.sY, this.sWidth, this.sHeight, this.dX, this.dY, this.dWidth, this.dHeight);
     }
 
@@ -129,6 +131,10 @@ export abstract class AbstractCanvasLayer implements ILayer {
 
     private isBetween(value: number, min: number, max: number): boolean {
         return value > min && value <= max;
+    }
+
+    protected notifyRenderChanges(): void {
+        this.layerHost.notifyRenderChanges();
     }
 
     public isPierced(coords: TCoords): boolean {
