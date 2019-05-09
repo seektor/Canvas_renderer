@@ -10,7 +10,7 @@ export class CVerticalSliderViewport extends AbstractCanvasViewport {
     protected model: CVerticalSliderModel;
 
     constructor(params: TCanvasViewportParams<CVerticalSliderModel>) {
-        const abstractParams: TAbstractCanvasViewportParams<CVerticalSliderMainStage, CVerticalSliderModel> = { ...params, mainStageCtor: (l, gv, m, p) => new CVerticalSliderMainStage(l, gv, m, p) };
+        const abstractParams: TAbstractCanvasViewportParams<CVerticalSliderMainStage, CVerticalSliderModel> = { ...params, mainStageCtor: (p) => new CVerticalSliderMainStage(p) };
         super(abstractParams);
         this.setResizeService();
         this.renderMainStage();

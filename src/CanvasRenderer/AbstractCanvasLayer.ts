@@ -1,5 +1,5 @@
 import { ILayer } from './interfaces/ILayer';
-import { TLayerParams } from './structures/TLayerParams';
+import { TLayerRenderParams } from './structures/TLayerRenderParams';
 import { ILayerHost } from './interfaces/ILayerHost';
 import { AbstractCanvasModel } from './AbstractCanvasModel';
 import { ILayerParamsExtractor } from './interfaces/ILayerParamsExtractor';
@@ -9,6 +9,8 @@ import { TCoords } from './structures/TCoords';
 import { TLayerCoords } from './structures/TLayerCoords';
 import { ILayerViewport } from './interfaces/ILayerViewport';
 import Colors from '../UIHelpers/Colors';
+import { TDeltas } from './structures/TDeltas';
+import { TLayerParams } from './structures/TLayerParams';
 
 export abstract class AbstractCanvasLayer implements ILayer {
 
@@ -34,12 +36,12 @@ export abstract class AbstractCanvasLayer implements ILayer {
     protected globalViewport: ILayerViewport;
     protected layerParamsExtractor: ILayerParamsExtractor;
 
-    constructor(layerHost: ILayerHost, globalViewport: ILayerViewport, model: AbstractCanvasModel, layerParamsExtractor: ILayerParamsExtractor) {
-        this.layerHost = layerHost;
-        this.globalViewport = globalViewport;
-        this.model = model;
-        this.layerParamsExtractor = layerParamsExtractor;
-        this.initializeParameters(layerParamsExtractor);
+    constructor(params: TLayerParams<AbstractCanvasModel, unknown>) {
+        this.layerHost = params.layerHost;
+        this.globalViewport = params.globalViewport;
+        this.model = params.model;
+        this.layerParamsExtractor = params.layerParamsExtractor;
+        this.initializeParameters(params.layerParamsExtractor);
         this.createDrawBufferCanvas();
     }
 
@@ -48,7 +50,7 @@ export abstract class AbstractCanvasLayer implements ILayer {
     }
 
     public onResize(): void {
-        const layerParams: TLayerParams = this.layerParamsExtractor(this);
+        const layerParams: TLayerRenderParams = this.layerParamsExtractor(this);
         this.updateLayer(layerParams, true);
         this.renderSelf();
     }
@@ -57,7 +59,7 @@ export abstract class AbstractCanvasLayer implements ILayer {
         return { x: this.dX, y: this.dY };
     }
 
-    protected updateLayer(params: TLayerParams, fitToView: boolean): void {
+    protected updateLayer(params: TLayerRenderParams, fitToView: boolean): void {
         this.layer.height = params.height;
         this.layer.width = params.width;
         this.layerHeight = params.height;
@@ -84,7 +86,7 @@ export abstract class AbstractCanvasLayer implements ILayer {
     protected abstract renderSelf(...params: unknown[]): void;
 
     private initializeParameters(paramsExtractor: ILayerParamsExtractor): void {
-        const layerParams: TLayerParams = paramsExtractor(this);
+        const layerParams: TLayerRenderParams = paramsExtractor(this);
         this.layerWidth = layerParams.width;
         this.layerHeight = layerParams.height;
         this.dX = layerParams.dX || 0;
@@ -151,6 +153,10 @@ export abstract class AbstractCanvasLayer implements ILayer {
 
     public onActionMove(coords: TCoords): void {
 
+    }
+
+    public onActionDrag(deltas: TDeltas): void {
+        console.log(deltas);
     }
 
     public onActionEnd(coords: TCoords): void {

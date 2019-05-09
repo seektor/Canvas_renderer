@@ -10,5 +10,5 @@ export interface TCanvasViewportParams<T extends AbstractCanvasModel> {
 }
 
 export interface TAbstractCanvasViewportParams<T extends AbstractCanvasStage, U extends AbstractCanvasModel> extends TCanvasViewportParams<U> {
-    mainStageCtor: LayerCtor<T, U>;
+    mainStageCtor: LayerCtor<T, U, null>;
 }

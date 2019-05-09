@@ -5,14 +5,15 @@ import { Direction } from '../../../../CanvasRenderer/structures/Direction';
 import { TLayerRect } from '../../../../CanvasRenderer/structures/TLayerRect';
 import { CFlatGridModel } from '../CFlatGridModel';
 import { CanvasBasePainter } from '../../../../CanvasRenderer/utils/painter/CanvasBasePainter';
+import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
 
 export class CFlatGridHeaderLayer extends AbstractCanvasLayer {
 
     protected model: CFlatGridModel;
     private painter: CanvasBasePainter;
 
-    constructor(layerHost: ILayerHost, globalViewport, model: CFlatGridModel, layerParamsExtractor: ILayerParamsExtractor) {
-        super(layerHost, globalViewport, model, layerParamsExtractor);
+    constructor(params: TLayerParams<CFlatGridModel, unknown>) {
+        super(params);
         this.painter = this.model.getCanvasPainter();
         this.renderSelf();
     }

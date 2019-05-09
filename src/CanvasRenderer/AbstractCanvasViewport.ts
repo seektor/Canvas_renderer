@@ -6,7 +6,7 @@ import { ILayerHost } from './interfaces/ILayerHost';
 import { AbstractCanvasModel } from './AbstractCanvasModel';
 import { TLayerRect } from './structures/TLayerRect';
 import { ILayerParamsExtractor } from './interfaces/ILayerParamsExtractor';
-import { TLayerParams } from './structures/TLayerParams';
+import { TLayerRenderParams } from './structures/TLayerRenderParams';
 import { TCanvasViewportEventsData } from './structures/TCanvasViewportEventsData';
 import { TCoords } from './structures/TCoords';
 import { ILayer } from './interfaces/ILayer';
@@ -42,7 +42,9 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     }
 
     private bindMethods(): void {
+        this.onActionStart = this.onActionStart.bind(this);
         this.onActionMove = this.onActionMove.bind(this);
+        this.onActionEnd = this.onActionEnd.bind(this);
         this.onViewportOut = this.onViewportOut.bind(this);
     }
 
@@ -51,7 +53,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     }
 
     public getDisplayLayerRect(): TLayerRect {
-        const displayLayerParams: TLayerParams = this.displayLayerRectExtractor(this.mainStage);
+        const displayLayerParams: TLayerRenderParams = this.displayLayerRectExtractor(this.mainStage);
         return { height: displayLayerParams.height, width: displayLayerParams.width, y: displayLayerParams.dY, x: displayLayerParams.dX };
     }
 
@@ -88,18 +90,21 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
             this.displayCanvas = params.hostingParams.displayCanvas;
             this.displayCanvasContext = this.displayCanvas.getContext('2d');
             this.model.setViewport(this);
-            this.mainStage = params.mainStageCtor(params.hostingParams.layerHost, this, params.model, () => params.hostingParams.displayLayerRectExtractor(this.mainStage));
+            this.mainStage = params.mainStageCtor({ layerHost: params.hostingParams.layerHost, globalViewport: this, model: params.model, layerParamsExtractor: () => params.hostingParams.displayLayerRectExtractor(this.mainStage) });
         } else {
             this.isHosted = false;
             const containerDimensions: TDimensions = this.getContainerDimensions();
             this.displayLayerRectExtractor = () => ({ dX: 0, dY: 0, ...this.getContainerDimensions() });
             this.createDisplayCanvas(containerDimensions);
             this.model.setViewport(this);
-            this.mainStage = params.mainStageCtor(this, this, this.model, () => this.displayLayerRectExtractor(this.mainStage));
+            this.mainStage = params.mainStageCtor({ layerHost: this, globalViewport: this, model: this.model, layerParamsExtractor: () => this.displayLayerRectExtractor(this.mainStage) });
             params.container.appendChild(this.displayCanvas);
         }
         this.eventsData = {
-            displayOffsetLeft: 0, displayOffsetTop: 0, topActiveLayerPlacement: { layer: this.mainStage, ...this.mainStage.getParentRelativeCoords() }
+            displayOffsetLeft: 0,
+            displayOffsetTop: 0,
+            topActiveLayerPlacement: { layer: this.mainStage, ...this.mainStage.getParentRelativeCoords() },
+            actionStartLayer: null
         };
         this.updateEventsData();
         this.model.onMainStageCreation();
@@ -156,7 +161,9 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     }
 
     private setBaseEvents(): void {
+        this.displayCanvas.addEventListener('mousedown', this.onActionStart);
         this.displayCanvas.addEventListener('mousemove', this.onActionMove);
+        this.displayCanvas.addEventListener('mouseup', this.onActionEnd);
         this.displayCanvas.addEventListener('mouseout', this.onViewportOut);
     }
 
@@ -167,6 +174,12 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     private onActionStart(e: MouseEvent): void {
         const displayCoords: TCoords = this.mapToDisplayCoords(e);
         const layerPlacement: TLayerPlacement = this.findTopActiveLayerDataFromCoords(displayCoords);
+        this.eventsData.actionStartLayer = {
+            layer: layerPlacement.layer,
+            relativity: LayerRelativity.MainViewport,
+            x: displayCoords.x,
+            y: displayCoords.y
+        };
     }
 
     private onActionMove(e: MouseEvent): void {
@@ -174,16 +187,20 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         const currentLayerPlacement: TLayerPlacement = this.findTopActiveLayerDataFromCoords(displayCoords);
         if (this.eventsData.topActiveLayerPlacement.layer !== currentLayerPlacement.layer) {
             this.eventsData.topActiveLayerPlacement.layer.onActionOut();
-            currentLayerPlacement.layer.onActionEnter(displayCoords);
+            currentLayerPlacement.layer.onActionEnter(currentLayerPlacement);
             this.eventsData.topActiveLayerPlacement = currentLayerPlacement;
         }
         currentLayerPlacement.layer.onActionMove(currentLayerPlacement);
+        if (this.eventsData.actionStartLayer) {
+            currentLayerPlacement.layer.onActionDrag({ dX: displayCoords.x - this.eventsData.actionStartLayer.x, dY: displayCoords.y - this.eventsData.actionStartLayer.y });
+        }
         this.renderMainStage();
     }
 
     private onActionEnd(e: MouseEvent): void {
         const displayCoords: TCoords = this.mapToDisplayCoords(e);
         const layerPlacement: TLayerPlacement = this.findTopActiveLayerDataFromCoords(displayCoords);
+        this.eventsData.actionStartLayer = null;
     }
 
     private onViewportOut(): void {

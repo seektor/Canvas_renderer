@@ -4,4 +4,5 @@ export interface TCanvasViewportEventsData {
     displayOffsetLeft: number;
     displayOffsetTop: number;
     topActiveLayerPlacement: TLayerPlacement;
+    actionStartLayer: TLayerPlacement;
 }

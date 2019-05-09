@@ -1,6 +1,6 @@
 import { ILayer } from './ILayer';
-import { TLayerParams } from '../structures/TLayerParams';
+import { TLayerRenderParams } from '../structures/TLayerRenderParams';
 
 export interface ILayerParamsExtractor {
-    (layer: ILayer | undefined): TLayerParams;
+    (layer: ILayer | undefined): TLayerRenderParams;
 }

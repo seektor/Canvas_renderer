@@ -1,12 +1,12 @@
-export interface TLayerParams {
-    width: number;
-    height: number;
-    sX?: number;
-    sY?: number;
-    sWidth?: number;
-    sHeight?: number;
-    dX: number;
-    dY: number;
-    dWidth?: number;
-    dHeight?: number;
+import { ILayerHost } from "../interfaces/ILayerHost";
+import { ILayerViewport } from "../interfaces/ILayerViewport";
+import { AbstractCanvasModel } from "../AbstractCanvasModel";
+import { ILayerParamsExtractor } from "../interfaces/ILayerParamsExtractor";
+
+export interface TLayerParams<T extends AbstractCanvasModel, U> {
+    layerHost: ILayerHost;
+    globalViewport: ILayerViewport;
+    model: T;
+    layerParamsExtractor: ILayerParamsExtractor;
+    config?: U
 }

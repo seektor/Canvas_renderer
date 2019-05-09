@@ -1,13 +1,12 @@
 import { ILayer } from './interfaces/ILayer';
 import { ILayerHost } from './interfaces/ILayerHost';
 import { AbstractCanvasLayer } from './AbstractCanvasLayer';
-import { TLayerParams } from './structures/TLayerParams';
+import { TLayerRenderParams } from './structures/TLayerRenderParams';
 import { AbstractCanvasComponent } from './AbstractCanvasComponent';
-import { AbstractCanvasModel } from './AbstractCanvasModel';
-import { ILayerParamsExtractor } from './interfaces/ILayerParamsExtractor';
 import { LayerType } from './structures/LayerType';
-import { ILayerViewport } from './interfaces/ILayerViewport';
 import Colors from '../UIHelpers/Colors';
+import { TLayerParams } from './structures/TLayerParams';
+import { AbstractCanvasModel } from './AbstractCanvasModel';
 
 export abstract class AbstractCanvasStage extends AbstractCanvasLayer implements ILayerHost {
 
@@ -17,8 +16,8 @@ export abstract class AbstractCanvasStage extends AbstractCanvasLayer implements
     private subLayersComponentsMap: WeakMap<ILayer, AbstractCanvasComponent>;
     private hasRenderChanges: boolean;
 
-    constructor(layerHost: ILayerHost, globalViewport: ILayerViewport, model: AbstractCanvasModel, layerParamsExtractor: ILayerParamsExtractor) {
-        super(layerHost, globalViewport, model, layerParamsExtractor);
+    constructor(params: TLayerParams<AbstractCanvasModel, unknown>) {
+        super(params);
         this.hasRenderChanges = true;
         this.subLayers = [];
         this.subLayersComponentsMap = new WeakMap();
@@ -39,7 +38,7 @@ export abstract class AbstractCanvasStage extends AbstractCanvasLayer implements
     }
 
     public onResize(): void {
-        const layerParams: TLayerParams = this.layerParamsExtractor(this);
+        const layerParams: TLayerRenderParams = this.layerParamsExtractor(this);
         this.updateLayer(layerParams, true);
         this.subLayers.forEach(layer => layer.onResize());
         this.renderSelf(true);

@@ -1,12 +1,10 @@
 import { AbstractCanvasLayer } from '../../../../CanvasRenderer/AbstractCanvasLayer';
 import { CVerticalSliderModel } from '../CVerticalSliderModel';
-import { ILayerHost } from '../../../../CanvasRenderer/interfaces/ILayerHost';
-import { ILayerParamsExtractor } from '../../../../CanvasRenderer/interfaces/ILayerParamsExtractor';
 import { CVerticalSliderPainter } from '../styles/CVerticalSliderPainter';
 import { Direction } from '../../../../CanvasRenderer/structures/Direction';
 import { TVerticalSliderButtonParams } from '../structures/TVerticalSliderButtonParams';
 import { CursorType } from '../../../../CanvasRenderer/structures/CursorType';
-import { ILayerViewport } from '../../../../CanvasRenderer/interfaces/ILayerViewport';
+import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
 
 export class CVerticalSliderButtonLayer extends AbstractCanvasLayer {
 
@@ -14,9 +12,9 @@ export class CVerticalSliderButtonLayer extends AbstractCanvasLayer {
     private painter: CVerticalSliderPainter;
     private direction: Direction.Up | Direction.Down;
 
-    constructor(layerHost: ILayerHost, globalViewport: ILayerViewport, model: CVerticalSliderModel, layerParamsExtractor: ILayerParamsExtractor, params: TVerticalSliderButtonParams) {
-        super(layerHost, globalViewport, model, layerParamsExtractor);
-        this.direction = params.direction;
+    constructor(params: TLayerParams<CVerticalSliderModel, TVerticalSliderButtonParams>) {
+        super(params);
+        this.direction = params.config.direction;
         this.painter = this.model.getCanvasPainter();
         this.renderSelf(false);
     }
