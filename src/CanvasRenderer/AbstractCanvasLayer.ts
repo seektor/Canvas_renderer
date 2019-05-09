@@ -114,16 +114,15 @@ export abstract class AbstractCanvasLayer implements ILayer {
     }
 
     private drawImage(context: CanvasRenderingContext2D): void {
-        console.log(`%c Drawing: ${this.constructor.name}`, `color: ${Colors.BLUE}`);
         context.drawImage(this.layer, this.sX, this.sY, this.sWidth, this.sHeight, this.dX, this.dY, this.dWidth, this.dHeight);
     }
 
-    protected getLayerRect(): TRect {
+    public getLayerRect(): TRect {
         return {
             height: this.layerHeight,
             width: this.layerWidth,
-            x: 0,
-            y: 0
+            x: this.dX,
+            y: this.dY
         }
     }
 
@@ -148,28 +147,18 @@ export abstract class AbstractCanvasLayer implements ILayer {
         return this.isBetween(coords.x, this.sX, this.sX + this.sWidth) && this.isBetween(coords.y, this.sY, this.sY + this.sHeight);
     }
 
-    public onActionEnter(coords: TCoords): void {
+    public onActionEnter(coords: TCoords): void { };
 
-    };
+    public onActionStart(coords: TCoords): void { }
 
-    public onActionStart(coords: TCoords): void {
+    public onActionMove(coords: TCoords): void { }
 
-    }
+    public onActionDrag(deltas: TDeltas): void { }
 
-    public onActionMove(coords: TCoords): void {
+    public onActionEnd(coords: TCoords): void { }
 
-    }
+    public onActionOut(): void { }
 
-    public onActionDrag(deltas: TDeltas): void {
-        console.log(deltas);
-    }
-
-    public onActionEnd(coords: TCoords): void {
-
-    }
-
-    public onActionOut(): void {
-
-    }
+    public onViewportOut(): void { }
 
 }

@@ -12,4 +12,12 @@ export class Utils {
     public static noop(): void {
         return undefined;
     }
+
+    public static logMessage(message: string, color: string): void {
+        console.log(`%c ${message}`, `color: ${color}`);
+    }
+
+    public static clampValue(value: number, min: number, max: number): number {
+        return Math.min(Math.max(value, min), max);
+    }
 }

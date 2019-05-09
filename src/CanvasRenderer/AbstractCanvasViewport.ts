@@ -52,7 +52,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         return this.mainStage;
     }
 
-    public getDisplayLayerRect(): TLayerRect {
+    public getLayerRect(): TLayerRect {
         const displayLayerParams: TLayerRenderParams = this.displayLayerRectExtractor(this.mainStage);
         return { height: displayLayerParams.height, width: displayLayerParams.width, y: displayLayerParams.dY, x: displayLayerParams.dX };
     }
@@ -66,7 +66,6 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     }
 
     protected renderMainStage(): void {
-        console.log("%c ===== RENDER MAIN STAGE =====", `color: ${Colors.GREEN}`);
         if (this.hasRenderChanges) {
             this.mainStage.render(this.displayCanvasContext);
             this.hasRenderChanges = false;
@@ -104,7 +103,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
             displayOffsetLeft: 0,
             displayOffsetTop: 0,
             topActiveLayerPlacement: { layer: this.mainStage, ...this.mainStage.getParentRelativeCoords() },
-            actionStartLayer: null
+            actionStartLayer: null,
         };
         this.updateEventsData();
         this.model.onMainStageCreation();
@@ -185,6 +184,8 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     }
 
     private onActionMove(e: MouseEvent): void {
+        Utils.logMessage('===== Action Move =====', Colors.GREEN);
+        console.time("Action Move time");
         const displayCoords: TCoords = this.mapToDisplayCoords(e);
         const layerPlacement: TParentRelativeLayerPlacement = this.findTopActiveLayerDataFromCoords(displayCoords);
         if (this.eventsData.topActiveLayerPlacement.layer !== layerPlacement.layer) {
@@ -194,9 +195,10 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         }
         layerPlacement.layer.onActionMove(layerPlacement);
         if (this.eventsData.actionStartLayer) {
-            layerPlacement.layer.onActionDrag({ dX: displayCoords.x - this.eventsData.actionStartLayer.x, dY: displayCoords.y - this.eventsData.actionStartLayer.y });
+            this.eventsData.actionStartLayer.layer.onActionDrag({ dX: displayCoords.x - this.eventsData.actionStartLayer.x, dY: displayCoords.y - this.eventsData.actionStartLayer.y });
         }
         this.renderMainStage();
+        console.timeEnd("Action Move time");
     }
 
     private onActionEnd(e: MouseEvent): void {
@@ -206,10 +208,11 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     }
 
     private onViewportOut(): void {
-        this.eventsData.topActiveLayerPlacement.layer.onActionOut();
+        this.eventsData.topActiveLayerPlacement.layer.onViewportOut();
         this.eventsData.topActiveLayerPlacement.layer = this.mainStage;
         this.eventsData.topActiveLayerPlacement.x = 0;
         this.eventsData.topActiveLayerPlacement.y = 0;
+        this.eventsData.actionStartLayer = null;
         this.renderMainStage();
     }
 }

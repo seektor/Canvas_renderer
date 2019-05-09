@@ -4,7 +4,6 @@ import { AbstractCanvasLayer } from './AbstractCanvasLayer';
 import { TLayerRenderParams } from './structures/TLayerRenderParams';
 import { AbstractCanvasComponent } from './AbstractCanvasComponent';
 import { LayerType } from './structures/LayerType';
-import Colors from '../UIHelpers/Colors';
 import { TLayerParams } from './structures/TLayerParams';
 import { AbstractCanvasModel } from './AbstractCanvasModel';
 
@@ -25,10 +24,8 @@ export abstract class AbstractCanvasStage extends AbstractCanvasLayer implements
 
     public render(context: CanvasRenderingContext2D): void {
         if (this.hasRenderChanges) {
-            console.log(`%c Render stage's children: ${this.subLayers.map(sl => sl.constructor.name)}`, `color: ${Colors.DEEP_ORANGE}`);
             this.renderSelf(false);
         }
-        console.log(`%c Render stage: ${this.constructor.name}`, `color: ${Colors.ORANGE}`);
         super.render(context);
         this.hasRenderChanges = false;
     }

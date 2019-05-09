@@ -17,7 +17,7 @@ export abstract class AbstractCanvasModel {
     public onResize(): void { };
 
     public getDisplayRect(): TLayerRect {
-        return this.ownViewport.getDisplayLayerRect();
+        return this.ownViewport.getLayerRect();
     }
 
     public getCanvasPainter(): CanvasBasePainter {
