@@ -6,11 +6,12 @@ import { ILayerParamsExtractor } from './interfaces/ILayerParamsExtractor';
 import { TRect } from './structures/TRect';
 import { LayerType } from './structures/LayerType';
 import { TCoords } from './structures/TCoords';
-import { TLayerCoords } from './structures/TLayerCoords';
+import { TLayerCoords, TParentRelativeCoords } from './structures/TLayerCoords';
 import { ILayerViewport } from './interfaces/ILayerViewport';
 import Colors from '../UIHelpers/Colors';
 import { TDeltas } from './structures/TDeltas';
 import { TLayerParams } from './structures/TLayerParams';
+import { LayerRelativity } from './structures/LayerRelativity';
 
 export abstract class AbstractCanvasLayer implements ILayer {
 
@@ -55,8 +56,12 @@ export abstract class AbstractCanvasLayer implements ILayer {
         this.renderSelf();
     }
 
-    public getParentRelativeCoords(): TLayerCoords {
-        return { x: this.dX, y: this.dY };
+    public getParentRelativeCoords(): TParentRelativeCoords {
+        return { x: this.dX, y: this.dY, relativity: LayerRelativity.Parent };
+    }
+
+    protected clear(): void {
+        this.layerContext.clearRect(this.sX, this.sY, this.sWidth, this.sHeight);
     }
 
     protected updateLayer(params: TLayerRenderParams, fitToView: boolean): void {

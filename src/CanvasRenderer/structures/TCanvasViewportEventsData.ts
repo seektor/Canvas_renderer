@@ -1,8 +1,8 @@
-import { TLayerPlacement } from "./TLayerPlacement";
+import { TParentRelativeLayerPlacement, TMainViewportLayerPlacement } from "./TLayerPlacement";
 
 export interface TCanvasViewportEventsData {
     displayOffsetLeft: number;
     displayOffsetTop: number;
-    topActiveLayerPlacement: TLayerPlacement;
-    actionStartLayer: TLayerPlacement;
+    topActiveLayerPlacement: TParentRelativeLayerPlacement;
+    actionStartLayer: TMainViewportLayerPlacement;
 }

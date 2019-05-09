@@ -57,6 +57,7 @@ export abstract class AbstractCanvasStage extends AbstractCanvasLayer implements
     }
 
     protected renderSelf(notifyChanges: boolean): void {
+        this.clear();
         this.subLayers.forEach(layer => layer.render(this.layerContext));
         if (notifyChanges) {
             this.notifyRenderChanges();

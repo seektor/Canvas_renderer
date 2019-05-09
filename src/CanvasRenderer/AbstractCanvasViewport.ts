@@ -13,7 +13,7 @@ import { ILayer } from './interfaces/ILayer';
 import { LayerType } from './structures/LayerType';
 import { IStage } from './interfaces/IStage';
 import { TLayerCoords } from './structures/TLayerCoords';
-import { TLayerPlacement } from './structures/TLayerPlacement';
+import { TParentRelativeLayerPlacement } from './structures/TLayerPlacement';
 import { LayerRelativity } from './structures/LayerRelativity';
 import { CursorType } from './structures/CursorType';
 import Colors from '../UIHelpers/Colors';
@@ -133,10 +133,10 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         return arg.type === LayerType.Stage;
     }
 
-    private findTopActiveLayerDataFromCoords(coords: TCoords): TLayerPlacement {
-        let topLayerPlacement: TLayerPlacement = {
+    private findTopActiveLayerDataFromCoords(coords: TCoords): TParentRelativeLayerPlacement {
+        let topLayerPlacement: TParentRelativeLayerPlacement = {
             layer: this.mainStage,
-            relativity: LayerRelativity.MainViewport,
+            relativity: LayerRelativity.Parent,
             x: coords.x,
             y: coords.y
         }
@@ -173,33 +173,35 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
 
     private onActionStart(e: MouseEvent): void {
         const displayCoords: TCoords = this.mapToDisplayCoords(e);
-        const layerPlacement: TLayerPlacement = this.findTopActiveLayerDataFromCoords(displayCoords);
+        const layerPlacement: TParentRelativeLayerPlacement = this.findTopActiveLayerDataFromCoords(displayCoords);
         this.eventsData.actionStartLayer = {
             layer: layerPlacement.layer,
             relativity: LayerRelativity.MainViewport,
             x: displayCoords.x,
             y: displayCoords.y
         };
+        layerPlacement.layer.onActionStart(layerPlacement);
+        this.renderMainStage();
     }
 
     private onActionMove(e: MouseEvent): void {
         const displayCoords: TCoords = this.mapToDisplayCoords(e);
-        const currentLayerPlacement: TLayerPlacement = this.findTopActiveLayerDataFromCoords(displayCoords);
-        if (this.eventsData.topActiveLayerPlacement.layer !== currentLayerPlacement.layer) {
+        const layerPlacement: TParentRelativeLayerPlacement = this.findTopActiveLayerDataFromCoords(displayCoords);
+        if (this.eventsData.topActiveLayerPlacement.layer !== layerPlacement.layer) {
             this.eventsData.topActiveLayerPlacement.layer.onActionOut();
-            currentLayerPlacement.layer.onActionEnter(currentLayerPlacement);
-            this.eventsData.topActiveLayerPlacement = currentLayerPlacement;
+            layerPlacement.layer.onActionEnter(layerPlacement);
+            this.eventsData.topActiveLayerPlacement = layerPlacement;
         }
-        currentLayerPlacement.layer.onActionMove(currentLayerPlacement);
+        layerPlacement.layer.onActionMove(layerPlacement);
         if (this.eventsData.actionStartLayer) {
-            currentLayerPlacement.layer.onActionDrag({ dX: displayCoords.x - this.eventsData.actionStartLayer.x, dY: displayCoords.y - this.eventsData.actionStartLayer.y });
+            layerPlacement.layer.onActionDrag({ dX: displayCoords.x - this.eventsData.actionStartLayer.x, dY: displayCoords.y - this.eventsData.actionStartLayer.y });
         }
         this.renderMainStage();
     }
 
     private onActionEnd(e: MouseEvent): void {
         const displayCoords: TCoords = this.mapToDisplayCoords(e);
-        const layerPlacement: TLayerPlacement = this.findTopActiveLayerDataFromCoords(displayCoords);
+        const layerPlacement: TParentRelativeLayerPlacement = this.findTopActiveLayerDataFromCoords(displayCoords);
         this.eventsData.actionStartLayer = null;
     }
 

@@ -1,11 +1,9 @@
 import { AbstractCanvasLayer } from '../../../../CanvasRenderer/AbstractCanvasLayer';
 import { CVerticalSliderModel } from '../CVerticalSliderModel';
-import { ILayerHost } from '../../../../CanvasRenderer/interfaces/ILayerHost';
-import { CanvasBasePainter } from '../../../../CanvasRenderer/utils/painter/CanvasBasePainter';
-import { ILayerParamsExtractor } from '../../../../CanvasRenderer/interfaces/ILayerParamsExtractor';
 import { CVerticalSliderPainter } from '../styles/CVerticalSliderPainter';
 import { CursorType } from '../../../../CanvasRenderer/structures/CursorType';
 import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
+import { TParentRelativeCoords } from '../../../../CanvasRenderer/structures/TLayerCoords';
 
 export class CVerticalSliderHandleLayer extends AbstractCanvasLayer {
 
@@ -27,7 +25,17 @@ export class CVerticalSliderHandleLayer extends AbstractCanvasLayer {
         this.globalViewport.setCursor(CursorType.Grab);
     }
 
+    public onActionStart(coords: TParentRelativeCoords): void {
+        this.dY += 20;
+        console.log(this.dY);
+        this.notifyRenderChanges();
+    }
+
     public onActionEnd(): void {
+        this.globalViewport.setCursor(CursorType.Auto);
+    }
+
+    public onActionOut(): void {
         this.globalViewport.setCursor(CursorType.Auto);
     }
 }
