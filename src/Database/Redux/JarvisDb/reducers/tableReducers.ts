@@ -4,7 +4,7 @@ import { TableActions, ADD_TABLE } from "../types/TableActionsTypes";
 const defaultTableState: TablesState = {
     allIds: [],
     byId: {
-        'main': { values: [], metadata: { fields: [], rowCount: 0 } }
+        'targets': { values: [], metadata: { fields: [], rowCount: 0 } }
     }
 }
 

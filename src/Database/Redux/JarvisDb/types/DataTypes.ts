@@ -28,19 +28,18 @@ export interface TableData {
     metadata: TableMetadata;
 }
 
-export interface MainTableData extends TableData {
-    values: MainTableRow[];
+export interface TargetsTableData extends TableData {
+    values: TargetsTableRow[];
 }
 
-export interface MainTableRow {
+export interface TargetsTableRow {
     id: number;
     firstName: string;
     gender: string;
     country: string;
-    car: string;
-    price: number;
-    dateOfPurchase: string;
-    satisfaction: boolean;
+    bounty: number;
+    lastSeen: string;
+    isCaught: boolean;
 }
 
 export interface VariableMetadata {
@@ -63,7 +62,7 @@ export interface VariablesState {
 
 export interface TablesState {
     readonly byId: {
-        readonly "main": MainTableData;
+        readonly "targets": TargetsTableData;
         readonly [key: string]: TableData;
     },
     readonly allIds: string[]

@@ -1,14 +1,14 @@
-import { createStore, combineReducers, Action, Store } from 'redux';
+import { createStore, Store } from 'redux';
 import { variableReducers } from "./reducers/variableReducers";
 import { tableReducers } from "./reducers/tableReducers";
-import { MainTableRow, TestDbState, DataType, FieldType } from './types/DataTypes';
+import { TargetsTableRow, TestDbState, DataType, FieldType } from './types/DataTypes';
 import { TestDbActions } from './actions';
 import { VariableActions } from './types/VariableActionsTypes';
 import { TableActions } from './types/TableActionsTypes';
 
-export class ReduxTestDb {
+export class ReduxJarvisDb {
 
-    private mainTable: MainTableRow[] = require('./static/MAIN_MOCK_DATA.json');
+    private mainTable: TargetsTableRow[] = require('./static/MAIN_MOCK_DATA.json');
     private store: Store;
     private initialState: TestDbState = {
         variables: {
@@ -25,9 +25,9 @@ export class ReduxTestDb {
             }
         },
         tables: {
-            allIds: ['main'],
+            allIds: ['targets'],
             byId: {
-                'main': {
+                'targets': {
                     metadata: {
                         rowCount: 1000,
                         fields: [
@@ -35,10 +35,9 @@ export class ReduxTestDb {
                             { id: "firstName", name: "First Name", dataType: DataType.String, fieldType: FieldType.Characteristic },
                             { id: "gender", name: "Gender", dataType: DataType.String, fieldType: FieldType.Characteristic },
                             { id: "country", name: "Country", dataType: DataType.String, fieldType: FieldType.Characteristic },
-                            { id: "car", name: "Car", dataType: DataType.String, fieldType: FieldType.Characteristic },
-                            { id: "price", name: "Price", dataType: DataType.Number, fieldType: FieldType.Metric },
-                            { id: "dateOfPurchase", name: "Date of Purchase", dataType: DataType.String, fieldType: FieldType.Metric },
-                            { id: "satisfaction", name: "Satisfaction", dataType: DataType.Boolean, fieldType: FieldType.Metric },
+                            { id: "bounty", name: "Bounty", dataType: DataType.Number, fieldType: FieldType.Metric },
+                            { id: "lastSeen", name: "Last seen", dataType: DataType.String, fieldType: FieldType.Metric },
+                            { id: "isCaught", name: "Is caught", dataType: DataType.Boolean, fieldType: FieldType.Metric },
                         ]
                     },
                     values: this.mainTable
