@@ -52,7 +52,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         return this.mainStage;
     }
 
-    public getLayerRect(): TLayerRect {
+    public getLayerDisplayRect(): TLayerRect {
         const displayLayerParams: TLayerRenderParams = this.displayLayerRectExtractor(this.mainStage);
         return { height: displayLayerParams.height, width: displayLayerParams.width, y: displayLayerParams.dY, x: displayLayerParams.dX };
     }

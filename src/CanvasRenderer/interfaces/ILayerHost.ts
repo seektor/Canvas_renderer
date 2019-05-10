@@ -3,5 +3,5 @@ import { TRect } from "../structures/TRect";
 
 export interface ILayerHost {
     notifyRenderChanges(): void;
-    getLayerRect(): TRect;
+    getLayerDisplayRect(): TRect;
 }

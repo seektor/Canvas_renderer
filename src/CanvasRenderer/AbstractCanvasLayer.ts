@@ -12,6 +12,7 @@ import Colors from '../UIHelpers/Colors';
 import { TDeltas } from './structures/TDeltas';
 import { TLayerParams } from './structures/TLayerParams';
 import { LayerRelativity } from './structures/LayerRelativity';
+import { TDimensions } from './structures/TDimensions';
 
 export abstract class AbstractCanvasLayer implements ILayer {
 
@@ -117,7 +118,14 @@ export abstract class AbstractCanvasLayer implements ILayer {
         context.drawImage(this.layer, this.sX, this.sY, this.sWidth, this.sHeight, this.dX, this.dY, this.dWidth, this.dHeight);
     }
 
-    public getLayerRect(): TRect {
+    protected getLayerDimensions(): TDimensions {
+        return {
+            height: this.layerHeight,
+            width: this.layerWidth
+        }
+    }
+
+    public getLayerDisplayRect(): TRect {
         return {
             height: this.layerHeight,
             width: this.layerWidth,

@@ -6,10 +6,6 @@ export interface TLayerPlacement extends TCoords {
     layer: ILayer;
 }
 
-export interface TParentRelativeLayerPlacement extends TParentRelativeCoords {
-    layer: ILayer;
-}
+export interface TParentRelativeLayerPlacement extends TLayerPlacement, TParentRelativeCoords { }
 
-export interface TMainViewportLayerPlacement extends TMainViewportRelativeCoords {
-    layer: ILayer;
-}
+export interface TMainViewportLayerPlacement extends TLayerPlacement, TMainViewportRelativeCoords { }

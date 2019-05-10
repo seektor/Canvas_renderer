@@ -21,6 +21,6 @@ export class CVerticalSliderBaseLayer extends AbstractCanvasLayer {
     }
 
     public renderSelf(): void {
-        this.painter.drawBackground(this.layerContext, this.getLayerRect());
+        this.painter.drawBackground(this.layerContext, this.getLayerDisplayRect());
     }
 }

@@ -25,7 +25,7 @@ export class CVerticalSliderHandleLayer extends AbstractCanvasLayer {
     }
 
     private updateProperties(): void {
-        this.trackLength = this.layerHost.getLayerRect().height;
+        this.trackLength = this.layerHost.getLayerDisplayRect().height;
         this.dragStartDY = this.dY;
     }
 
@@ -35,7 +35,7 @@ export class CVerticalSliderHandleLayer extends AbstractCanvasLayer {
     }
 
     public renderSelf(): void {
-        this.painter.drawHandle(this.layerContext, this.getLayerRect());
+        this.painter.drawHandle(this.layerContext, this.getLayerRenderRect());
         this.notifyRenderChanges();
     }
 
