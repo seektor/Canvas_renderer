@@ -1,11 +1,12 @@
 import { AbstractCanvasModel } from '../../../CanvasRenderer/AbstractCanvasModel';
-import { CFlatGridPainter } from './styles/CFLatGridPainter';
 import { TableMetadata } from '../../../Database/Redux/JarvisDb/types/DataTypes';
 import { TColumnData } from './structures/TColumnData';
+import { CFlatGridPainter } from './styles/CFLatGridPainter';
 
 export class CFlatGridModel extends AbstractCanvasModel {
 
     private readonly baseColumnWidth: number = 250;
+    private readonly minColumnWidth: number = 100;
 
     protected canvasPainter: CFlatGridPainter;
     private columnsData: TColumnData[];
@@ -38,5 +39,10 @@ export class CFlatGridModel extends AbstractCanvasModel {
 
     public calculateHeaderWidth(): number {
         return this.columnsData.reduce((p, c) => p += c.width, 0);
+    }
+
+    public setColumnWidth(columnIndex: number, width: number): void {
+        const column: TColumnData = this.columnsData[columnIndex];
+        column.width = Math.max(this.minColumnWidth, width);
     }
 }

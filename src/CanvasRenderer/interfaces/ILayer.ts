@@ -1,7 +1,7 @@
 import { LayerType } from "../structures/LayerType";
 import { TCoords } from "../structures/TCoords";
-import { TLayerCoords, TParentRelativeCoords } from "../structures/TLayerCoords";
 import { TDeltas } from "../structures/TDeltas";
+import { TLayerCoords } from "../structures/TLayerCoords";
 
 export interface ILayer {
     readonly type: LayerType;
@@ -11,7 +11,7 @@ export interface ILayer {
     isPierced(coords: TCoords): boolean;
 
     onActionEnter(coords: TCoords): void;
-    onActionStart(coords: TParentRelativeCoords): void;
+    onActionStart(coords: TCoords): void;
     onActionMove(coords: TCoords): void;
     onActionDrag(deltas: TDeltas): void;
     onActionEnd(coords: TCoords): void;

@@ -181,13 +181,14 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     private onActionStart(e: MouseEvent): void {
         const displayCoords: TCoords = this.mapToDisplayCoords(e);
         const layerPlacement: TParentRelativeLayerPlacement = this.findTopActiveLayerDataFromCoords(displayCoords);
+        const localCoords: TCoords = { x: displayCoords.x - layerPlacement.x, y: displayCoords.y - layerPlacement.y };
         this.eventsData.actionStartLayer = {
             layer: layerPlacement.layer,
             relativity: LayerRelativity.MainViewport,
             x: displayCoords.x,
             y: displayCoords.y
         };
-        layerPlacement.layer.onActionStart(layerPlacement);
+        layerPlacement.layer.onActionStart(localCoords);
         this.renderMainStage();
     }
 
@@ -196,12 +197,13 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         console.time("Action Move time");
         const displayCoords: TCoords = this.mapToDisplayCoords(e);
         const layerPlacement: TParentRelativeLayerPlacement = this.findTopActiveLayerDataFromCoords(displayCoords);
+        const localCoords: TCoords = { x: displayCoords.x - layerPlacement.x, y: displayCoords.y - layerPlacement.y };
         if (this.eventsData.topActiveLayerPlacement.layer !== layerPlacement.layer) {
             this.eventsData.topActiveLayerPlacement.layer.onActionOut();
-            layerPlacement.layer.onActionEnter(layerPlacement);
+            layerPlacement.layer.onActionEnter(localCoords);
             this.eventsData.topActiveLayerPlacement = layerPlacement;
         }
-        layerPlacement.layer.onActionMove({ x: displayCoords.x - layerPlacement.x, y: displayCoords.y - layerPlacement.y });
+        layerPlacement.layer.onActionMove(localCoords);
         if (this.eventsData.actionStartLayer) {
             this.eventsData.actionStartLayer.layer.onActionDrag({ dX: displayCoords.x - this.eventsData.actionStartLayer.x, dY: displayCoords.y - this.eventsData.actionStartLayer.y });
         }
@@ -212,6 +214,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     private onActionEnd(e: MouseEvent): void {
         const displayCoords: TCoords = this.mapToDisplayCoords(e);
         const layerPlacement: TParentRelativeLayerPlacement = this.findTopActiveLayerDataFromCoords(displayCoords);
+        const localCoords: TCoords = { x: displayCoords.x - layerPlacement.x, y: displayCoords.y - layerPlacement.y };
         this.eventsData.actionStartLayer = null;
     }
 
