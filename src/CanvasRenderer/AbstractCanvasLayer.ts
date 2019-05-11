@@ -1,18 +1,17 @@
-import { ILayer } from './interfaces/ILayer';
-import { TLayerRenderParams } from './structures/TLayerRenderParams';
-import { ILayerHost } from './interfaces/ILayerHost';
 import { AbstractCanvasModel } from './AbstractCanvasModel';
+import { ILayer } from './interfaces/ILayer';
+import { ILayerHost } from './interfaces/ILayerHost';
 import { ILayerParamsExtractor } from './interfaces/ILayerParamsExtractor';
-import { TRect } from './structures/TRect';
+import { ILayerViewport } from './interfaces/ILayerViewport';
+import { LayerRelativity } from './structures/LayerRelativity';
 import { LayerType } from './structures/LayerType';
 import { TCoords } from './structures/TCoords';
-import { TLayerCoords, TParentRelativeCoords } from './structures/TLayerCoords';
-import { ILayerViewport } from './interfaces/ILayerViewport';
-import Colors from '../UIHelpers/Colors';
 import { TDeltas } from './structures/TDeltas';
-import { TLayerParams } from './structures/TLayerParams';
-import { LayerRelativity } from './structures/LayerRelativity';
 import { TDimensions } from './structures/TDimensions';
+import { TParentRelativeCoords } from './structures/TLayerCoords';
+import { TLayerParams } from './structures/TLayerParams';
+import { TLayerRenderParams } from './structures/TLayerRenderParams';
+import { TRect } from './structures/TRect';
 
 export abstract class AbstractCanvasLayer implements ILayer {
 
@@ -54,8 +53,11 @@ export abstract class AbstractCanvasLayer implements ILayer {
     public onResize(): void {
         const layerParams: TLayerRenderParams = this.layerParamsExtractor(this);
         this.updateLayer(layerParams, true);
+        this.updateParams();
         this.renderSelf();
     }
+
+    protected updateParams(): void { }
 
     public getParentRelativeCoords(): TParentRelativeCoords {
         return { x: this.dX, y: this.dY, relativity: LayerRelativity.Parent };
@@ -143,7 +145,7 @@ export abstract class AbstractCanvasLayer implements ILayer {
         }
     }
 
-    private isBetween(value: number, min: number, max: number): boolean {
+    protected isBetween(value: number, min: number, max: number): boolean {
         return value > min && value <= max;
     }
 

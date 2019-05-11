@@ -1,22 +1,22 @@
-import { AbstractCanvasStage } from './AbstractCanvasStage';
-import { TDimensions } from './structures/TDimensions';
-import { Utils } from './utils/Utils';
-import { TAbstractCanvasViewportParams } from './structures/TCanvasViewportParams';
-import { ILayerHost } from './interfaces/ILayerHost';
+import Colors from '../UIHelpers/Colors';
 import { AbstractCanvasModel } from './AbstractCanvasModel';
-import { TLayerRect } from './structures/TLayerRect';
-import { ILayerParamsExtractor } from './interfaces/ILayerParamsExtractor';
-import { TLayerRenderParams } from './structures/TLayerRenderParams';
-import { TCanvasViewportEventsData } from './structures/TCanvasViewportEventsData';
-import { TCoords } from './structures/TCoords';
+import { AbstractCanvasStage } from './AbstractCanvasStage';
 import { ILayer } from './interfaces/ILayer';
-import { LayerType } from './structures/LayerType';
+import { ILayerHost } from './interfaces/ILayerHost';
+import { ILayerParamsExtractor } from './interfaces/ILayerParamsExtractor';
 import { IStage } from './interfaces/IStage';
+import { CursorType } from './structures/CursorType';
+import { LayerRelativity } from './structures/LayerRelativity';
+import { LayerType } from './structures/LayerType';
+import { TCanvasViewportEventsData } from './structures/TCanvasViewportEventsData';
+import { TAbstractCanvasViewportParams } from './structures/TCanvasViewportParams';
+import { TCoords } from './structures/TCoords';
+import { TDimensions } from './structures/TDimensions';
 import { TLayerCoords } from './structures/TLayerCoords';
 import { TParentRelativeLayerPlacement } from './structures/TLayerPlacement';
-import { LayerRelativity } from './structures/LayerRelativity';
-import { CursorType } from './structures/CursorType';
-import Colors from '../UIHelpers/Colors';
+import { TLayerRect } from './structures/TLayerRect';
+import { TLayerRenderParams } from './structures/TLayerRenderParams';
+import { Utils } from './utils/Utils';
 
 export abstract class AbstractCanvasViewport implements ILayerHost {
 
@@ -201,7 +201,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
             layerPlacement.layer.onActionEnter(layerPlacement);
             this.eventsData.topActiveLayerPlacement = layerPlacement;
         }
-        layerPlacement.layer.onActionMove(layerPlacement);
+        layerPlacement.layer.onActionMove({ x: displayCoords.x - layerPlacement.x, y: displayCoords.y - layerPlacement.y });
         if (this.eventsData.actionStartLayer) {
             this.eventsData.actionStartLayer.layer.onActionDrag({ dX: displayCoords.x - this.eventsData.actionStartLayer.x, dY: displayCoords.y - this.eventsData.actionStartLayer.y });
         }

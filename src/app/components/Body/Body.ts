@@ -2,6 +2,8 @@ import { Utils } from '../../utils/Utils';
 import { PointerEventHandler } from '../../../CanvasRenderer/utils/pointer-event-handler/PointerEventHandler';
 import { CVerticalSlider } from '../../../CanvasComponents/components/VerticalSlider/CVerticalSlider';
 import { CFlatGrid } from '../../../CanvasComponents/components/FlatGrid/CFlatGrid';
+import { ReduxJarvisDb } from '../../../Database/Redux/JarvisDb/ReduxJarvisDb';
+import CommunicationService from '../../services/communicationService/CommunicationService';
 
 export class Body {
 
@@ -13,11 +15,10 @@ export class Body {
     }
 
     public initialize(): void {
-        // const reduxTestDb: ReduxTestDb = new ReduxTestDb();
-        // CommunicationService.setDataProvider(reduxTestDb.getStore());
-        // CommunicationService.createAvgSummaryTable("main", "country", "price");
+        const reduxJarvisDb: ReduxJarvisDb = new ReduxJarvisDb();
+        CommunicationService.setDataProvider(reduxJarvisDb.getStore());
 
-        const canvasFlatGridComponent: CFlatGrid = new CFlatGrid();
+        const canvasFlatGridComponent: CFlatGrid = new CFlatGrid({ tableName: 'targets' });
         canvasFlatGridComponent.createViewport(this.bodyElement);
         // const verticalSliderComponent: CVerticalSlider = new CVerticalSlider();
         // verticalSliderComponent.createViewport(this.bodyElement);

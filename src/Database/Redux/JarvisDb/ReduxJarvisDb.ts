@@ -8,7 +8,7 @@ import { TableActions } from './types/TableActionsTypes';
 
 export class ReduxJarvisDb {
 
-    private mainTable: TargetsTableRow[] = require('./static/MAIN_MOCK_DATA.json');
+    private targetsTable: TargetsTableRow[] = require('./static/TARGETS.json');
     private store: Store;
     private initialState: TestDbState = {
         variables: {
@@ -37,10 +37,10 @@ export class ReduxJarvisDb {
                             { id: "country", name: "Country", dataType: DataType.String, fieldType: FieldType.Characteristic },
                             { id: "bounty", name: "Bounty", dataType: DataType.Number, fieldType: FieldType.Metric },
                             { id: "lastSeen", name: "Last seen", dataType: DataType.String, fieldType: FieldType.Metric },
-                            { id: "isCaught", name: "Is caught", dataType: DataType.Boolean, fieldType: FieldType.Metric },
+                            { id: "terminated", name: "Terminated", dataType: DataType.Boolean, fieldType: FieldType.Metric },
                         ]
                     },
-                    values: this.mainTable
+                    values: this.targetsTable
                 },
             }
         }

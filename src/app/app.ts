@@ -15,9 +15,9 @@ class App {
         // this.runAppInitAnimation(appElement);
         this.header = new Header(appElement);
         this.body = new Body(appElement);
-        this.footer = new Footer(appElement);
+        // this.footer = new Footer(appElement);
 
-        this.body.initialize();
+        setTimeout(() => this.body.initialize(), 1000);
     }
 
     private runAppInitAnimation(appElement: HTMLElement) {
