@@ -1,6 +1,5 @@
 import { AbstractCanvasModel } from '../../../CanvasRenderer/AbstractCanvasModel';
 import { CVerticalSliderPainter } from './styles/CVerticalSliderPainter';
-import VerticalSliderStyles from './styles/VerticalSliderStyles';
 
 export class CVerticalSliderModel extends AbstractCanvasModel {
 
@@ -17,7 +16,7 @@ export class CVerticalSliderModel extends AbstractCanvasModel {
 
     public getCanvasPainter(): CVerticalSliderPainter {
         if (!this.canvasPainter) {
-            this.canvasPainter = new CVerticalSliderPainter(VerticalSliderStyles);
+            this.canvasPainter = new CVerticalSliderPainter();
         }
         return this.canvasPainter;
     }

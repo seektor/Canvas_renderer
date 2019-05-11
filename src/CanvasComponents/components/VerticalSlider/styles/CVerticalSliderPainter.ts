@@ -4,14 +4,26 @@ import { TRect } from '../../../../CanvasRenderer/structures/TRect';
 import { Direction } from '../../../../CanvasRenderer/structures/Direction';
 import { TLineStyles } from '../../../../CanvasRenderer/utils/painter/structures/CanvasPainterTypes';
 import { TCoords } from '../../../../CanvasRenderer/structures/TCoords';
+import ThemingService from '../../../../app/services/themingService/ThemingService';
+import { TThemeStyles } from '../../../../app/services/themingService/structures/TThemeStyles';
 
 export class CVerticalSliderPainter extends CanvasBasePainter {
 
     private styles: TVerticalSliderStyles;
 
-    constructor(styles: TVerticalSliderStyles) {
+    constructor() {
         super();
-        this.styles = styles;
+        this.applyTheme();
+    }
+
+    private applyTheme() {
+        const theme: TThemeStyles = ThemingService.getTheme();
+        this.styles = {
+            colorBackground: theme.colorBackground,
+            colorTrack: theme.colorBackgroundLighter,
+            colorInteractiveElement_1: theme.colorPrimary,
+            colorInteractiveElement_2: theme.colorPrimaryDarker
+        }
     }
 
     public getSliderBorderWidth(displayWidth: number): number {
