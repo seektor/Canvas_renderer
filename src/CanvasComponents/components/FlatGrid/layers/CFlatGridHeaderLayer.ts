@@ -6,11 +6,12 @@ import { TLayerRect } from '../../../../CanvasRenderer/structures/TLayerRect';
 import { CFlatGridModel } from '../CFlatGridModel';
 import { CanvasBasePainter } from '../../../../CanvasRenderer/utils/painter/CanvasBasePainter';
 import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
+import { CFlatGridPainter } from '../styles/CFLatGridPainter';
 
 export class CFlatGridHeaderLayer extends AbstractCanvasLayer {
 
     protected model: CFlatGridModel;
-    private painter: CanvasBasePainter;
+    private painter: CFlatGridPainter;
 
     constructor(params: TLayerParams<CFlatGridModel, unknown>) {
         super(params);
@@ -19,8 +20,6 @@ export class CFlatGridHeaderLayer extends AbstractCanvasLayer {
     }
 
     public renderSelf(): void {
-        this.painter.fillRect(this.layerContext, { y: this.sY, x: this.sX, height: this.layerHeight, width: this.layerWidth }, {
-            fillStyle: "blue"
-        })
+        this.painter.drawHeader(this.layerContext, { y: this.sY, x: this.sX, height: this.sHeight, width: this.sWidth });
     }
 }

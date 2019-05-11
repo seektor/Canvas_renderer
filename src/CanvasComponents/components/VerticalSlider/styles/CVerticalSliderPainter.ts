@@ -1,11 +1,11 @@
 import { CanvasBasePainter } from '../../../../CanvasRenderer/utils/painter/CanvasBasePainter';
-import { TVerticalSliderStyles } from './VerticalSliderStyles';
 import { TRect } from '../../../../CanvasRenderer/structures/TRect';
 import { Direction } from '../../../../CanvasRenderer/structures/Direction';
 import { TLineStyles } from '../../../../CanvasRenderer/utils/painter/structures/CanvasPainterTypes';
 import { TCoords } from '../../../../CanvasRenderer/structures/TCoords';
-import ThemingService from '../../../../app/services/themingService/ThemingService';
 import { TThemeStyles } from '../../../../app/services/themingService/structures/TThemeStyles';
+import ThemingService from '../../../../app/services/themingService/ThemingService';
+import { TVerticalSliderStyles } from './TVerticalSliderStyles';
 
 export class CVerticalSliderPainter extends CanvasBasePainter {
 

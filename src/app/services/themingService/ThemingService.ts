@@ -15,7 +15,6 @@ class ThemingService {
     private constructor() {
         this.themeName = ThemeType.Dark;
         this.theme = DarkTheme;
-        console.log(this.theme);
     }
 
     public getTheme(): TThemeStyles {

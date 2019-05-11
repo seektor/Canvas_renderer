@@ -38,7 +38,6 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
 
         this.bindMethods();
         this.construct(params);
-        this.setBaseEvents();
     }
 
     private bindMethods(): void {
@@ -86,10 +85,10 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         if (params.hostingParams) {
             this.isHosted = true;
             this.displayLayerRectExtractor = params.hostingParams.displayLayerRectExtractor;
-            this.displayCanvas = params.hostingParams.displayCanvas;
+            this.displayCanvas = params.hostingParams.globalViewport.getDisplayCanvas();
             this.displayCanvasContext = this.displayCanvas.getContext('2d');
             this.model.setViewport(this);
-            this.mainStage = params.mainStageCtor({ layerHost: params.hostingParams.layerHost, globalViewport: this, model: params.model, layerParamsExtractor: () => params.hostingParams.displayLayerRectExtractor(this.mainStage) });
+            this.mainStage = params.mainStageCtor({ layerHost: params.hostingParams.layerHost, globalViewport: params.hostingParams.globalViewport, model: params.model, layerParamsExtractor: () => params.hostingParams.displayLayerRectExtractor(this.mainStage) });
         } else {
             this.isHosted = false;
             const containerDimensions: TDimensions = this.getContainerDimensions();
@@ -98,19 +97,28 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
             this.model.setViewport(this);
             this.mainStage = params.mainStageCtor({ layerHost: this, globalViewport: this, model: this.model, layerParamsExtractor: () => this.displayLayerRectExtractor(this.mainStage) });
             params.container.appendChild(this.displayCanvas);
+            this.setBaseEvents();
+            this.eventsData = {
+                displayOffsetLeft: 0,
+                displayOffsetTop: 0,
+                topActiveLayerPlacement: { layer: this.mainStage, ...this.mainStage.getParentRelativeCoords() },
+                actionStartLayer: null,
+            };
+            this.updateEventsData();
         }
-        this.eventsData = {
-            displayOffsetLeft: 0,
-            displayOffsetTop: 0,
-            topActiveLayerPlacement: { layer: this.mainStage, ...this.mainStage.getParentRelativeCoords() },
-            actionStartLayer: null,
-        };
-        this.updateEventsData();
         this.model.onMainStageCreation();
     }
 
     public notifyRenderChanges() {
         this.hasRenderChanges = true;
+    }
+
+    public getContainer(): HTMLElement {
+        return this.container;
+    }
+
+    public getDisplayCanvas(): HTMLCanvasElement {
+        return this.displayCanvas;
     }
 
     private createDisplayCanvas(dimensions: TDimensions): void {

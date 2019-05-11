@@ -17,10 +17,10 @@ export class Body {
         // CommunicationService.setDataProvider(reduxTestDb.getStore());
         // CommunicationService.createAvgSummaryTable("main", "country", "price");
 
-        // const canvasFlatGridComponent: CFlatGrid = new CFlatGrid();
-        // canvasFlatGridComponent.createViewport(this.bodyElement);
-        const verticalSliderComponent: CVerticalSlider = new CVerticalSlider();
-        verticalSliderComponent.createViewport(this.bodyElement);
+        const canvasFlatGridComponent: CFlatGrid = new CFlatGrid();
+        canvasFlatGridComponent.createViewport(this.bodyElement);
+        // const verticalSliderComponent: CVerticalSlider = new CVerticalSlider();
+        // verticalSliderComponent.createViewport(this.bodyElement);
     }
 
     private construct(container: HTMLElement): void {
