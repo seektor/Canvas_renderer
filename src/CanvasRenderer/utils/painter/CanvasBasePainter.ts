@@ -1,7 +1,7 @@
-import { TRect } from '../../structures/TRect';
-import { TCanvasStyles } from './structures/TCanvasStyles';
-import { TRectStyles as TStrokeRectStyles, TRoundRectParams, TLineStyles, TFillRectStyles, TMeasureText, TFillTextStyles } from './structures/CanvasPainterTypes';
 import { TCoords } from '../../structures/TCoords';
+import { TRect } from '../../structures/TRect';
+import { TFillArcSektorStyles, TFillCircleStyles, TFillRectStyles, TFillTextStyles, TLineStyles, TMeasureText, TRectStyles as TStrokeRectStyles, TRoundRectParams } from './structures/CanvasPainterTypes';
+import { TCanvasStyles } from './structures/TCanvasStyles';
 
 export class CanvasBasePainter {
 
@@ -60,6 +60,33 @@ export class CanvasBasePainter {
 
     public strokeRectPure(ctx: CanvasRenderingContext2D, rect: TRect): void {
         ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
+    }
+
+    public fillCircle(ctx: CanvasRenderingContext2D, rect: TRect, styles: Partial<TFillCircleStyles>): void {
+        const savedStyles: Partial<TCanvasStyles> = this.extractStyles(ctx, Object.keys(styles) as Array<(keyof TCanvasStyles)>);
+        this.applyStyles(ctx, styles);
+        const centerX: number = Math.floor(rect.x + rect.width * 0.5);
+        const centerY: number = Math.floor(rect.y + rect.height * 0.5);
+        const radius: number = Math.floor(rect.width * 0.5);
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+        ctx.fill();
+        this.applyStyles(ctx, savedStyles);
+    }
+
+    public fillArcSector(ctx: CanvasRenderingContext2D, rect: TRect, startAngle: number, endAngle: number, styles: Partial<TFillArcSektorStyles>): void {
+        const savedStyles: Partial<TCanvasStyles> = this.extractStyles(ctx, Object.keys(styles) as Array<(keyof TCanvasStyles)>);
+        this.applyStyles(ctx, styles);
+        const centerX: number = Math.floor(rect.x + rect.width * 0.5);
+        const centerY: number = Math.floor(rect.y + rect.height * 0.5);
+        const radius: number = Math.floor(rect.width * 0.5);
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, startAngle, endAngle, false);
+        ctx.lineTo(centerX, centerY);
+        ctx.closePath();
+        ctx.fill();
+        this.applyStyles(ctx, savedStyles);
     }
 
     public fillText(ctx: CanvasRenderingContext2D, text: string, coords: TCoords, styles: Partial<TFillTextStyles>) {

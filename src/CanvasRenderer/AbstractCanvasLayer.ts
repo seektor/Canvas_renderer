@@ -127,6 +127,15 @@ export abstract class AbstractCanvasLayer implements ILayer {
         }
     }
 
+    protected getLayerRect(): TRect {
+        return {
+            height: this.layerHeight,
+            width: this.layerWidth,
+            x: 0,
+            y: 0
+        }
+    }
+
     public getLayerDisplayRect(): TRect {
         return {
             height: this.layerHeight,

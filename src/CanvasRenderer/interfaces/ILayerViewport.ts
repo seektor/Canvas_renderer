@@ -4,4 +4,5 @@ export interface ILayerViewport {
     setCursor(type: CursorType): void;
     getContainer(): HTMLElement;
     getDisplayCanvas(): HTMLCanvasElement;
+    forceRerender(): void;
 }

@@ -109,6 +109,10 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         this.model.onMainStageCreation();
     }
 
+    public forceRerender(): void {
+        this.renderMainStage();
+    }
+
     public notifyRenderChanges() {
         this.hasRenderChanges = true;
     }

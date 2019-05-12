@@ -1,14 +1,10 @@
 import { AbstractCanvasStage } from '../../../../CanvasRenderer/AbstractCanvasStage';
-import { ILayerHost } from '../../../../CanvasRenderer/interfaces/ILayerHost';
 import { ILayer } from '../../../../CanvasRenderer/interfaces/ILayer';
-import { CFlatGridModel } from '../CFlatGridModel';
 import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
-import { CRectBaseLayer } from '../../../commonLayers/RectBaseLayer/CRectBaseLayer';
 import { TLayerRenderParams } from '../../../../CanvasRenderer/structures/TLayerRenderParams';
-import { TLayerRect } from '../../../../CanvasRenderer/structures/TLayerRect';
-import ThemingService from '../../../../app/services/themingService/ThemingService';
-import { CFlatGridStage } from './CFlatGridStage';
 import { CVerticalSlider } from '../../VerticalSlider/CVerticalSlider';
+import { CFlatGridModel } from '../CFlatGridModel';
+import { CFlatGridStage } from './CFlatGridStage';
 
 export class CFlatGridMainStage extends AbstractCanvasStage {
 
@@ -19,14 +15,8 @@ export class CFlatGridMainStage extends AbstractCanvasStage {
         this.createLayers();
     }
 
-    private getMainStageLayerParams(): TLayerRenderParams {
-        const displayRect: TLayerRect = this.model.getDisplayRect();
-        return {
-            dX: 0,
-            dY: 0,
-            height: displayRect.height,
-            width: displayRect.width
-        }
+    protected renderSelfLayer(): void {
+        this.model.getCanvasPainter().drawBackground(this.layerContext, this.getLayerRect());
     }
 
     private getFlatGridLayerParams(): TLayerRenderParams {
@@ -49,9 +39,6 @@ export class CFlatGridMainStage extends AbstractCanvasStage {
     }
 
     protected createLayers(): void {
-        const backgroundLayer: ILayer = new CRectBaseLayer({ layerHost: this, globalViewport: this.globalViewport, model: this.model, layerParamsExtractor: (_layer) => this.getMainStageLayerParams(), config: { backgroundColor: ThemingService.getTheme().colorBackgroundDarker } });
-        this.addLayer(backgroundLayer);
-
         const flatGridStage: ILayer = new CFlatGridStage({
             layerHost: this, globalViewport: this.globalViewport, model: this.model, layerParamsExtractor: () => this.getFlatGridLayerParams()
         });

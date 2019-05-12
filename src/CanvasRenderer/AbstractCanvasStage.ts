@@ -1,11 +1,11 @@
+import { AbstractCanvasComponent } from './AbstractCanvasComponent';
+import { AbstractCanvasLayer } from './AbstractCanvasLayer';
+import { AbstractCanvasModel } from './AbstractCanvasModel';
 import { ILayer } from './interfaces/ILayer';
 import { ILayerHost } from './interfaces/ILayerHost';
-import { AbstractCanvasLayer } from './AbstractCanvasLayer';
-import { TLayerRenderParams } from './structures/TLayerRenderParams';
-import { AbstractCanvasComponent } from './AbstractCanvasComponent';
 import { LayerType } from './structures/LayerType';
 import { TLayerParams } from './structures/TLayerParams';
-import { AbstractCanvasModel } from './AbstractCanvasModel';
+import { TLayerRenderParams } from './structures/TLayerRenderParams';
 
 export abstract class AbstractCanvasStage extends AbstractCanvasLayer implements ILayerHost {
 
@@ -37,6 +37,7 @@ export abstract class AbstractCanvasStage extends AbstractCanvasLayer implements
     public onResize(): void {
         const layerParams: TLayerRenderParams = this.layerParamsExtractor(this);
         this.updateLayer(layerParams, true);
+        this.updateParams();
         this.subLayers.forEach(layer => layer.onResize());
         this.renderSelf(true);
     }
@@ -55,11 +56,14 @@ export abstract class AbstractCanvasStage extends AbstractCanvasLayer implements
 
     protected renderSelf(notifyChanges: boolean): void {
         this.clear();
+        this.renderSelfLayer();
         this.subLayers.forEach(layer => layer.render(this.layerContext));
         if (notifyChanges) {
             this.notifyRenderChanges();
         }
     }
+
+    protected renderSelfLayer(): void { }
 
     public notifyRenderChanges(): void {
         this.hasRenderChanges = true;

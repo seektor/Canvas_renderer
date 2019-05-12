@@ -1,3 +1,4 @@
+import { CDigitalDisplay } from '../../../CanvasComponents/components/DigitalDisplay/CDigitalDisplay';
 import { CFlatGrid } from '../../../CanvasComponents/components/FlatGrid/CFlatGrid';
 import { PointerEventHandler } from '../../../CanvasRenderer/utils/pointer-event-handler/PointerEventHandler';
 import { ReduxJarvisDb } from '../../../Database/Redux/JarvisDb/ReduxJarvisDb';
@@ -20,6 +21,12 @@ export class Body {
         const flatGridPlaceholder: HTMLElement = document.getElementById('gridPlaceholder');
         const canvasFlatGridComponent: CFlatGrid = new CFlatGrid({ tableName: 'targets' });
         canvasFlatGridComponent.createViewport(flatGridPlaceholder);
+
+        const digitalDisplayPlaceholder: HTMLElement = document.getElementById('digitalDisplayPlaceholder');
+        const canvasDigitalDisplayComponent: CDigitalDisplay = new CDigitalDisplay();
+        canvasDigitalDisplayComponent.createViewport(digitalDisplayPlaceholder);
+
+
         // const verticalSliderComponent: CVerticalSlider = new CVerticalSlider();
         // verticalSliderComponent.createViewport(this.bodyElement);
     }
