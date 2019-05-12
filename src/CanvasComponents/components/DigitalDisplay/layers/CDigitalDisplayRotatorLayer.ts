@@ -14,9 +14,10 @@ export class CDigitalDisplayRotatorLayer extends AbstractCanvasLayer {
     constructor(params: TLayerParams<CDigitalDisplayModel, unknown>) {
         super(params);
         this.painter = this.model.getCanvasPainter();
+        this.hostLayerCenter = { x: 0, y: 0 };
         this.updateParams();
         this.renderSelf();
-        // setInterval(() => this.rotate(), 32);
+        setInterval(() => this.rotate(), 32);
     }
 
     protected updateParams() {

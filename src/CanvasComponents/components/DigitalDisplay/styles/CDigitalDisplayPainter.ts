@@ -54,7 +54,7 @@ export class CDigitalDisplayPainter extends CanvasBasePainter {
         this.fillArcSector(ctx, rect, -Math.PI * 0.8, -Math.PI * 0.2, styles);
         this.fillArcSector(ctx, rect, Math.PI * 0.2, Math.PI * 0.8, styles);
         const ringWidth: number = this.rotatorWidth;
-        const internalFillRect: TRect = { x: rect.x + ringWidth, y: rect.y + ringWidth, width: rect.width - ringWidth * 2, height: rect.height - ringWidth * 2 };
+        const internalFillRect: TRect = { x: rect.x + ringWidth, y: rect.y + ringWidth, width: Math.max(1, rect.width - ringWidth * 2), height: Math.max(1, rect.height - ringWidth * 2) };
         styles.fillStyle = this.styles.colorBackground;
         this.fillArcSector(ctx, internalFillRect, -Math.PI * 0.8, -Math.PI * 0.2, styles);
         this.fillArcSector(ctx, internalFillRect, Math.PI * 0.2, Math.PI * 0.8, styles);

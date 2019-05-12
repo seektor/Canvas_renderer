@@ -5,8 +5,8 @@ import { TLayerRenderParams } from '../../../../CanvasRenderer/structures/TLayer
 import { CDigitalDisplayModel } from '../CDigitalDIsplayModel';
 import { CDigitalDisplayBaseLayer } from '../layers/CDigitalDisplayBaseLayer';
 import { CDigitalDisplayContentLayer } from '../layers/CDigitalDisplayContentLayer';
-import { CDigitalDisplayRotatorLayer } from '../layers/CDigitalDisplayRotatorLayer';
 import { CDigitalDisplayPainter } from '../styles/CDigitalDisplayPainter';
+import { CDigitalDisplayRotationStage } from './CDigitalDisplayRotationStage';
 
 export class CDigitalDisplayMainStage extends AbstractCanvasStage {
 
@@ -33,8 +33,8 @@ export class CDigitalDisplayMainStage extends AbstractCanvasStage {
         this.baseLayerRenderParams = {
             dX: dX + this.externalRingPadding,
             dY: dY + this.externalRingPadding,
-            height: lesserDimension - this.externalRingPadding * 2,
-            width: lesserDimension - this.externalRingPadding * 2
+            height: Math.max(1, lesserDimension - this.externalRingPadding * 2),
+            width: Math.max(1, lesserDimension - this.externalRingPadding * 2)
         }
     }
 
@@ -47,8 +47,8 @@ export class CDigitalDisplayMainStage extends AbstractCanvasStage {
         return {
             dX: this.baseLayerRenderParams.dX + translation,
             dY: this.baseLayerRenderParams.dY + translation,
-            height: this.baseLayerRenderParams.height - (translation) * 2,
-            width: this.baseLayerRenderParams.width - (translation) * 2
+            height: Math.max(1, this.baseLayerRenderParams.height - translation * 2),
+            width: Math.max(1, this.baseLayerRenderParams.width - translation * 2)
         }
     }
 
@@ -70,10 +70,10 @@ export class CDigitalDisplayMainStage extends AbstractCanvasStage {
         });
         this.addLayer(baseLayer);
 
-        const rotatorLayer: ILayer = new CDigitalDisplayRotatorLayer({
+        const rotationLayer: ILayer = new CDigitalDisplayRotationStage({
             layerHost: this, globalViewport: this.globalViewport, model: this.model, layerParamsExtractor: () => this.getRotatorLayerRenderParams()
         });
-        this.addLayer(rotatorLayer);
+        this.addLayer(rotationLayer);
 
         const contentLayer: ILayer = new CDigitalDisplayContentLayer({
             layerHost: this, globalViewport: this.globalViewport, model: this.model, layerParamsExtractor: () => this.getContentLayerRenderParams()

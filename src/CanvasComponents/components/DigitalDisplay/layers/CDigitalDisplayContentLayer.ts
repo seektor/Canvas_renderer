@@ -12,9 +12,12 @@ export class CDigitalDisplayContentLayer extends AbstractCanvasLayer {
         super(params);
         this.painter = this.model.getCanvasPainter();
         this.renderSelf();
+        setInterval(() => this.renderSelf(), 60000);
     }
 
     public renderSelf(): void {
+        this.clear();
         this.painter.renderDisplay(this.layerContext, this.getLayerRect());
+        this.notifyRenderChanges();
     }
 }
