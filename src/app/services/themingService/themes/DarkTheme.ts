@@ -1,5 +1,5 @@
-import { TThemeStyles } from "../structures/TThemeStyles";
 import DarkColors from "../../../../UIHelpers/DarkColors";
+import { TThemeStyles } from "../structures/TThemeStyles";
 
 export default {
     colorBackground: DarkColors.DARKER_GREY,
@@ -11,6 +11,6 @@ export default {
     colorPrimaryDarker: "#209090",
 
     colorSecondaryLighter: "#9b4dcb",
-    colorSecpndary: "#691b99",
+    colorSecondary: "#691b99",
     colorSecondaryDarker: "#37006a"
 } as TThemeStyles;

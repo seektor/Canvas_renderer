@@ -10,7 +10,6 @@ import { CDigitalDisplayRotationStage } from './CDigitalDisplayRotationStage';
 
 export class CDigitalDisplayMainStage extends AbstractCanvasStage {
 
-    private readonly externalRingPadding: number = 5;
     private readonly ringsDifference: number = 5;
     private readonly externalRingWidth: number = 6;
     private readonly rotatorWidth: number = 4;
@@ -31,10 +30,10 @@ export class CDigitalDisplayMainStage extends AbstractCanvasStage {
         const dX: number = lesserDimension === this.layerHeight ? Math.round((this.layerWidth - lesserDimension) * 0.5) : 0;
         const dY: number = lesserDimension === this.layerHeight ? 0 : Math.round((this.layerHeight - lesserDimension) * 0.5);
         this.baseLayerRenderParams = {
-            dX: dX + this.externalRingPadding,
-            dY: dY + this.externalRingPadding,
-            height: Math.max(1, lesserDimension - this.externalRingPadding * 2),
-            width: Math.max(1, lesserDimension - this.externalRingPadding * 2)
+            dX: dX,
+            dY: dY,
+            height: lesserDimension,
+            width: lesserDimension
         }
     }
 

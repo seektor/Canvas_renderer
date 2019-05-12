@@ -1,5 +1,5 @@
-import { TThemeStyles } from "./structures/TThemeStyles";
 import { ThemeType } from "./structures/ThemeType";
+import { TThemeStyles } from "./structures/TThemeStyles";
 import DarkTheme from "./themes/DarkTheme";
 
 class ThemingService {
@@ -20,8 +20,6 @@ class ThemingService {
     public getTheme(): TThemeStyles {
         return this.theme;
     }
-
-
 }
 
 export default ThemingService.getInstance();

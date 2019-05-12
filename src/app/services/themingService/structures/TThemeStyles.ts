@@ -4,7 +4,7 @@ export interface TThemeStyles {
     colorPrimaryDarker: string;
 
     colorSecondaryLighter: string;
-    colorSecpndary: string;
+    colorSecondary: string;
     colorSecondaryDarker: string;
 
     colorBackgroundLighter: string;

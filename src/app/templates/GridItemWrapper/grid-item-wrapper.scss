@@ -1,0 +1,14 @@
+.giw {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    &__title {
+        background-color: $ColorBackgroundDarker;
+        color: $ColorFont;
+    }
+
+    &__content {
+        flex-grow: 1;
+    }
+}

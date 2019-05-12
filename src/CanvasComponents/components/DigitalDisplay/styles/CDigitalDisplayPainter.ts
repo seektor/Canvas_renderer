@@ -78,7 +78,7 @@ export class CDigitalDisplayPainter extends CanvasBasePainter {
         const styles: TFillTextStyles = {
             fillStyle: this.styles.colorText,
             textAlign: "center",
-            font: this.getFontStyle(Constants.fontMain, timeHeight * 0.6, 'bold'),
+            font: this.getFontStyle(Constants.fontMain, timeHeight * 0.5, 'bold'),
             textBaseline: "top"
         }
         this.fillText(ctx, timeString, timeCoords, styles);
