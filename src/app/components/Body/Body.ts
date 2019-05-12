@@ -1,9 +1,8 @@
-import { Utils } from '../../utils/Utils';
-import { PointerEventHandler } from '../../../CanvasRenderer/utils/pointer-event-handler/PointerEventHandler';
-import { CVerticalSlider } from '../../../CanvasComponents/components/VerticalSlider/CVerticalSlider';
 import { CFlatGrid } from '../../../CanvasComponents/components/FlatGrid/CFlatGrid';
+import { PointerEventHandler } from '../../../CanvasRenderer/utils/pointer-event-handler/PointerEventHandler';
 import { ReduxJarvisDb } from '../../../Database/Redux/JarvisDb/ReduxJarvisDb';
 import CommunicationService from '../../services/communicationService/CommunicationService';
+import { Utils } from '../../utils/Utils';
 
 export class Body {
 
@@ -18,8 +17,9 @@ export class Body {
         const reduxJarvisDb: ReduxJarvisDb = new ReduxJarvisDb();
         CommunicationService.setDataProvider(reduxJarvisDb.getStore());
 
+        const flatGridPlaceholder: HTMLElement = document.getElementById('gridPlaceholder');
         const canvasFlatGridComponent: CFlatGrid = new CFlatGrid({ tableName: 'targets' });
-        canvasFlatGridComponent.createViewport(this.bodyElement);
+        canvasFlatGridComponent.createViewport(flatGridPlaceholder);
         // const verticalSliderComponent: CVerticalSlider = new CVerticalSlider();
         // verticalSliderComponent.createViewport(this.bodyElement);
     }

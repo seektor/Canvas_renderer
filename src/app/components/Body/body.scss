@@ -1,5 +1,22 @@
 .body {
     flex-grow: 1;
-    color: black;
+    background-color: $ColorBackground;
+    color: $ColorFont;
     overflow: hidden;
+
+    &__grid {
+        height: 100%;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10px;
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        grid-template-rows: repeat(12, 1fr);
+        row-gap: 10px;
+        column-gap: 10px;
+
+        &>div {
+            background-color: $ColorBackgroundDarker;
+        }
+    }
 }
