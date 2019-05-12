@@ -1,4 +1,5 @@
 import { CDigitalDisplay } from '../../../CanvasComponents/components/DigitalDisplay/CDigitalDisplay';
+import { CFlatDisplay } from '../../../CanvasComponents/components/FlatDisplay/CFlatDisplay';
 import { CFlatGrid } from '../../../CanvasComponents/components/FlatGrid/CFlatGrid';
 import { PointerEventHandler } from '../../../CanvasRenderer/utils/pointer-event-handler/PointerEventHandler';
 import { ReduxJarvisDb } from '../../../Database/Redux/JarvisDb/ReduxJarvisDb';
@@ -40,9 +41,12 @@ export class Body {
 
         const flatDisplayOneElement: HTMLElement = gridItemElement.cloneNode(true) as HTMLElement;
         const flatDisplayOneTitle: HTMLElement = Utils.getElementByAttribute(flatDisplayOneElement, GIWAttributeHooks.title);
+        const flatDisplayContent: HTMLElement = Utils.getElementByAttribute(flatDisplayOneElement, GIWAttributeHooks.content);
         flatDisplayOneTitle.innerHTML = 'Flat Display';
         const flatDisplayOnePlaceholderElement: HTMLElement = document.getElementById('flatDisplayOnePlaceholder');
         flatDisplayOnePlaceholderElement.appendChild(flatDisplayOneElement);
+        const canvasFlatDisplayComponent: CFlatDisplay = new CFlatDisplay();
+        canvasFlatDisplayComponent.createViewport(flatDisplayContent);
 
 
         // const verticalSliderComponent: CVerticalSlider = new CVerticalSlider();

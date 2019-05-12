@@ -1,6 +1,6 @@
 import { TCoords } from '../../structures/TCoords';
 import { TRect } from '../../structures/TRect';
-import { TFillArcSektorStyles, TFillCircleStyles, TFillRectStyles, TFillTextStyles, TLineStyles, TMeasureText, TRectStyles as TStrokeRectStyles, TRoundRectParams } from './structures/CanvasPainterTypes';
+import { FontDecoration, TFillArcSektorStyles, TFillCircleStyles, TFillRectStyles, TFillTextStyles, TLineStyles, TMeasureText, TRectStyles as TStrokeRectStyles, TRoundRectParams } from './structures/CanvasPainterTypes';
 import { TCanvasStyles } from './structures/TCanvasStyles';
 
 export class CanvasBasePainter {
@@ -100,7 +100,7 @@ export class CanvasBasePainter {
         ctx.fillText(text, coords.x, coords.y);
     }
 
-    public getFontStyle(fontName: string, fontHeight: number, decoration?: 'bold' | 'italic'): string {
+    public getFontStyle(fontName: string, fontHeight: number, decoration?: FontDecoration): string {
         return decoration ? `${decoration} ${fontHeight}px ${fontName}` : `${fontHeight}px ${fontName}`
     }
 
@@ -134,6 +134,22 @@ export class CanvasBasePainter {
         }
         ctx.font = initialFontStyle;
         return text;
+    }
+
+    public getFittingFont(ctx: CanvasRenderingContext2D, text: string, height: number, fontName: string, decoration: FontDecoration | null, maxWidth: number): string {
+        const initialFontStyle: string = ctx.font;
+        let fontHeight: number = height;
+        let font: string = this.getFontStyle(fontName, fontHeight, decoration);
+        ctx.font = font;
+        let textWidth: number = ctx.measureText(text).width;
+        while (textWidth > maxWidth) {
+            fontHeight -= 1;
+            font = this.getFontStyle(fontName, fontHeight, decoration);
+            ctx.font = font;
+            textWidth = ctx.measureText(text).width;
+        }
+        ctx.font = initialFontStyle;
+        return font;
     }
 
     public truncateTextPure(ctx: CanvasRenderingContext2D, text: string, maxWidth: number, truncationSymbol: string): string {

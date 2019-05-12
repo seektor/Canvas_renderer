@@ -9,3 +9,5 @@ export type TLineStyles = Pick<TCanvasStyles, 'strokeStyle' | 'lineWidth' | 'sha
 export type TFillCircleStyles = Pick<TCanvasStyles, 'fillStyle'>;
 export type TFillArcSektorStyles = Pick<TCanvasStyles, 'fillStyle' | 'strokeStyle'>;
 
+export type FontDecoration = 'bold' | 'italic';
+
