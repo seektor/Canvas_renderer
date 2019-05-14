@@ -5,7 +5,7 @@ import { TCoords } from '../../../../CanvasRenderer/structures/TCoords';
 import { TRect } from '../../../../CanvasRenderer/structures/TRect';
 import { CanvasBasePainter } from '../../../../CanvasRenderer/utils/painter/CanvasBasePainter';
 import { TCanvasStyles } from '../../../../CanvasRenderer/utils/painter/structures/TCanvasStyles';
-import { DataRow } from '../../../../Database/Redux/JarvisDb/types/DataTypes';
+import { DataRow, DataType } from '../../../../Database/Redux/JarvisDb/types/DataTypes';
 import { TColumnData } from '../structures/TColumnData';
 import { TFlatGridStyles } from './TFlatGridStyles';
 
@@ -87,28 +87,45 @@ export class CFlatGridPainter extends CanvasBasePainter {
         const styles: Partial<TCanvasStyles> = {
             lineWidth: 1,
             strokeStyle: this.styles.colorDataCellBorder,
+            fillStyle: this.styles.colorDataCellBorder,
             textAlign: "center",
-            font: this.getFontStyle(Constants.fontMain, rect.height * 0.5),
+            font: this.getFontStyle(Constants.fontMain, this.rowHeight * 0.5),
             textBaseline: "middle"
         }
         const savedStyles: Partial<TCanvasStyles> = this.extractStyles(ctx, Object.keys(styles) as Array<(keyof TCanvasStyles)>);
         this.applyStyles(ctx, styles);
-        let currentX: number = 0;
-        let currentY: number = 0;
-        [1].forEach(() => {
-            currentX = 0;
+        const initialX: number = this.dataCellLineWidth % 2 === 0 ? 0 : 0.5;
+        const initialY: number = initialX;
+        let currentX: number = initialX;
+        let currentY: number = initialY;
+        rows.forEach((row: DataRow) => {
+            currentX = initialX;
             columnsData.forEach((column: TColumnData) => {
                 this.strokeRectPure(ctx, { height: this.rowHeight, width: column.width, x: currentX, y: currentY });
+                const maxCellContentWidth: number = column.width - 2 * this.cellHorizontalPadding;
+                const formattedText: string = this.getFormattedCellValue(row[column.id], column.dataType);
+                const truncatedText: string = this.truncateTextPure(ctx, formattedText, maxCellContentWidth, this.truncationSymbol);
+                const centerX: number = currentX + column.width * 0.5;
+                const centerY: number = currentY + this.rowHeight * 0.5 + this.headerCellLineWidth; 
+                this.fillTextPure(ctx, truncatedText, {x: centerX, y: centerY});
                 currentX += column.width;
             });
             currentY += Math.floor(this.rowHeight);
         });
 
-        this.drawLines(ctx, [{ y: 50 - 0.5, x: 0 }, { y: 50 - 0.5, x: 500 }], styles);
-        styles.lineWidth = 2;
-        this.drawLines(ctx, [{ y: 70, x: 0 }, { y: 70, x: 500 }], styles);
-
         this.applyStyles(ctx, savedStyles);
+    }
+
+    private getFormattedCellValue(value: unknown, dataType: DataType): string {
+        switch(dataType){
+            case DataType.Boolean:
+                return (value as boolean).toString();
+            case DataType.Date:
+            case DataType.Number:
+                return (value as number).toString();
+            case DataType.String:
+                return value as string;
+        }
     }
 
 }

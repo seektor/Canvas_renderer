@@ -2,8 +2,8 @@ import { AbstractCanvasLayer } from '../../../../CanvasRenderer/AbstractCanvasLa
 import { TCoords } from '../../../../CanvasRenderer/structures/TCoords';
 import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
 import { TRect } from '../../../../CanvasRenderer/structures/TRect';
-import { CDigitalDisplayModel } from '../CDigitalDisplayModel';
 import { CDigitalDisplayPainter } from '../styles/CDigitalDisplayPainter';
+import { CDigitalDisplayModel } from '../CDigitalDIsplayModel';
 
 export class CDigitalDisplayRotatorLayer extends AbstractCanvasLayer {
 

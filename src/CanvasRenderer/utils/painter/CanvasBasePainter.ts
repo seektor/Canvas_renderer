@@ -96,7 +96,7 @@ export class CanvasBasePainter {
         this.applyStyles(ctx, savedStyles);
     }
 
-    public fillTextPure(ctx: CanvasRenderingContext2D, text: string, coords: TCoords, ) {
+    public fillTextPure(ctx: CanvasRenderingContext2D, text: string, coords: TCoords) {
         ctx.fillText(text, coords.x, coords.y);
     }
 

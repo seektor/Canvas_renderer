@@ -15,7 +15,7 @@ export class CFlatGridModel extends AbstractCanvasModel {
 
     private readonly baseColumnWidth: number = 250;
     private readonly minColumnWidth: number = 100;
-    private readonly rowHeight: number = 20;
+    private readonly rowHeight: number = 25;
     private readonly headerHeight: number = 40;
     private readonly rowBuffer: number = 60;
 

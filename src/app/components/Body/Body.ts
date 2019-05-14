@@ -5,6 +5,7 @@ import { ReduxJarvisDb } from '../../../Database/Redux/JarvisDb/ReduxJarvisDb';
 import CommunicationService from '../../services/communicationService/CommunicationService';
 import GIWAttributeHooks from '../../templates/GridItemWrapper/structures/GIWAttributeHooks';
 import { Utils } from '../../utils/Utils';
+import { CDigitalDisplay } from '../../../CanvasComponents/components/DigitalDisplay/CDigitalDisplay';
 
 export class Body {
 
@@ -31,14 +32,14 @@ export class Body {
         const canvasFlatGridComponent: CFlatGrid = new CFlatGrid({ tableName: 'targets' });
         canvasFlatGridComponent.createViewport(gridContent);
 
-        // const digitalDisplayElement: HTMLElement = gridItemElement.cloneNode(true) as HTMLElement;
-        // const digitalDisplayTitle: HTMLElement = Utils.getElementByAttribute(digitalDisplayElement, GIWAttributeHooks.title);
-        // const digitalDisplayContent: HTMLElement = Utils.getElementByAttribute(digitalDisplayElement, GIWAttributeHooks.content);
-        // digitalDisplayTitle.innerHTML = 'Digital Display';
-        // const digitalDisplayPlaceholderElement: HTMLElement = document.getElementById('digitalDisplayPlaceholder');
-        // digitalDisplayPlaceholderElement.appendChild(digitalDisplayElement);
-        // const canvasDigitalDisplayComponent: CDigitalDisplay = new CDigitalDisplay();
-        // canvasDigitalDisplayComponent.createViewport(digitalDisplayContent);
+        const digitalDisplayElement: HTMLElement = gridItemElement.cloneNode(true) as HTMLElement;
+        const digitalDisplayTitle: HTMLElement = Utils.getElementByAttribute(digitalDisplayElement, GIWAttributeHooks.title);
+        const digitalDisplayContent: HTMLElement = Utils.getElementByAttribute(digitalDisplayElement, GIWAttributeHooks.content);
+        digitalDisplayTitle.innerHTML = 'Digital Display';
+        const digitalDisplayPlaceholderElement: HTMLElement = document.getElementById('digitalDisplayPlaceholder');
+        digitalDisplayPlaceholderElement.appendChild(digitalDisplayElement);
+        const canvasDigitalDisplayComponent: CDigitalDisplay = new CDigitalDisplay();
+        canvasDigitalDisplayComponent.createViewport(digitalDisplayContent);
 
         const flatDisplayOneElement: HTMLElement = gridItemElement.cloneNode(true) as HTMLElement;
         const flatDisplayOneTitle: HTMLElement = Utils.getElementByAttribute(flatDisplayOneElement, GIWAttributeHooks.title);
