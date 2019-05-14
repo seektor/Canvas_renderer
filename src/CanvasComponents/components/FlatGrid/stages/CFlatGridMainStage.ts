@@ -23,7 +23,7 @@ export class CFlatGridMainStage extends AbstractCanvasStage {
         return {
             dX: this.dX,
             dY: this.dY,
-            height: Math.min(40, this.layerHeight),
+            height: this.layerHeight,
             width: Math.max(this.layerWidth - 20, 0)
         }
     }

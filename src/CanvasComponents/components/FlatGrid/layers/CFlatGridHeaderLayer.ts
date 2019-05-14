@@ -9,7 +9,7 @@ import { CFlatGridPainter } from '../styles/CFLatGridPainter';
 
 export class CFlatGridHeaderLayer extends AbstractCanvasLayer {
 
-    private readonly shadowHeight: number = 4;
+    private readonly shadowHeight: number;
     private readonly resizeHorizontalTriggerWidth: number = 5;
 
     protected model: CFlatGridModel;
@@ -18,11 +18,20 @@ export class CFlatGridHeaderLayer extends AbstractCanvasLayer {
     private contentWidth: number;
     private columnResizeData: { columnIndex: number, initialWidth: number } | null = null;
 
-    constructor(params: TLayerParams<CFlatGridModel, unknown>) {
+    constructor(params: TLayerParams<CFlatGridModel, unknown>, shadowHeight: number) {
         super(params);
         this.painter = this.model.getCanvasPainter();
+        this.shadowHeight = shadowHeight;
+        this.setEvents();
         this.updateParams();
-        this.renderSelf();
+    }
+
+    private setEvents(): void {
+        this.model.onMetadataDidChange$.subscribe(() => {
+            this.updateParams();
+            this.renderSelf();
+            this.notifyRenderChanges();
+        });
     }
 
     protected updateParams(): void {

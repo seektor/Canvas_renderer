@@ -1,5 +1,5 @@
 import { Store } from "redux";
-import { TestDbState, TableData, TargetsTableRow, DataType, TField, FieldType, TableMetadata } from "../../../Database/Redux/JarvisDb/types/DataTypes";
+import { DataRow, TableData, TableMetadata, TestDbState } from "../../../Database/Redux/JarvisDb/types/DataTypes";
 
 class CommunicationService {
 
@@ -14,9 +14,9 @@ class CommunicationService {
         this.store = store;
     }
 
-    public getTableData<T>(tableName: string, from: number, to: number): T[] {
+    public getTableData(tableName: string, from: number, to: number): DataRow[] {
         const tableData: TableData = this.store.getState().tables.byId[tableName];
-        return tableData.values.slice(from, Math.min(to, tableData.metadata.rowCount)) as T[];
+        return tableData.values.slice(from, Math.min(to, tableData.metadata.rowCount));
     }
 
     public getTableMetadata(tableName): TableMetadata {

@@ -18,13 +18,17 @@ export interface TField {
     fieldType: FieldType
 }
 
+export interface DataRow {
+    [key: string]: unknown;
+}
+
 export interface VariableData {
     value: number;
     metadata: VariableMetadata;
 }
 
 export interface TableData {
-    values: unknown[],
+    values: DataRow[],
     metadata: TableMetadata;
 }
 

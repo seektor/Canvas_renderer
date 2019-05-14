@@ -1,10 +1,10 @@
 import { AbstractCanvasLayer } from '../../../../CanvasRenderer/AbstractCanvasLayer';
-import { CVerticalSliderModel } from '../CVerticalSliderModel';
-import { CVerticalSliderPainter } from '../styles/CVerticalSliderPainter';
-import { Direction } from '../../../../CanvasRenderer/structures/Direction';
-import { TVerticalSliderButtonParams } from '../structures/TVerticalSliderButtonParams';
 import { CursorType } from '../../../../CanvasRenderer/structures/CursorType';
+import { Direction } from '../../../../CanvasRenderer/structures/Direction';
 import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
+import { CVerticalSliderModel } from '../CVerticalSliderModel';
+import { TVerticalSliderButtonParams } from '../structures/TVerticalSliderButtonParams';
+import { CVerticalSliderPainter } from '../styles/CVerticalSliderPainter';
 
 export class CVerticalSliderButtonLayer extends AbstractCanvasLayer {
 
@@ -20,6 +20,7 @@ export class CVerticalSliderButtonLayer extends AbstractCanvasLayer {
     }
 
     public renderSelf(isActive: boolean): void {
+        this.clear();
         this.painter.drawArrowButton(this.layerContext, this.getLayerRenderRect(), this.direction, isActive);
         this.notifyRenderChanges();
     }
