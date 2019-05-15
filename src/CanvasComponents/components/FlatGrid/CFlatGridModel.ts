@@ -1,6 +1,7 @@
 import { Observable, Subject } from 'rxjs';
 import { AbstractCanvasModel } from '../../../CanvasRenderer/AbstractCanvasModel';
 import { TableMetadata } from '../../../Database/Redux/JarvisDb/types/DataTypes';
+import { ISliderHandlers } from '../VerticalSlider/interfaces/ISliderHandlers';
 import { IHostGridModel } from './interfaces/IHostGridModel';
 import { TColumnData } from './structures/TColumnData';
 import { TDataFrame } from './structures/TDataFrame';
@@ -24,6 +25,8 @@ export class CFlatGridModel extends AbstractCanvasModel {
     private rowCount: number;
     private dataFrame: TDataFrame;
     private host: IHostGridModel;
+
+    private verticalSliderHandlers: ISliderHandlers;
 
     constructor(host: IHostGridModel) {
         super();
@@ -61,6 +64,10 @@ export class CFlatGridModel extends AbstractCanvasModel {
 
     public getData(): TDataFrame {
         return this.dataFrame;
+    }
+
+    public setVerticalSliderHandlers(handlers: ISliderHandlers): void {
+        this.verticalSliderHandlers = handlers;
     }
 
     private requestData(): void {

@@ -117,6 +117,9 @@ export abstract class AbstractCanvasLayer implements ILayer {
     }
 
     private drawImage(context: CanvasRenderingContext2D): void {
+        if (this.layerWidth === 0 || this.layerHeight === 0) {
+            return;
+        }
         context.drawImage(this.layer, this.sX, this.sY, this.sWidth, this.sHeight, this.dX, this.dY, this.dWidth, this.dHeight);
     }
 

@@ -1,11 +1,11 @@
 import { AbstractCanvasLayer } from '../../../../CanvasRenderer/AbstractCanvasLayer';
+import { CursorType } from '../../../../CanvasRenderer/structures/CursorType';
+import { TDeltas } from '../../../../CanvasRenderer/structures/TDeltas';
+import { TParentRelativeCoords } from '../../../../CanvasRenderer/structures/TLayerCoords';
+import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
+import { Utils } from '../../../../CanvasRenderer/utils/Utils';
 import { CVerticalSliderModel } from '../CVerticalSliderModel';
 import { CVerticalSliderPainter } from '../styles/CVerticalSliderPainter';
-import { CursorType } from '../../../../CanvasRenderer/structures/CursorType';
-import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
-import { TParentRelativeCoords } from '../../../../CanvasRenderer/structures/TLayerCoords';
-import { TDeltas } from '../../../../CanvasRenderer/structures/TDeltas';
-import { Utils } from '../../../../CanvasRenderer/utils/Utils';
 
 export class CVerticalSliderHandleLayer extends AbstractCanvasLayer {
 

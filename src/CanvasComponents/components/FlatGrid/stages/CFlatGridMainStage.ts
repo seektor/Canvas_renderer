@@ -3,6 +3,7 @@ import { ILayer } from '../../../../CanvasRenderer/interfaces/ILayer';
 import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
 import { TLayerRenderParams } from '../../../../CanvasRenderer/structures/TLayerRenderParams';
 import { CVerticalSlider } from '../../VerticalSlider/CVerticalSlider';
+import { ISliderHandlers } from '../../VerticalSlider/interfaces/ISliderHandlers';
 import { CFlatGridModel } from '../CFlatGridModel';
 import { CFlatGridStage } from './CFlatGridStage';
 
@@ -45,6 +46,8 @@ export class CFlatGridMainStage extends AbstractCanvasStage {
         this.addLayer(flatGridStage);
 
         const verticalSlider: CVerticalSlider = new CVerticalSlider();
+        const verticalSliderHandlers: ISliderHandlers = verticalSlider.getSliderHandlers();
+        this.model.setVerticalSliderHandlers(verticalSliderHandlers);
         verticalSlider.createViewport(this.globalViewport.getContainer(), {
             globalViewport: this.globalViewport,
             displayLayerRectExtractor: (_layer: ILayer) => this.getVerticalSliderLayerParams(),
