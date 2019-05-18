@@ -1,7 +1,6 @@
-import { TCoords } from "../structures/TCoords";
-import { TRect } from "../structures/TRect";
+import { TLayerRect } from "../structures/TLayerRect";
 
 export interface ILayerHost {
     notifyRenderChanges(): void;
-    getLayerDisplayRect(): TRect;
+    getLayerDisplayRect(): TLayerRect;
 }

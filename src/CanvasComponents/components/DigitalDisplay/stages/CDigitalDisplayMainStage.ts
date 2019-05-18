@@ -46,8 +46,8 @@ export class CDigitalDisplayMainStage extends AbstractCanvasStage {
         return {
             dX: this.baseLayerRenderParams.dX + translation,
             dY: this.baseLayerRenderParams.dY + translation,
-            height: Math.max(1, this.baseLayerRenderParams.height - translation * 2),
-            width: Math.max(1, this.baseLayerRenderParams.width - translation * 2)
+            height: Math.max(0, this.baseLayerRenderParams.height - translation * 2),
+            width: Math.max(0, this.baseLayerRenderParams.width - translation * 2)
         }
     }
 

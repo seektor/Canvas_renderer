@@ -1,6 +1,6 @@
 import { TCoords } from '../../structures/TCoords';
 import { TRect } from '../../structures/TRect';
-import { FontDecoration, TFillArcSektorStyles, TFillCircleStyles, TFillRectStyles, TFillTextStyles, TLineStyles, TMeasureText, TRectStyles as TStrokeRectStyles, TRoundRectParams } from './structures/CanvasPainterTypes';
+import { FontDecoration, TFillArcStyles, TFillCircleStyles, TFillRectStyles, TFillTextStyles, TLineStyles, TMeasureText, TRectStyles as TStrokeRectStyles, TRoundRectParams } from './structures/CanvasPainterTypes';
 import { TCanvasStyles } from './structures/TCanvasStyles';
 
 export class CanvasBasePainter {
@@ -74,7 +74,7 @@ export class CanvasBasePainter {
         this.applyStyles(ctx, savedStyles);
     }
 
-    public fillArcSector(ctx: CanvasRenderingContext2D, rect: TRect, startAngle: number, endAngle: number, styles: Partial<TFillArcSektorStyles>): void {
+    public fillArcSector(ctx: CanvasRenderingContext2D, rect: TRect, fromAngle: number, toAngle: number, styles: Partial<TFillArcStyles>): void {
         const savedStyles: Partial<TCanvasStyles> = this.extractStyles(ctx, Object.keys(styles) as Array<(keyof TCanvasStyles)>);
         this.applyStyles(ctx, styles);
         const centerX: number = Math.floor(rect.x + rect.width * 0.5);
@@ -82,10 +82,38 @@ export class CanvasBasePainter {
         const radius: number = Math.floor(rect.width * 0.5);
         ctx.beginPath();
         ctx.moveTo(centerX, centerY);
-        ctx.arc(centerX, centerY, radius, startAngle, endAngle, false);
+        ctx.arc(centerX, centerY, radius, fromAngle, toAngle, false);
         ctx.lineTo(centerX, centerY);
         ctx.closePath();
         ctx.fill();
+        this.applyStyles(ctx, savedStyles);
+    }
+
+    public fillArcRing(ctx: CanvasRenderingContext2D, centerX: number, centerY: number, fromAngle: number, toAngle: number, outerRadius: number, innerRadius: number, styles: Partial<TFillArcStyles>): void {
+        const savedStyles: Partial<TCanvasStyles> = this.extractStyles(ctx, Object.keys(styles) as Array<(keyof TCanvasStyles)>);
+        this.applyStyles(ctx, styles);
+
+        var grd = ctx.createLinearGradient(0, 0, 200, 0);
+        grd.addColorStop(0, "blue");
+        grd.addColorStop(1, "red");
+        // ctx.fillStyle = grd;
+        const lineWidth: number = outerRadius - innerRadius;
+        ctx.strokeStyle = grd;
+        ctx.lineWidth = lineWidth;
+
+        ctx.beginPath();
+        //ctx.moveTo(centerX + outerRadius * Math.cos(fromAngle), centerY + outerRadius * Math.sin(fromAngle));
+        // ctx.arc(centerX, centerY, outerRadius - lineWidth / 2, fromAngle, toAngle, false);
+        //ctx.lineTo(centerX + innerRadius * Math.cos(toAngle), centerY + innerRadius * Math.sin(toAngle));
+        //ctx.arc(centerX, centerY, innerRadius, toAngle, fromAngle, true);
+        var grd = ctx.createLinearGradient(centerX + innerRadius * Math.cos(toAngle), centerY + innerRadius * Math.sin(toAngle), centerX + innerRadius * Math.cos(fromAngle + (toAngle - fromAngle) * 0.5), centerY + innerRadius * Math.sin(fromAngle + (toAngle - fromAngle) * 0.5));
+        grd.addColorStop(0, "blue");
+        grd.addColorStop(1, "green");
+        ctx.strokeStyle = grd;
+        ctx.arc(centerX, centerY, outerRadius - lineWidth / 2, fromAngle, fromAngle + (toAngle - fromAngle) * 0.5, false);
+
+        ctx.stroke();
+        ctx.closePath();
         this.applyStyles(ctx, savedStyles);
     }
 

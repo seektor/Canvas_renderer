@@ -7,7 +7,7 @@ export type TFillTextStyles = Pick<TCanvasStyles, "fillStyle" | "font" | "textAl
 export type TRectStyles = Pick<TCanvasStyles, 'strokeStyle' | 'lineWidth' | 'shadowBlur' | 'shadowColor' | 'shadowOffsetY'>;
 export type TLineStyles = Pick<TCanvasStyles, 'strokeStyle' | 'lineWidth' | 'shadowBlur' | 'shadowColor' | 'shadowOffsetY'>;
 export type TFillCircleStyles = Pick<TCanvasStyles, 'fillStyle'>;
-export type TFillArcSektorStyles = Pick<TCanvasStyles, 'fillStyle' | 'strokeStyle'>;
+export type TFillArcStyles = Pick<TCanvasStyles, 'fillStyle' | 'strokeStyle'>;
 
 export type FontDecoration = 'bold' | 'italic';
 

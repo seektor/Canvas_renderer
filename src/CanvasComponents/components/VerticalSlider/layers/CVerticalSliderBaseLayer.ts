@@ -1,13 +1,7 @@
 import { AbstractCanvasLayer } from '../../../../CanvasRenderer/AbstractCanvasLayer';
-import { CVerticalSliderModel } from '../CVerticalSliderModel';
-import { ILayerHost } from '../../../../CanvasRenderer/interfaces/ILayerHost';
-import { ILayerParamsExtractor } from '../../../../CanvasRenderer/interfaces/ILayerParamsExtractor';
-import { CVerticalSliderPainter } from '../styles/CVerticalSliderPainter';
-import { TVerticalSliderViewState } from '../structures/TVerticalSliderViewState';
-import { Direction } from '../../../../CanvasRenderer/structures/Direction';
-import { TLayerRect } from '../../../../CanvasRenderer/structures/TLayerRect';
-import { ILayerViewport } from '../../../../CanvasRenderer/interfaces/ILayerViewport';
 import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
+import { CVerticalSliderModel } from '../CVerticalSliderModel';
+import { CVerticalSliderPainter } from '../styles/CVerticalSliderPainter';
 
 export class CVerticalSliderBaseLayer extends AbstractCanvasLayer {
 
@@ -21,6 +15,6 @@ export class CVerticalSliderBaseLayer extends AbstractCanvasLayer {
     }
 
     public renderSelf(): void {
-        this.painter.drawBackground(this.layerContext, this.getLayerDisplayRect());
+        this.painter.drawBackground(this.layerContext, this.getLayerRenderRect());
     }
 }

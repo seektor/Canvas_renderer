@@ -10,6 +10,7 @@ import { TDeltas } from './structures/TDeltas';
 import { TDimensions } from './structures/TDimensions';
 import { TParentRelativeCoords } from './structures/TLayerCoords';
 import { TLayerParams } from './structures/TLayerParams';
+import { TLayerRect } from './structures/TLayerRect';
 import { TLayerRenderParams } from './structures/TLayerRenderParams';
 import { TRect } from './structures/TRect';
 
@@ -139,12 +140,13 @@ export abstract class AbstractCanvasLayer implements ILayer {
         }
     }
 
-    public getLayerDisplayRect(): TRect {
+    public getLayerDisplayRect(): TLayerRect {
         return {
             height: this.layerHeight,
             width: this.layerWidth,
             x: this.dX,
-            y: this.dY
+            y: this.dY,
+            relativity: LayerRelativity.Parent
         }
     }
 

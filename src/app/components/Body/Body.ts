@@ -1,16 +1,19 @@
+import { CDigitalDisplay } from '../../../CanvasComponents/components/DigitalDisplay/CDigitalDisplay';
 import { CFlatDisplay } from '../../../CanvasComponents/components/FlatDisplay/CFlatDisplay';
 import { CFlatGrid } from '../../../CanvasComponents/components/FlatGrid/CFlatGrid';
+import { CGauge } from '../../../CanvasComponents/components/Gauge/CGauge';
+import { AbstractCanvasComponent } from '../../../CanvasRenderer/AbstractCanvasComponent';
 import { PointerEventHandler } from '../../../CanvasRenderer/utils/pointer-event-handler/PointerEventHandler';
 import { ReduxJarvisDb } from '../../../Database/Redux/JarvisDb/ReduxJarvisDb';
 import CommunicationService from '../../services/communicationService/CommunicationService';
 import GIWAttributeHooks from '../../templates/GridItemWrapper/structures/GIWAttributeHooks';
 import { Utils } from '../../utils/Utils';
-import { CDigitalDisplay } from '../../../CanvasComponents/components/DigitalDisplay/CDigitalDisplay';
 
 export class Body {
 
     private bodyElement: HTMLElement;
     private pointerEventHandler: PointerEventHandler;
+    private placeholderGridItem: HTMLElement;
 
     constructor(container: HTMLElement) {
         this.construct(container);
@@ -21,38 +24,42 @@ export class Body {
         CommunicationService.setDataProvider(reduxJarvisDb.getStore());
 
         const gridItemTemplate: string = require('../../templates/GridItemWrapper/grid-item-wrapper.tpl.html');
-        const gridItemElement: HTMLElement = Utils.convertToDocumentFragment(gridItemTemplate).firstElementChild as HTMLElement;
+        this.placeholderGridItem = Utils.convertToDocumentFragment(gridItemTemplate).firstElementChild as HTMLElement;
 
-        const gridElement: HTMLElement = gridItemElement.cloneNode(true) as HTMLElement;
-        const gridTitle: HTMLElement = Utils.getElementByAttribute(gridElement, GIWAttributeHooks.title);
-        const gridContent: HTMLElement = Utils.getElementByAttribute(gridElement, GIWAttributeHooks.content);
-        gridTitle.innerHTML = 'Flat grid';
         const flatGridPlaceholderElement: HTMLElement = document.getElementById('gridPlaceholder');
-        flatGridPlaceholderElement.append(gridElement);
         const canvasFlatGridComponent: CFlatGrid = new CFlatGrid({ tableName: 'targets' });
-        canvasFlatGridComponent.createViewport(gridContent);
+        const flatGridElement: HTMLElement = this.createGridItemWithCanvasComponent('Flat grid', canvasFlatGridComponent);
+        flatGridPlaceholderElement.append(flatGridElement);
 
-        const digitalDisplayElement: HTMLElement = gridItemElement.cloneNode(true) as HTMLElement;
-        const digitalDisplayTitle: HTMLElement = Utils.getElementByAttribute(digitalDisplayElement, GIWAttributeHooks.title);
-        const digitalDisplayContent: HTMLElement = Utils.getElementByAttribute(digitalDisplayElement, GIWAttributeHooks.content);
-        digitalDisplayTitle.innerHTML = 'Digital Display';
         const digitalDisplayPlaceholderElement: HTMLElement = document.getElementById('digitalDisplayPlaceholder');
-        digitalDisplayPlaceholderElement.appendChild(digitalDisplayElement);
         const canvasDigitalDisplayComponent: CDigitalDisplay = new CDigitalDisplay();
-        canvasDigitalDisplayComponent.createViewport(digitalDisplayContent);
+        const digitalDisplayElement: HTMLElement = this.createGridItemWithCanvasComponent('Digital Display', canvasDigitalDisplayComponent);
+        digitalDisplayPlaceholderElement.appendChild(digitalDisplayElement);
 
-        const flatDisplayOneElement: HTMLElement = gridItemElement.cloneNode(true) as HTMLElement;
-        const flatDisplayOneTitle: HTMLElement = Utils.getElementByAttribute(flatDisplayOneElement, GIWAttributeHooks.title);
-        const flatDisplayContent: HTMLElement = Utils.getElementByAttribute(flatDisplayOneElement, GIWAttributeHooks.content);
-        flatDisplayOneTitle.innerHTML = 'Flat Display';
-        const flatDisplayOnePlaceholderElement: HTMLElement = document.getElementById('flatDisplayOnePlaceholder');
-        flatDisplayOnePlaceholderElement.appendChild(flatDisplayOneElement);
+        const gaugePlaceholderElement: HTMLElement = document.getElementById('gaugePlaceholder');
+        const canvasGaugeComponent: CGauge = new CGauge();
+        const gaugeElement: HTMLElement = this.createGridItemWithCanvasComponent('Gauge', canvasGaugeComponent);
+        gaugePlaceholderElement.appendChild(gaugeElement);
+
+        const flatDisplayOnePlaceholderElement: HTMLElement = document.getElementById('flatDisplayPlaceholder_One');
         const canvasFlatDisplayComponent: CFlatDisplay = new CFlatDisplay();
-        canvasFlatDisplayComponent.createViewport(flatDisplayContent);
+        const flatDisplayElement: HTMLElement = this.createGridItemWithCanvasComponent('Flat Display', canvasFlatDisplayComponent);
+        flatDisplayOnePlaceholderElement.appendChild(flatDisplayElement);
+
+        window.dispatchEvent(new Event('resize'));
 
 
         // const verticalSliderComponent: CVerticalSlider = new CVerticalSlider();
         // verticalSliderComponent.createViewport(this.bodyElement);
+    }
+
+    private createGridItemWithCanvasComponent(title: string, element: AbstractCanvasComponent): HTMLElement {
+        const gridElement: HTMLElement = this.placeholderGridItem.cloneNode(true) as HTMLElement;
+        const elementTitle: HTMLElement = Utils.getElementByAttribute(gridElement, GIWAttributeHooks.title);
+        const elementContent: HTMLElement = Utils.getElementByAttribute(gridElement, GIWAttributeHooks.content);
+        elementTitle.innerHTML = title;
+        element.createViewport(elementContent);
+        return gridElement;
     }
 
     private construct(container: HTMLElement): void {

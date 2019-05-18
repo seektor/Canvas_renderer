@@ -4,7 +4,7 @@ import { Constants } from '../../../../app/utils/Constants';
 import { TCoords } from '../../../../CanvasRenderer/structures/TCoords';
 import { TRect } from '../../../../CanvasRenderer/structures/TRect';
 import { CanvasBasePainter } from '../../../../CanvasRenderer/utils/painter/CanvasBasePainter';
-import { TFillArcSektorStyles, TFillTextStyles } from '../../../../CanvasRenderer/utils/painter/structures/CanvasPainterTypes';
+import { TFillArcStyles, TFillTextStyles } from '../../../../CanvasRenderer/utils/painter/structures/CanvasPainterTypes';
 import { TDigitalDisplayStyles } from './TDigitalDisplayStyles';
 
 export class CDigitalDisplayPainter extends CanvasBasePainter {
@@ -42,12 +42,12 @@ export class CDigitalDisplayPainter extends CanvasBasePainter {
     public drawExternalCircle(ctx: CanvasRenderingContext2D, rect: TRect): void {
         this.fillCircle(ctx, rect, { fillStyle: this.styles.colorExternalCircle });
         const ringWidth: number = this.externalRingWidth;
-        const internalFillRect: TRect = { x: rect.x + ringWidth, y: rect.y + ringWidth, width: rect.width - ringWidth * 2, height: rect.height - ringWidth * 2 };
+        const internalFillRect: TRect = { x: rect.x + ringWidth, y: rect.y + ringWidth, width: Math.max(0, rect.width - ringWidth * 2), height: Math.max(0, rect.height - ringWidth * 2) };
         this.fillCircle(ctx, internalFillRect, { fillStyle: this.styles.colorBackground });
     }
 
     public drawRotator(ctx: CanvasRenderingContext2D, rect: TRect): void {
-        const styles: TFillArcSektorStyles = {
+        const styles: TFillArcStyles = {
             fillStyle: this.styles.colorInternalCircle,
             strokeStyle: this.styles.colorBackground
         }
@@ -82,7 +82,7 @@ export class CDigitalDisplayPainter extends CanvasBasePainter {
             textBaseline: "top"
         }
         this.fillText(ctx, timeString, timeCoords, styles);
-        styles.font = this.getFontStyle(Constants.fontMain, dayHeight * 0.4);
+        styles.font = this.getFontStyle(Constants.fontMain, Math.round(dayHeight * 0.4));
         styles.textBaseline = "bottom";
         this.fillText(ctx, dayNameString, dayCoords, styles);
     }
