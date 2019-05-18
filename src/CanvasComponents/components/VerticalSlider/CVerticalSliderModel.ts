@@ -1,3 +1,4 @@
+import { Observable, Subject } from 'rxjs';
 import { AbstractCanvasModel } from '../../../CanvasRenderer/AbstractCanvasModel';
 import { ISliderHandlers } from './interfaces/ISliderHandlers';
 import { CVerticalSliderPainter } from './styles/CVerticalSliderPainter';
@@ -6,6 +7,9 @@ export class CVerticalSliderModel extends AbstractCanvasModel implements ISlider
 
     protected canvasPainter: CVerticalSliderPainter;
 
+    public onDimensionsDidChange$: Observable<void>;
+    private dimensionsDidChange$: Subject<void>;
+
     private value: number;
     private maxValue: number;
     private scrollWrapperScrollSize: number;
@@ -13,10 +17,16 @@ export class CVerticalSliderModel extends AbstractCanvasModel implements ISlider
 
     constructor() {
         super();
+        this.init();
+    }
+
+    private init(): void {
         this.scrollWrapperScrollSize = 0;
         this.scrollWrapperDisplaySize = 0;
         this.value = 50;
         this.maxValue = 500;
+        this.dimensionsDidChange$ = new Subject();
+        this.onDimensionsDidChange$ = this.dimensionsDidChange$.asObservable();
     }
 
     public getCanvasPainter(): CVerticalSliderPainter {
@@ -27,7 +37,7 @@ export class CVerticalSliderModel extends AbstractCanvasModel implements ISlider
     }
 
     public getTheoreticalHandleHeight(): number {
-        return this.scrollWrapperDisplaySize / Math.max(this.scrollWrapperScrollSize, 1) * this.scrollWrapperDisplaySize;
+        return 70; // this.scrollWrapperDisplaySize / Math.max(this.scrollWrapperScrollSize, 1) * this.scrollWrapperDisplaySize;
     }
 
     public setScrollWrapperScrollSize(size: number): void {
@@ -36,9 +46,10 @@ export class CVerticalSliderModel extends AbstractCanvasModel implements ISlider
 
     public setScrollWrapperDisplaySize(size: number): void {
         this.scrollWrapperDisplaySize = size;
+        this.dimensionsDidChange$.next();
     }
 
-    public init(scrollWrapperScrollSize: number, scrollWrapperDisplaySize: number): void {
+    public initSlider(scrollWrapperScrollSize: number, scrollWrapperDisplaySize: number): void {
         this.scrollWrapperScrollSize = scrollWrapperScrollSize;
         this.scrollWrapperDisplaySize = scrollWrapperDisplaySize;
     }

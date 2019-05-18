@@ -22,6 +22,7 @@ export class CVerticalSliderHandleLayer extends AbstractCanvasLayer {
         this.isDragged = false;
         this.updateProperties();
         this.renderSelf();
+        this.model.onDimensionsDidChange$.subscribe(() => this.onResize());
     }
 
     private updateProperties(): void {

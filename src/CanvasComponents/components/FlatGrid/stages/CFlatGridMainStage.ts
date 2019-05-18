@@ -25,7 +25,7 @@ export class CFlatGridMainStage extends AbstractCanvasStage {
             dX: this.dX,
             dY: this.dY,
             height: this.layerHeight,
-            width: Math.max(this.layerWidth - 20, 0)
+            width: Math.max(this.layerWidth - this.model.getVerticalScrollWidth(), 0)
         }
     }
 
@@ -40,14 +40,15 @@ export class CFlatGridMainStage extends AbstractCanvasStage {
     }
 
     protected createLayers(): void {
+        const verticalSlider: CVerticalSlider = new CVerticalSlider();
+        const verticalSliderHandlers: ISliderHandlers = verticalSlider.getSliderHandlers();
+        this.model.setVerticalSliderHandlers(verticalSliderHandlers);
+
         const flatGridStage: ILayer = new CFlatGridStage({
             layerHost: this, globalViewport: this.globalViewport, model: this.model, layerParamsExtractor: () => this.getFlatGridLayerParams()
         });
         this.addLayer(flatGridStage);
 
-        const verticalSlider: CVerticalSlider = new CVerticalSlider();
-        const verticalSliderHandlers: ISliderHandlers = verticalSlider.getSliderHandlers();
-        this.model.setVerticalSliderHandlers(verticalSliderHandlers);
         verticalSlider.createViewport(this.globalViewport.getContainer(), {
             globalViewport: this.globalViewport,
             displayLayerRectExtractor: (_layer: ILayer) => this.getVerticalSliderLayerParams(),

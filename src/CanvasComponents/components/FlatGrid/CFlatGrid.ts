@@ -22,11 +22,17 @@ export class CFlatGrid extends AbstractCanvasComponent {
 
     public async requestData(from: number, to: number): Promise<void> {
         const rows: DataRow[] = CommunicationService.getTableData(this.tableName, from, to);
-        setTimeout(() => this.model.setData({ rows, from, to }), 100);
+        return new Promise((res) => setTimeout(() => {
+            this.model.setData({ rows, from, to });
+            res();
+        }, 100));
     }
 
     public async requestMetadata(): Promise<void> {
         const tableMetadata: TableMetadata = CommunicationService.getTableMetadata(this.tableName);
-        setTimeout(() => this.model.setMetadata(tableMetadata), 100);
+        return new Promise((res) => setTimeout(() => {
+            this.model.setMetadata(tableMetadata);
+            res();
+        }, 50));
     }
 }

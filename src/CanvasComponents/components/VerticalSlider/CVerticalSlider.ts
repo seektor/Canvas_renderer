@@ -17,7 +17,7 @@ export class CVerticalSlider extends AbstractCanvasComponent {
 
     public getSliderHandlers(): ISliderHandlers {
         return {
-            init: (ss, sd) => this.model.init(ss, sd),
+            initSlider: (ss, sd) => this.model.initSlider(ss, sd),
             setScrollWrapperDisplaySize: (sd) => this.model.setScrollWrapperDisplaySize(sd),
             setScrollWrapperScrollSize: (ss) => this.model.setScrollWrapperScrollSize(ss)
         }

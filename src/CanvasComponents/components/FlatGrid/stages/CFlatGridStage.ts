@@ -14,6 +14,17 @@ export class CFlatGridStage extends AbstractCanvasStage {
     constructor(params: TLayerParams<CFlatGridModel, unknown>) {
         super(params);
         this.createLayers();
+        this.setDataDisplayHeight();
+    }
+
+    public onResize(): void {
+        super.onResize();
+        this.setDataDisplayHeight();
+    }
+
+    private setDataDisplayHeight(): void {
+        const displayHeight: number = this.layerHeight - this.model.getHeaderHeight();
+        this.model.setDisplayDataLayerHeight(displayHeight);
     }
 
     private getHeaderLayerParams(layer: ILayer): TLayerRenderParams {

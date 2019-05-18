@@ -17,8 +17,12 @@ export class CFlatGridModel extends AbstractCanvasModel {
     private readonly baseColumnWidth: number = 250;
     private readonly minColumnWidth: number = 100;
     private readonly rowHeight: number = 25;
+    private readonly verticalScrollWidth: number = 20;
+    private readonly horizontalScrollHeight: number = 20;
     private readonly headerHeight: number = 40;
     private readonly rowBuffer: number = 60;
+
+    private displayDataLayerHeight: number = 0;
 
     protected canvasPainter: CFlatGridPainter;
     private columnsData: TColumnData[];
@@ -54,8 +58,21 @@ export class CFlatGridModel extends AbstractCanvasModel {
         return this.canvasPainter;
     }
 
+    public setDisplayDataLayerHeight(height: number): void {
+        this.displayDataLayerHeight = height;
+        this.verticalSliderHandlers.setScrollWrapperDisplaySize(height);
+    }
+
     public getHeaderHeight(): number {
         return this.headerHeight;
+    }
+
+    public getVerticalScrollWidth(): number {
+        return this.verticalScrollWidth
+    }
+
+    public getHorizontalScrollHeight(): number {
+        return this.horizontalScrollHeight;
     }
 
     public getColumnsData(): TColumnData[] {
@@ -71,6 +88,7 @@ export class CFlatGridModel extends AbstractCanvasModel {
     }
 
     private requestData(): void {
+        // CALLBACK!
         this.host.requestData(0, this.rowBuffer);
     }
 
@@ -90,6 +108,8 @@ export class CFlatGridModel extends AbstractCanvasModel {
                 width: this.baseColumnWidth
             }
         });
+        const scrollWrapperScrollSize: number = data.rowCount * this.rowHeight;
+        this.verticalSliderHandlers.initSlider(scrollWrapperScrollSize, this.displayDataLayerHeight);
         this.metadataDidChange$.next();
         this.ownViewport.forceRerender();
     }
