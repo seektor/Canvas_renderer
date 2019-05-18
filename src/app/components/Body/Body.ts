@@ -3,7 +3,6 @@ import { CFlatDisplay } from '../../../CanvasComponents/components/FlatDisplay/C
 import { CFlatGrid } from '../../../CanvasComponents/components/FlatGrid/CFlatGrid';
 import { CGauge } from '../../../CanvasComponents/components/Gauge/CGauge';
 import { AbstractCanvasComponent } from '../../../CanvasRenderer/AbstractCanvasComponent';
-import { PointerEventHandler } from '../../../CanvasRenderer/utils/pointer-event-handler/PointerEventHandler';
 import { ReduxJarvisDb } from '../../../Database/Redux/JarvisDb/ReduxJarvisDb';
 import CommunicationService from '../../services/communicationService/CommunicationService';
 import GIWAttributeHooks from '../../templates/GridItemWrapper/structures/GIWAttributeHooks';
@@ -12,7 +11,6 @@ import { Utils } from '../../utils/Utils';
 export class Body {
 
     private bodyElement: HTMLElement;
-    private pointerEventHandler: PointerEventHandler;
     private placeholderGridItem: HTMLElement;
 
     constructor(container: HTMLElement) {
@@ -41,10 +39,15 @@ export class Body {
         const gaugeElement: HTMLElement = this.createGridItemWithCanvasComponent('Gauge', canvasGaugeComponent);
         gaugePlaceholderElement.appendChild(gaugeElement);
 
-        const flatDisplayOnePlaceholderElement: HTMLElement = document.getElementById('flatDisplayPlaceholder_One');
-        const canvasFlatDisplayComponent: CFlatDisplay = new CFlatDisplay();
-        const flatDisplayElement: HTMLElement = this.createGridItemWithCanvasComponent('Flat Display', canvasFlatDisplayComponent);
-        flatDisplayOnePlaceholderElement.appendChild(flatDisplayElement);
+        const flatDisplayPlaceholderElement_One: HTMLElement = document.getElementById('flatDisplayPlaceholder_One');
+        const canvasFlatDisplayComponent_One: CFlatDisplay = new CFlatDisplay();
+        const flatDisplayElement_One: HTMLElement = this.createGridItemWithCanvasComponent('Flat Display', canvasFlatDisplayComponent_One);
+        flatDisplayPlaceholderElement_One.appendChild(flatDisplayElement_One);
+
+        const flatDisplayPlaceholderElement_Two: HTMLElement = document.getElementById('flatDisplayPlaceholder_Two');
+        const canvasFlatDisplayComponent_Two: CFlatDisplay = new CFlatDisplay();
+        const flatDisplayElement_Two: HTMLElement = this.createGridItemWithCanvasComponent('Flat Display', canvasFlatDisplayComponent_Two);
+        flatDisplayPlaceholderElement_Two.appendChild(flatDisplayElement_Two);
 
         window.dispatchEvent(new Event('resize'));
 

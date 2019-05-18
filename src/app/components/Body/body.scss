@@ -1,16 +1,15 @@
 .body {
     flex-grow: 1;
-    background-color: $ColorBackground;
-    color: $ColorFont;
+    background-color: $ColorBackgroundDarker;
     overflow: hidden;
+    box-sizing: border-box;
+    padding: 0 10px 0 10px;
 
     &__grid {
         height: 100%;
         width: 100%;
-        box-sizing: border-box;
-        padding: 10px;
         display: grid;
-        grid-template-columns: repeat(12, 1fr);
+        grid-template-columns: repeat(13, 1fr);
         grid-template-rows: repeat(12, 1fr);
         row-gap: 10px;
         column-gap: 10px;

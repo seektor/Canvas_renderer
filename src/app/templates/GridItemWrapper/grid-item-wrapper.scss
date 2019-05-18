@@ -5,8 +5,18 @@
     overflow: hidden;
 
     &__title {
+        width:100%;
+        text-align:center;
+        border-bottom: 1px solid $ColorPrimaryDarker;
+        line-height:0.1em; 
+        margin:10px 0 20px;
         background-color: $ColorBackgroundDarker;
-        color: $ColorFont;
+        color: $ColorPrimary;
+
+        &>span {
+            background:$ColorBackgroundDarker;
+            padding:0 10px;
+        }
     }
 
     &__content {

@@ -15,7 +15,7 @@ export class CFlatDisplayContentLayer extends AbstractCanvasLayer {
 
     public renderSelf(): void {
         this.clear();
-        this.painter.drawContent(this.layerContext, this.getLayerRect(), "123,456,789$");
+        this.painter.drawContent(this.layerContext, this.getLayerRect(), "123,456,789$ +33.3%");
         this.notifyRenderChanges();
     }
 }
