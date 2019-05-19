@@ -1,10 +1,10 @@
-import { CanvasBasePainter } from '../../../../CanvasRenderer/utils/painter/CanvasBasePainter';
-import { TRect } from '../../../../CanvasRenderer/structures/TRect';
-import { Direction } from '../../../../CanvasRenderer/structures/Direction';
-import { TLineStyles } from '../../../../CanvasRenderer/utils/painter/structures/CanvasPainterTypes';
-import { TCoords } from '../../../../CanvasRenderer/structures/TCoords';
 import { TThemeStyles } from '../../../../app/services/themingService/structures/TThemeStyles';
 import ThemingService from '../../../../app/services/themingService/ThemingService';
+import { Direction } from '../../../../CanvasRenderer/structures/Direction';
+import { TCoords } from '../../../../CanvasRenderer/structures/TCoords';
+import { TRect } from '../../../../CanvasRenderer/structures/TRect';
+import { CanvasBasePainter } from '../../../../CanvasRenderer/utils/painter/CanvasBasePainter';
+import { TLineStyles } from '../../../../CanvasRenderer/utils/painter/structures/CanvasPainterTypes';
 import { TVerticalSliderStyles } from './TVerticalSliderStyles';
 
 export class CVerticalSliderPainter extends CanvasBasePainter {
@@ -70,7 +70,7 @@ export class CVerticalSliderPainter extends CanvasBasePainter {
             x: rect.x + rect.width - horizontalPadding,
             y: direction === Direction.Up ? rect.y + rect.height - contraryPointerPadding : rect.y + contraryPointerPadding
         }
-        this.drawLines(ctx, [point0, point1, point2], styles);
+        this.strokeLines(ctx, [point0, point1, point2], styles);
     }
 
 }

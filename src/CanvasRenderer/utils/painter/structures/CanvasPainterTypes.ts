@@ -8,6 +8,7 @@ export type TRectStyles = Pick<TCanvasStyles, 'strokeStyle' | 'lineWidth' | 'sha
 export type TLineStyles = Pick<TCanvasStyles, 'strokeStyle' | 'lineWidth' | 'shadowBlur' | 'shadowColor' | 'shadowOffsetY'>;
 export type TFillCircleStyles = Pick<TCanvasStyles, 'fillStyle'>;
 export type TFillArcStyles = Pick<TCanvasStyles, 'fillStyle' | 'strokeStyle'>;
+export type TStrokeArcStyles = Pick<TCanvasStyles, 'strokeStyle' | 'lineWidth'>;
 
 export type FontDecoration = 'bold' | 'italic';
 

@@ -20,7 +20,7 @@
 
     &__title {
         font-size: 3rem;
-        line-height: $headerHeight;
+        line-height: $headerHeight + 10;
         flex-grow: 1;
         font-weight: bold;
     }

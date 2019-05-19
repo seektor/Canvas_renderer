@@ -1,4 +1,5 @@
 export interface TGaugeStyles {
     colorBackground: string;
-    colorGauge: string;
+    colorPassiveGauge: string;
+    colorActiveGauge: string;
 }

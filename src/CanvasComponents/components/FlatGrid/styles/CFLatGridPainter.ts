@@ -49,7 +49,7 @@ export class CFlatGridPainter extends CanvasBasePainter {
         this.strokeRect(ctx, headerFrameRect, {
             lineWidth: this.headerCellLineWidth, strokeStyle: this.styles.colorHeaderMain
         });
-        this.drawLines(ctx, [{ x: 0, y: effectiveRect.height }, { x: effectiveRect.width, y: effectiveRect.height }], {
+        this.strokeLines(ctx, [{ x: 0, y: effectiveRect.height }, { x: effectiveRect.width, y: effectiveRect.height }], {
             lineWidth: shadowHeight,
             shadowBlur: 4,
             shadowColor: this.styles.colorHeaderMain,
@@ -106,8 +106,8 @@ export class CFlatGridPainter extends CanvasBasePainter {
                 const formattedText: string = this.getFormattedCellValue(row[column.id], column.dataType);
                 const truncatedText: string = this.truncateTextPure(ctx, formattedText, maxCellContentWidth, this.truncationSymbol);
                 const centerX: number = currentX + column.width * 0.5;
-                const centerY: number = currentY + this.rowHeight * 0.5 + this.headerCellLineWidth; 
-                this.fillTextPure(ctx, truncatedText, {x: centerX, y: centerY});
+                const centerY: number = currentY + this.rowHeight * 0.5 + this.headerCellLineWidth;
+                this.fillTextPure(ctx, truncatedText, { x: centerX, y: centerY });
                 currentX += column.width;
             });
             currentY += Math.floor(this.rowHeight);
@@ -117,7 +117,7 @@ export class CFlatGridPainter extends CanvasBasePainter {
     }
 
     private getFormattedCellValue(value: unknown, dataType: DataType): string {
-        switch(dataType){
+        switch (dataType) {
             case DataType.Boolean:
                 return (value as boolean).toString();
             case DataType.Date:

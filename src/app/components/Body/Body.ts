@@ -2,8 +2,10 @@ import { CDigitalDisplay } from '../../../CanvasComponents/components/DigitalDis
 import { CFlatDisplay } from '../../../CanvasComponents/components/FlatDisplay/CFlatDisplay';
 import { CFlatGrid } from '../../../CanvasComponents/components/FlatGrid/CFlatGrid';
 import { CGauge } from '../../../CanvasComponents/components/Gauge/CGauge';
+import { TGaugeParams } from '../../../CanvasComponents/components/Gauge/structures/TGaugeParams';
 import { AbstractCanvasComponent } from '../../../CanvasRenderer/AbstractCanvasComponent';
 import { ReduxJarvisDb } from '../../../Database/Redux/JarvisDb/ReduxJarvisDb';
+import Colors from '../../../UIHelpers/Colors';
 import CommunicationService from '../../services/communicationService/CommunicationService';
 import GIWAttributeHooks from '../../templates/GridItemWrapper/structures/GIWAttributeHooks';
 import { Utils } from '../../utils/Utils';
@@ -35,8 +37,8 @@ export class Body {
         digitalDisplayPlaceholderElement.appendChild(digitalDisplayElement);
 
         const gaugePlaceholderElement: HTMLElement = document.getElementById('gaugePlaceholder');
-        const canvasGaugeComponent: CGauge = new CGauge();
-        const gaugeElement: HTMLElement = this.createGridItemWithCanvasComponent('Gauge', canvasGaugeComponent);
+        const canvasGaugeComponent: CGauge = new CGauge(this.getGaugeParams());
+        const gaugeElement: HTMLElement = this.createGridItemWithCanvasComponent('Jet Power', canvasGaugeComponent);
         gaugePlaceholderElement.appendChild(gaugeElement);
 
         const flatDisplayPlaceholderElement_One: HTMLElement = document.getElementById('flatDisplayPlaceholder_One');
@@ -70,5 +72,24 @@ export class Body {
         const templateFragment: DocumentFragment = Utils.convertToDocumentFragment(template);
         this.bodyElement = templateFragment.firstChild as HTMLElement;
         container.append(this.bodyElement);
+    }
+
+    private getGaugeParams(): TGaugeParams {
+        return {
+            colorPercentageRanges: [
+                {
+                    color: Colors.ORANGE,
+                    from: 55,
+                    to: 80
+                },
+                {
+                    color: Colors.RED,
+                    from: 80,
+                    to: 100
+                }
+            ],
+            max: 100,
+            min: 0
+        }
     }
 }
