@@ -68,8 +68,8 @@ export class CGaugePainter extends CanvasBasePainter {
         this.gaugeAngleColorRanges.forEach((range: TColorRange, index: number) => {
             styles.strokeStyle = range.color;
             const from: number = index > 0 ? range.from + colorSeparatorDiff : range.from;
-            const to: number = index < this.gaugeAngleColorRanges.length ? range.to - colorSeparatorDiff : range.to;
-            this.strokeArcRing(ctx, centerX, centerY, from, to, gD.outerRadius, styles);
+            const to: number = index < this.gaugeAngleColorRanges.length ? Math.max(range.to - colorSeparatorDiff, 0) : range.to;
+            this.strokeArcRing(ctx, centerX, centerY, from, to, gD.outerRadius, false, styles);
         });
 
         const fromBaseAngle = this.gaugeAngleRange.from;
@@ -77,11 +77,11 @@ export class CGaugePainter extends CanvasBasePainter {
         styles.strokeStyle = this.styles.colorBackground;
         styles.lineWidth = gD.spaceWidth;
         // colorSpace
-        this.strokeArcRing(ctx, centerX, centerY, fromBaseAngle, toBaseAngle, Math.max(gD.outerRadius - gD.colorRangeWidth, 0), styles);
+        this.strokeArcRing(ctx, centerX, centerY, fromBaseAngle, toBaseAngle, Math.max(gD.outerRadius - gD.colorRangeWidth, 0), false, styles);
         styles.strokeStyle = this.styles.colorPassiveGauge;
         styles.lineWidth = gD.activeGaugeWidth;
         // passiveRing
-        this.strokeArcRing(ctx, centerX, centerY, fromBaseAngle, toBaseAngle, Math.max(gD.outerRadius - gD.colorRangeWidth - gD.spaceWidth, 0), styles);
+        this.strokeArcRing(ctx, centerX, centerY, fromBaseAngle, toBaseAngle, Math.max(gD.outerRadius - gD.colorRangeWidth - gD.spaceWidth, 0), false, styles);
 
         const minMaxTextRectWidth: number = Math.max(0, Math.round(gD.outerRadius - gD.innerRadius * Math.cos(Math.PI - fromBaseAngle)));
         const minMaxTextRectHeight: number = Math.max(0, Math.round(gD.outerRadius - gD.outerRadius * Math.sin(Math.PI - fromBaseAngle)));
@@ -111,12 +111,12 @@ export class CGaugePainter extends CanvasBasePainter {
             textAlign: 'center',
             textBaseline: 'middle'
         });
-        this.strokeArcRing(ctx, centerX, centerY, this.gaugeAngleRange.from, angle, Math.max(gD.outerRadius - gD.colorRangeWidth - gD.spaceWidth, 0), { lineWidth: gD.activeGaugeWidth, strokeStyle: this.styles.colorActiveGauge });
+        this.strokeArcRing(ctx, centerX, centerY, this.gaugeAngleRange.from, angle, Math.max(gD.outerRadius - gD.colorRangeWidth - gD.spaceWidth, 0), false, { lineWidth: gD.activeGaugeWidth, strokeStyle: this.styles.colorActiveGauge });
     }
 
     private getColorFromRange(angleValue: number): string {
         const color: string = this.styles.colorActiveGauge;
-        const colorRange: TColorRange | undefined = this.gaugeAngleColorRanges.find((range) => angleValue >= range.from && angleValue < range.to);
+        const colorRange: TColorRange | undefined = this.gaugeAngleColorRanges.find((range) => angleValue >= range.from && angleValue <= range.to);
         return colorRange ? colorRange.color : color;
     }
 }

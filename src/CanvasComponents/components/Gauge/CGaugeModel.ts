@@ -1,3 +1,4 @@
+import { Observable, Subject } from 'rxjs';
 import { AbstractCanvasModel } from '../../../CanvasRenderer/AbstractCanvasModel';
 import { TColorRange } from '../../../CanvasRenderer/structures/TColorRange';
 import { TRange } from '../../../CanvasRenderer/structures/TRange';
@@ -6,8 +7,11 @@ import { CGaugePainter } from './styles/CGaugePainter';
 
 export class CGaugeModel extends AbstractCanvasModel {
 
-    private gaugeRange: TRange = { from: 0, to: 100 };
-    private gaugeAngleRange: TRange = { from: Math.PI * 0.75, to: Math.PI * 2.25 };
+    public onValueDidChange$: Observable<void>;
+    private valueDidChange$: Subject<void>;
+
+    private gaugeRange: TRange;
+    private gaugeAngleRange: TRange;
     private gaugeColorRanges: TColorRange[];
     private value: number = 88;
 
@@ -15,7 +19,15 @@ export class CGaugeModel extends AbstractCanvasModel {
 
     constructor(params: TGaugeParams) {
         super();
+        this.init();
         this.processParams(params);
+    }
+
+    private init(): void {
+        this.gaugeRange = { from: 0, to: 100 };
+        this.gaugeAngleRange = { from: Math.PI * 0.75, to: Math.PI * 0.25 };
+        this.valueDidChange$ = new Subject();
+        this.onValueDidChange$ = this.valueDidChange$.asObservable();
     }
 
     private processParams(params: TGaugeParams): void {
@@ -32,7 +44,7 @@ export class CGaugeModel extends AbstractCanvasModel {
     }
 
     private getValueAsAngle(value: number): number {
-        return this.gaugeAngleRange.from + (this.gaugeAngleRange.to - this.gaugeAngleRange.from) * value / 100
+        return this.gaugeAngleRange.from + (Math.PI * 2 - Math.abs(this.gaugeAngleRange.from - this.gaugeAngleRange.to)) * value / 100;
     }
 
     public getCanvasPainter(): CGaugePainter {
@@ -45,5 +57,11 @@ export class CGaugeModel extends AbstractCanvasModel {
 
     public getCurrentValueAsAngle(): number {
         return this.getValueAsAngle(this.value);
+    }
+
+    public setRatio(ratio: number): void {
+        const rawValue: number = this.gaugeRange.from + (this.gaugeRange.to - this.gaugeRange.from) * ratio;
+        this.value = +rawValue.toFixed(1);
+        this.valueDidChange$.next();
     }
 }

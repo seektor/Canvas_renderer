@@ -1,4 +1,3 @@
-import Colors from '../UIHelpers/Colors';
 import { AbstractCanvasModel } from './AbstractCanvasModel';
 import { AbstractCanvasStage } from './AbstractCanvasStage';
 import { ILayer } from './interfaces/ILayer';
@@ -197,13 +196,13 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     }
 
     private onActionMove(e: MouseEvent): void {
-        Utils.logMessage('===== Action Move =====', Colors.GREEN);
-        console.time("Action Move time");
+        // Utils.logMessage('===== Action Move =====', Colors.GREEN);
+        // console.time("Action Move time");
         const displayCoords: TCoords = this.mapToDisplayCoords(e);
         const layerPlacement: TParentRelativeLayerPlacement = this.findTopActiveLayerDataFromCoords(displayCoords);
         const localCoords: TCoords = { x: displayCoords.x - layerPlacement.x, y: displayCoords.y - layerPlacement.y };
         if (this.eventsData.topActiveLayerPlacement.layer !== layerPlacement.layer) {
-            this.eventsData.topActiveLayerPlacement.layer.onActionOut();
+            this.eventsData.topActiveLayerPlacement.layer.onActionLeave();
             layerPlacement.layer.onActionEnter(localCoords);
             this.eventsData.topActiveLayerPlacement = layerPlacement;
         }
@@ -212,18 +211,19 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
             this.eventsData.actionStartLayer.layer.onActionDrag({ dX: displayCoords.x - this.eventsData.actionStartLayer.x, dY: displayCoords.y - this.eventsData.actionStartLayer.y });
         }
         this.renderMainStage();
-        console.timeEnd("Action Move time");
+        // console.timeEnd("Action Move time");
     }
 
     private onActionEnd(e: MouseEvent): void {
         const displayCoords: TCoords = this.mapToDisplayCoords(e);
         const layerPlacement: TParentRelativeLayerPlacement = this.findTopActiveLayerDataFromCoords(displayCoords);
         const localCoords: TCoords = { x: displayCoords.x - layerPlacement.x, y: displayCoords.y - layerPlacement.y };
+        this.eventsData.actionStartLayer.layer.onActionEnd(localCoords);
         this.eventsData.actionStartLayer = null;
     }
 
     private onViewportOut(): void {
-        this.eventsData.topActiveLayerPlacement.layer.onViewportOut();
+        this.eventsData.topActiveLayerPlacement.layer.onViewportLeave();
         this.eventsData.topActiveLayerPlacement.layer = this.mainStage;
         this.eventsData.topActiveLayerPlacement.x = 0;
         this.eventsData.topActiveLayerPlacement.y = 0;

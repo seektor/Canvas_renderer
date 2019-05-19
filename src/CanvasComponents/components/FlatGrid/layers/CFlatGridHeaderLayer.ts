@@ -74,12 +74,12 @@ export class CFlatGridHeaderLayer extends AbstractCanvasLayer {
         }
     }
 
-    public onActionOut() {
+    public onActionLeave() {
         this.globalViewport.setCursor(CursorType.Auto);
     }
 
-    public onViewportOut() {
-        this.onActionOut();
+    public onViewportLeave() {
+        this.onActionLeave();
     }
 
     private getResizableColumn(coords: TCoords): TColumnData | null {

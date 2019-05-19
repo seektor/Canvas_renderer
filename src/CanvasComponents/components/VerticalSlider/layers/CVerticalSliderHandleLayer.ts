@@ -62,13 +62,13 @@ export class CVerticalSliderHandleLayer extends AbstractCanvasLayer {
         }
     }
 
-    public onActionOut(): void {
+    public onActionLeave(): void {
         this.globalViewport.setCursor(CursorType.Auto);
     }
 
-    public onViewportOut(): void {
+    public onViewportLeave(): void {
         this.onActionEnd();
-        this.onActionOut();
+        this.onActionLeave();
     }
 
     private updatePositionFromAction(deltaY: number) {

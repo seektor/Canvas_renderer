@@ -15,6 +15,6 @@ export interface ILayer {
     onActionMove(coords: TCoords): void;
     onActionDrag(deltas: TDeltas): void;
     onActionEnd(coords: TCoords): void;
-    onActionOut(): void;
-    onViewportOut(): void;
+    onActionLeave(): void;
+    onViewportLeave(): void;
 }

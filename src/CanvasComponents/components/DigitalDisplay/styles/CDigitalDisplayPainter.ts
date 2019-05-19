@@ -51,13 +51,13 @@ export class CDigitalDisplayPainter extends CanvasBasePainter {
             fillStyle: this.styles.colorInternalCircle,
             strokeStyle: this.styles.colorBackground
         }
-        this.fillArcSector(ctx, rect, -Math.PI * 0.8, -Math.PI * 0.2, styles);
-        this.fillArcSector(ctx, rect, Math.PI * 0.2, Math.PI * 0.8, styles);
+        this.fillArcSector(ctx, rect, -Math.PI * 0.8, -Math.PI * 0.2, false, styles);
+        this.fillArcSector(ctx, rect, Math.PI * 0.2, Math.PI * 0.8, false, styles);
         const ringWidth: number = this.rotatorWidth;
         const internalFillRect: TRect = { x: rect.x + ringWidth, y: rect.y + ringWidth, width: Math.max(1, rect.width - ringWidth * 2), height: Math.max(1, rect.height - ringWidth * 2) };
         styles.fillStyle = this.styles.colorBackground;
-        this.fillArcSector(ctx, internalFillRect, -Math.PI * 0.8, -Math.PI * 0.2, styles);
-        this.fillArcSector(ctx, internalFillRect, Math.PI * 0.2, Math.PI * 0.8, styles);
+        this.fillArcSector(ctx, internalFillRect, -Math.PI * 0.8, -Math.PI * 0.2, false, styles);
+        this.fillArcSector(ctx, internalFillRect, Math.PI * 0.2, Math.PI * 0.8, false, styles);
         const coverRectY: number = rect.height * 0.5 - Math.sin(Math.PI * 0.2) * (rect.width * 0.5 - ringWidth);
         const coverRectX: number = rect.width * 0.5 - Math.cos(Math.PI * 0.2) * (rect.width * 0.5 - ringWidth);
         const squareCoverRect: TRect = { x: coverRectX, y: coverRectY, width: rect.width - coverRectX * 2, height: rect.height - coverRectY * 2 };

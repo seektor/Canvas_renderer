@@ -74,7 +74,7 @@ export class CanvasBasePainter {
         this.applyStyles(ctx, savedStyles);
     }
 
-    protected fillArcSector(ctx: CanvasRenderingContext2D, rect: TRect, fromAngle: number, toAngle: number, styles: Partial<TFillArcStyles>): void {
+    protected fillArcSector(ctx: CanvasRenderingContext2D, rect: TRect, fromAngle: number, toAngle: number, anticlockwise: boolean, styles: Partial<TFillArcStyles>): void {
         const savedStyles: Partial<TCanvasStyles> = this.extractStyles(ctx, Object.keys(styles) as Array<(keyof TCanvasStyles)>);
         this.applyStyles(ctx, styles);
         const centerX: number = Math.floor(rect.x + rect.width * 0.5);
@@ -82,19 +82,19 @@ export class CanvasBasePainter {
         const radius: number = Math.floor(rect.width * 0.5);
         ctx.beginPath();
         ctx.moveTo(centerX, centerY);
-        ctx.arc(centerX, centerY, radius, fromAngle, toAngle, false);
+        ctx.arc(centerX, centerY, radius, fromAngle, toAngle, anticlockwise);
         ctx.lineTo(centerX, centerY);
         ctx.closePath();
         ctx.fill();
         this.applyStyles(ctx, savedStyles);
     }
 
-    protected strokeArcRing(ctx: CanvasRenderingContext2D, centerX: number, centerY: number, startAngle: number, endAngle: number, outerRadius: number, styles: TStrokeArcStyles): void {
+    protected strokeArcRing(ctx: CanvasRenderingContext2D, centerX: number, centerY: number, startAngle: number, endAngle: number, outerRadius: number, anticlockwise: boolean, styles: TStrokeArcStyles): void {
         const savedStyles: Partial<TCanvasStyles> = this.extractStyles(ctx, Object.keys(styles) as Array<(keyof TCanvasStyles)>);
         this.applyStyles(ctx, styles);
         const strokeRadius: number = Math.max(outerRadius - styles.lineWidth * 0.5, 0);
         ctx.beginPath();
-        ctx.arc(centerX, centerY, strokeRadius, startAngle, endAngle, false);
+        ctx.arc(centerX, centerY, strokeRadius, startAngle, endAngle, anticlockwise);
         ctx.stroke();
         ctx.closePath();
         this.applyStyles(ctx, savedStyles);

@@ -181,8 +181,8 @@ export abstract class AbstractCanvasLayer implements ILayer {
 
     public onActionEnd(coords: TCoords): void { }
 
-    public onActionOut(): void { }
+    public onActionLeave(): void { }
 
-    public onViewportOut(): void { }
+    public onViewportLeave(): void { }
 
 }
