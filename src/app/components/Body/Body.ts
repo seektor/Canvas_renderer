@@ -2,6 +2,7 @@ import { CFlatDisplay } from '../../../CanvasComponents/components/FlatDisplay/C
 import { CFlatGrid } from '../../../CanvasComponents/components/FlatGrid/CFlatGrid';
 import { CGauge } from '../../../CanvasComponents/components/Gauge/CGauge';
 import { TGaugeParams } from '../../../CanvasComponents/components/Gauge/structures/TGaugeParams';
+import { CLineChart } from '../../../CanvasComponents/components/LineChart/CLineChart';
 import { AbstractCanvasComponent } from '../../../CanvasRenderer/AbstractCanvasComponent';
 import { ReduxJarvisDb } from '../../../Database/Redux/JarvisDb/ReduxJarvisDb';
 import Colors from '../../../UIHelpers/Colors';
@@ -25,12 +26,12 @@ export class Body {
         const gridItemTemplate: string = require('../../templates/GridItemWrapper/grid-item-wrapper.tpl.html');
         this.placeholderGridItem = Utils.convertToDocumentFragment(gridItemTemplate).firstElementChild as HTMLElement;
 
-        const flatGridPlaceholderElement: HTMLElement = document.getElementById('gridPlaceholder');
+        const flatGridPlaceholderElement: HTMLElement = document.getElementById('body__grid-Placeholder');
         const canvasFlatGridComponent: CFlatGrid = new CFlatGrid({ tableName: 'targets' });
         const flatGridElement: HTMLElement = this.createGridItemWithCanvasComponent('Flat grid', canvasFlatGridComponent);
         flatGridPlaceholderElement.append(flatGridElement);
 
-        // const digitalDisplayPlaceholderElement: HTMLElement = document.getElementById('digitalDisplayPlaceholder');
+        // const digitalDisplayPlaceholderElement: HTMLElement = document.getElementById('body__digital-display-placeholder');
         // const canvasDigitalDisplayComponent: CDigitalDisplay = new CDigitalDisplay();
         // const digitalDisplayElement: HTMLElement = this.createGridItemWithCanvasComponent('Digital Display', canvasDigitalDisplayComponent);
         // digitalDisplayPlaceholderElement.appendChild(digitalDisplayElement);
@@ -40,9 +41,14 @@ export class Body {
         const gaugeElement: HTMLElement = this.createGridItemWithCanvasComponent('Jet Power', canvasGaugeComponent);
         gaugePlaceholderElement.appendChild(gaugeElement);
 
+        const lineChartPlaceholderElement: HTMLElement = document.getElementById('body__line-chart-placeholder');
+        const canvasLineChartComponent: CLineChart = new CLineChart();
+        const lineChartElement: HTMLElement = this.createGridItemWithCanvasComponent('Stark Industries’ revenue', canvasLineChartComponent);
+        lineChartPlaceholderElement.appendChild(lineChartElement);
+
         const flatDisplayPlaceholderElement_One: HTMLElement = document.getElementById('flatDisplayPlaceholder_One');
         const canvasFlatDisplayComponent_One: CFlatDisplay = new CFlatDisplay();
-        const flatDisplayElement_One: HTMLElement = this.createGridItemWithCanvasComponent('Flat Display', canvasFlatDisplayComponent_One);
+        const flatDisplayElement_One: HTMLElement = this.createGridItemWithCanvasComponent('Stark Industries’ revenue', canvasFlatDisplayComponent_One);
         flatDisplayPlaceholderElement_One.appendChild(flatDisplayElement_One);
 
         const flatDisplayPlaceholderElement_Two: HTMLElement = document.getElementById('flatDisplayPlaceholder_Two');

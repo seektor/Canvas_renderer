@@ -1,13 +1,13 @@
 export interface TThemeStyles {
-    colorPrimaryLighter: string;
+    colorPrimaryLight: string;
     colorPrimary: string;
-    colorPrimaryDarker: string;
+    colorPrimaryDark: string;
 
-    colorSecondaryLighter: string;
+    colorSecondaryLight: string;
     colorSecondary: string;
-    colorSecondaryDarker: string;
+    colorSecondaryDark: string;
 
-    colorBackgroundLighter: string;
+    colorBackgroundLight: string;
     colorBackground: string;
-    colorBackgroundDarker: string;
+    colorBackgroundDark: string;
 }

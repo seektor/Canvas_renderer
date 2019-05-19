@@ -29,7 +29,7 @@ export class CFlatGridPainter extends CanvasBasePainter {
     private applyTheme() {
         const theme: TThemeStyles = ThemingService.getTheme();
         this.styles = {
-            colorBackground: theme.colorBackgroundDarker,
+            colorBackground: theme.colorBackgroundDark,
             colorHeaderMain: theme.colorPrimary,
             colorDataCellBorder: theme.colorPrimary
         }

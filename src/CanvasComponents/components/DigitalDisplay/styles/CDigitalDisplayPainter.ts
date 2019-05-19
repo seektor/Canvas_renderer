@@ -23,9 +23,9 @@ export class CDigitalDisplayPainter extends CanvasBasePainter {
     private applyTheme() {
         const theme: TThemeStyles = ThemingService.getTheme();
         this.styles = {
-            colorBackground: theme.colorBackgroundDarker,
+            colorBackground: theme.colorBackgroundDark,
             colorExternalCircle: theme.colorPrimary,
-            colorInternalCircle: theme.colorPrimaryDarker,
+            colorInternalCircle: theme.colorPrimaryDark,
             colorText: theme.colorPrimary
         }
     }

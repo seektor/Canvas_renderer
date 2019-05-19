@@ -19,9 +19,9 @@ export class CFlatDisplayPainter extends CanvasBasePainter {
     private applyTheme() {
         const theme: TThemeStyles = ThemingService.getTheme();
         this.styles = {
-            colorBackground: theme.colorBackgroundDarker,
+            colorBackground: theme.colorBackgroundDark,
             colorText: theme.colorPrimary,
-            colorChevron: theme.colorPrimaryDarker,
+            colorChevron: theme.colorPrimaryDark,
             colorChevronActive: theme.colorPrimary
         }
     }

@@ -20,9 +20,9 @@ export class CVerticalSliderPainter extends CanvasBasePainter {
         const theme: TThemeStyles = ThemingService.getTheme();
         this.styles = {
             colorBackground: theme.colorBackground,
-            colorTrack: theme.colorBackgroundLighter,
+            colorTrack: theme.colorBackgroundLight,
             colorInteractiveElement_1: theme.colorPrimary,
-            colorInteractiveElement_2: theme.colorPrimaryDarker
+            colorInteractiveElement_2: theme.colorPrimaryDark
         }
     }
 

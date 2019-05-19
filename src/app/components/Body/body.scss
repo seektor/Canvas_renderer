@@ -1,6 +1,6 @@
 .body {
     flex-grow: 1;
-    background-color: $ColorBackgroundDarker;
+    background-color: $ColorBackgroundDark;
     overflow: hidden;
     box-sizing: border-box;
     padding: 0 10px 0 10px;
@@ -15,7 +15,7 @@
         column-gap: 10px;
 
         &>div {
-            background-color: $ColorBackgroundDarker;
+            background-color: $ColorBackgroundDark;
         }
     }
 }

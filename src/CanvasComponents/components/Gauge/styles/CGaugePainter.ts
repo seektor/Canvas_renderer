@@ -26,8 +26,8 @@ export class CGaugePainter extends CanvasBasePainter {
     private applyTheme() {
         const theme: TThemeStyles = ThemingService.getTheme();
         this.styles = {
-            colorBackground: theme.colorBackgroundDarker,
-            colorPassiveGauge: theme.colorPrimaryDarker,
+            colorBackground: theme.colorBackgroundDark,
+            colorPassiveGauge: theme.colorPrimaryDark,
             colorActiveGauge: theme.colorPrimary
         }
     }
