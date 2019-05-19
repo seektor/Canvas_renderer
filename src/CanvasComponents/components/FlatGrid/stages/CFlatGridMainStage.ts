@@ -5,14 +5,17 @@ import { TLayerRenderParams } from '../../../../CanvasRenderer/structures/TLayer
 import { CVerticalSlider } from '../../VerticalSlider/CVerticalSlider';
 import { ISliderHandlers } from '../../VerticalSlider/interfaces/ISliderHandlers';
 import { CFlatGridModel } from '../CFlatGridModel';
+import { CFlatGridPainter } from '../styles/CFLatGridPainter';
 import { CFlatGridStage } from './CFlatGridStage';
 
 export class CFlatGridMainStage extends AbstractCanvasStage {
 
     protected model: CFlatGridModel;
+    protected canvasPainter: CFlatGridPainter;
 
     constructor(params: TLayerParams<CFlatGridModel, unknown>) {
         super(params);
+        this.canvasPainter = this.model.getCanvasPainter();
         this.createLayers();
     }
 
@@ -25,7 +28,7 @@ export class CFlatGridMainStage extends AbstractCanvasStage {
             dX: this.dX,
             dY: this.dY,
             height: this.layerHeight,
-            width: Math.max(this.layerWidth - this.model.getVerticalScrollWidth(), 0)
+            width: Math.max(this.layerWidth - this.canvasPainter.getVerticalScrollWidth(), 0)
         }
     }
 

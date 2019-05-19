@@ -49,11 +49,6 @@ export class CVerticalSliderModel extends AbstractCanvasModel implements ISlider
         this.dimensionsDidChange$.next();
     }
 
-    public initSlider(scrollWrapperScrollSize: number, scrollWrapperDisplaySize: number): void {
-        this.scrollWrapperScrollSize = scrollWrapperScrollSize;
-        this.scrollWrapperDisplaySize = scrollWrapperDisplaySize;
-    }
-
     public getRatio(): number {
         return this.value / this.maxValue;
     }

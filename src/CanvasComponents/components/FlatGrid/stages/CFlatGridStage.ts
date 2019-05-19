@@ -5,14 +5,17 @@ import { TLayerRenderParams } from '../../../../CanvasRenderer/structures/TLayer
 import { CFlatGridModel } from '../CFlatGridModel';
 import { CFlatGridDataLayer } from '../layers/CFlatGridDataLayer';
 import { CFlatGridHeaderLayer } from '../layers/CFlatGridHeaderLayer';
+import { CFlatGridPainter } from '../styles/CFLatGridPainter';
 
 export class CFlatGridStage extends AbstractCanvasStage {
 
     protected model: CFlatGridModel;
+    protected painter: CFlatGridPainter;
     private readonly headerShadowHeight: number = 4;
 
     constructor(params: TLayerParams<CFlatGridModel, unknown>) {
         super(params);
+        this.painter = this.model.getCanvasPainter();
         this.createLayers();
         this.setDataDisplayHeight();
     }
@@ -23,7 +26,7 @@ export class CFlatGridStage extends AbstractCanvasStage {
     }
 
     private setDataDisplayHeight(): void {
-        const displayHeight: number = this.layerHeight - this.model.getHeaderHeight();
+        const displayHeight: number = this.layerHeight - this.painter.getHeaderHeight();
         this.model.setDisplayDataLayerHeight(displayHeight);
     }
 
@@ -32,7 +35,7 @@ export class CFlatGridStage extends AbstractCanvasStage {
         return {
             dX: this.dX,
             dY: this.dY,
-            height: this.model.getHeaderHeight() + this.headerShadowHeight,
+            height: this.painter.getHeaderHeight() + this.headerShadowHeight,
             width: Math.max(headerWidth, this.layerWidth),
             sWidth: Math.min(headerWidth, this.layerWidth),
             dWidth: Math.min(headerWidth, this.layerWidth),
@@ -42,13 +45,13 @@ export class CFlatGridStage extends AbstractCanvasStage {
     private getDataLayerParams(layer: ILayer): TLayerRenderParams {
         const headerWidth: number = this.model.calculateHeaderWidth();
         const totalRowsHeight: number = this.model.getTotalRowsHeight();
-        const displayHeight: number = this.layerHeight - this.model.getHeaderHeight();
+        const displayHeight: number = this.layerHeight - this.painter.getHeaderHeight();
         const displayWidth: number = this.layerWidth;
         const sHeight: number = Math.min(totalRowsHeight, displayHeight);
         const sWidth: number = Math.min(displayWidth, headerWidth);
         return {
             dX: 0,
-            dY: this.model.getHeaderHeight(),
+            dY: this.painter.getHeaderHeight(),
             height: this.model.getRowBufferHeight(),
             width: Math.max(headerWidth, this.layerWidth),
             sHeight,

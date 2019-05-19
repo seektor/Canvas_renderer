@@ -12,15 +12,17 @@ import { TFlatGridStyles } from './TFlatGridStyles';
 export class CFlatGridPainter extends CanvasBasePainter {
 
     private styles: TFlatGridStyles;
+    private readonly headerHeight: number = 40;
+    private readonly rowHeight: number = 25;
     private readonly headerCellLineWidth: number = 2;
     private readonly dataCellLineWidth: number = 1;
     private readonly cellHorizontalPadding: number = 25;
+    private readonly verticalScrollWidth: number = 20;
+    private readonly horizontalScrollHeight: number = 20;
     private readonly truncationSymbol: string = '...';
-    private rowHeight: number;
 
-    constructor(rowHeight: number) {
+    constructor() {
         super();
-        this.rowHeight = rowHeight;
         this.applyTheme();
     }
 
@@ -31,6 +33,22 @@ export class CFlatGridPainter extends CanvasBasePainter {
             colorHeaderMain: theme.colorPrimary,
             colorDataCellBorder: theme.colorPrimary
         }
+    }
+
+    public getHeaderHeight(): number {
+        return this.headerHeight;
+    }
+
+    public getRowHeight(): number {
+        return this.rowHeight;
+    }
+
+    public getVerticalScrollWidth(): number {
+        return this.verticalScrollWidth
+    }
+
+    public getHorizontalScrollHeight(): number {
+        return this.horizontalScrollHeight;
     }
 
     public drawBackground(ctx: CanvasRenderingContext2D, rect: TRect): void {
