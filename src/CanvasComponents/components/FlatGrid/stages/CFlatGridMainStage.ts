@@ -19,39 +19,47 @@ export class CFlatGridMainStage extends AbstractCanvasStage {
         this.createLayers();
     }
 
+    public isVerticalScrollbarVisible(): boolean {
+        const totalRowsHeight: number = this.model.getTotalRowsHeight();
+        const dataLayerHeight: number = this.canvasPainter.getDataLayerDisplayHeight(this.layerHeight);
+        return dataLayerHeight < totalRowsHeight;
+    }
+
     protected renderSelfLayer(): void {
         this.model.getCanvasPainter().drawBackground(this.layerContext, this.getLayerRect());
     }
 
     private getFlatGridLayerParams(): TLayerRenderParams {
+        const isVScrollbarVisible: boolean = this.isVerticalScrollbarVisible();
+        const layerWidth: number = isVScrollbarVisible ? Math.max(this.layerWidth - this.canvasPainter.getVerticalScrollWidth(), 0) : this.layerWidth;
         return {
             dX: this.dX,
             dY: this.dY,
             height: this.layerHeight,
-            width: Math.max(this.layerWidth - this.canvasPainter.getVerticalScrollWidth(), 0)
+            width: layerWidth
         }
     }
 
     private getVerticalSliderLayerParams(): TLayerRenderParams {
-        const flatGridParams: TLayerRenderParams = this.getFlatGridLayerParams();
+        const isVScrollbarVisible: boolean = this.isVerticalScrollbarVisible();
+        const verticalScrollbarWidth: number = this.canvasPainter.getVerticalScrollWidth();
         return {
-            dX: flatGridParams.width,
+            dX: this.layerWidth - verticalScrollbarWidth,
             dY: this.dY,
             height: this.layerHeight,
-            width: 20
+            width: isVScrollbarVisible ? verticalScrollbarWidth : 0
         }
     }
 
     protected createLayers(): void {
-        const verticalSlider: CVerticalSlider = new CVerticalSlider();
-        const verticalSliderHandlers: ISliderHandlers = verticalSlider.getSliderHandlers();
-        this.model.setVerticalSliderHandlers(verticalSliderHandlers);
-
         const flatGridStage: ILayer = new CFlatGridStage({
             layerHost: this, globalViewport: this.globalViewport, model: this.model, layerParamsExtractor: () => this.getFlatGridLayerParams()
         });
         this.addLayer(flatGridStage);
 
+        const verticalSlider: CVerticalSlider = new CVerticalSlider();
+        const verticalSliderHandlers: ISliderHandlers = verticalSlider.getSliderHandlers();
+        this.model.setVerticalSliderHandlers(verticalSliderHandlers);
         verticalSlider.createViewport(this.globalViewport.getContainer(), {
             globalViewport: this.globalViewport,
             displayLayerRectExtractor: (_layer: ILayer) => this.getVerticalSliderLayerParams(),

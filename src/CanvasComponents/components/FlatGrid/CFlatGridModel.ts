@@ -8,7 +8,6 @@ import { TDataFrame } from './structures/TDataFrame';
 import { CFlatGridPainter } from './styles/CFLatGridPainter';
 
 export class CFlatGridModel extends AbstractCanvasModel {
-
     public onMetadataDidChange$: Observable<void>;
     private metadataDidChange$: Subject<void>;
     public onDataDidChange$: Observable<void>;
@@ -48,11 +47,6 @@ export class CFlatGridModel extends AbstractCanvasModel {
 
     public getCanvasPainter(): CFlatGridPainter {
         return this.canvasPainter;
-    }
-
-    public setDisplayDataLayerHeight(height: number): void {
-        this.displayDataLayerHeight = height;
-        this.verticalSliderHandlers.setScrollWrapperDisplaySize(height);
     }
 
     public getColumnsData(): TColumnData[] {

@@ -1,5 +1,6 @@
 import { AbstractCanvasLayer } from '../../../../CanvasRenderer/AbstractCanvasLayer';
 import { CursorType } from '../../../../CanvasRenderer/structures/CursorType';
+import { TCoords } from '../../../../CanvasRenderer/structures/TCoords';
 import { TDeltas } from '../../../../CanvasRenderer/structures/TDeltas';
 import { TParentRelativeCoords } from '../../../../CanvasRenderer/structures/TLayerCoords';
 import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
@@ -49,14 +50,15 @@ export class CVerticalSliderHandleLayer extends AbstractCanvasLayer {
         this.dragStartDY = this.dY;
     }
 
-    public onActionEnd(): void {
+    public onActionEnd(coords: TCoords): void {
         this.isDragged = false;
-        this.globalViewport.setCursor(CursorType.Auto);
+        if (!this.isPierced(coords)) {
+            this.globalViewport.setCursor(CursorType.Auto);
+        }
     }
 
     public onActionDrag(deltas: TDeltas): void {
         if (this.isDragged) {
-            console.log("Still");
             this.updatePositionFromAction(deltas.dY);
             this.notifyRenderChanges();
         }

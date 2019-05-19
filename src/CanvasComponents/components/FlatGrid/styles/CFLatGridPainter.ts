@@ -39,12 +39,16 @@ export class CFlatGridPainter extends CanvasBasePainter {
         return this.headerHeight;
     }
 
+    public getDataLayerDisplayHeight(flatGridHeight: number): number {
+        return Math.max(flatGridHeight - this.headerHeight, 0);
+    }
+
     public getRowHeight(): number {
         return this.rowHeight;
     }
 
     public getVerticalScrollWidth(): number {
-        return this.verticalScrollWidth
+        return this.verticalScrollWidth;
     }
 
     public getHorizontalScrollHeight(): number {
