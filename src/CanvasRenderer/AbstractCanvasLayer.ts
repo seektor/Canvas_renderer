@@ -194,6 +194,4 @@ export abstract class AbstractCanvasLayer implements ILayer {
 
     public onActionLeave(): void { }
 
-    public onViewportLeave(): void { }
-
 }

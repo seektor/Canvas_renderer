@@ -16,5 +16,4 @@ export interface ILayer {
     onActionDrag(deltas: TDeltas): void;
     onActionEnd(coords: TCoords): void;
     onActionLeave(): void;
-    onViewportLeave(): void;
 }

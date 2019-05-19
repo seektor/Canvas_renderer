@@ -58,19 +58,14 @@ export class CVerticalSliderHandleLayer extends AbstractCanvasLayer {
     }
 
     public onActionDrag(deltas: TDeltas): void {
-        if (this.isDragged) {
-            this.updatePositionFromAction(deltas.dY);
-            this.notifyRenderChanges();
-        }
+        this.updatePositionFromAction(deltas.dY);
+        this.notifyRenderChanges();
     }
 
     public onActionLeave(): void {
-        this.globalViewport.setCursor(CursorType.Auto);
-    }
-
-    public onViewportLeave(): void {
-        this.onActionEnd();
-        this.onActionLeave();
+        if (!this.isDragged) {
+            this.globalViewport.setCursor(CursorType.Auto);
+        }
     }
 
     private updatePositionFromAction(deltaY: number) {

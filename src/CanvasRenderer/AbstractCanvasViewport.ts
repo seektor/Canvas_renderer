@@ -223,10 +223,12 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     }
 
     private onViewportOut(): void {
-        this.eventsData.topActiveLayerPlacement.layer.onViewportLeave();
+        this.eventsData.topActiveLayerPlacement.layer.onActionLeave();
+        this.eventsData.actionStartLayer && this.eventsData.actionStartLayer.layer.onActionEnd({ x: -1, y: -1 });
         this.eventsData.topActiveLayerPlacement.layer = this.mainStage;
         this.eventsData.topActiveLayerPlacement.x = 0;
         this.eventsData.topActiveLayerPlacement.y = 0;
+        this.eventsData.actionStartLayer = null;
         this.renderMainStage();
     }
 }
