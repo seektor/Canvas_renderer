@@ -64,6 +64,10 @@ export abstract class AbstractCanvasLayer implements ILayer {
         return { x: this.dX, y: this.dY, relativity: LayerRelativity.Parent };
     }
 
+    public getLayerContext(): CanvasRenderingContext2D {
+        return this.layerContext;
+    }
+
     protected clear(): void {
         this.layerContext.clearRect(this.sX, this.sY, this.sWidth, this.sHeight);
     }
@@ -124,14 +128,14 @@ export abstract class AbstractCanvasLayer implements ILayer {
         context.drawImage(this.layer, this.sX, this.sY, this.sWidth, this.sHeight, this.dX, this.dY, this.dWidth, this.dHeight);
     }
 
-    protected getLayerDimensions(): TDimensions {
+    public getLayerDimensions(): TDimensions {
         return {
             height: this.layerHeight,
             width: this.layerWidth
         }
     }
 
-    protected getLayerRect(): TRect {
+    public getLayerRect(): TRect {
         return {
             height: this.layerHeight,
             width: this.layerWidth,
@@ -165,6 +169,13 @@ export abstract class AbstractCanvasLayer implements ILayer {
 
     protected notifyRenderChanges(): void {
         this.layerHost.notifyRenderChanges();
+    }
+
+    protected fillContent(color: string): void {
+        const initialColor: string = this.layerContext.fillStyle as string;
+        this.layerContext.fillStyle = color;
+        this.layerContext.fillRect(0, 0, this.layerWidth, this.layerHeight);
+        this.layerContext.fillStyle = initialColor;
     }
 
     public isPierced(coords: TCoords): boolean {

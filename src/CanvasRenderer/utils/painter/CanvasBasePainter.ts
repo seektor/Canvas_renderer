@@ -44,7 +44,7 @@ export class CanvasBasePainter {
         this.applyStyles(ctx, savedStyles);
     }
 
-    public fillRect(ctx: CanvasRenderingContext2D, rect: TRect, styles: Partial<TFillRectStyles>): void {
+    protected fillRect(ctx: CanvasRenderingContext2D, rect: TRect, styles: Partial<TFillRectStyles>): void {
         const savedStyles: Partial<TCanvasStyles> = this.extractStyles(ctx, Object.keys(styles) as Array<(keyof TCanvasStyles)>);
         this.applyStyles(ctx, styles);
         ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
