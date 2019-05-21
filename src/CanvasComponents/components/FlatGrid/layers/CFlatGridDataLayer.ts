@@ -1,9 +1,9 @@
 import { AbstractCanvasLayer } from '../../../../CanvasRenderer/AbstractCanvasLayer';
 import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
 import { TLayerRenderParams } from '../../../../CanvasRenderer/structures/TLayerRenderParams';
-import { DataRow } from '../../../../Database/Redux/JarvisDb/types/DataTypes';
 import { CFlatGridModel } from '../CFlatGridModel';
 import { TColumnData } from '../structures/TColumnData';
+import { TDataFrame } from '../structures/TDataFrame';
 import { CFlatGridPainter } from '../styles/CFLatGridPainter';
 
 export class CFlatGridDataLayer extends AbstractCanvasLayer {
@@ -12,23 +12,29 @@ export class CFlatGridDataLayer extends AbstractCanvasLayer {
     protected painter: CFlatGridPainter;
 
     private columnsData: TColumnData[];
-    private rows: DataRow[];
+    private dataFrame: TDataFrame;
 
     constructor(params: TLayerParams<CFlatGridModel, unknown>) {
         super(params);
         this.painter = this.model.getCanvasPainter();
+        this.dataFrame = { from: 0, to: 0, rows: [] };
+        this.columnsData = [];
         this.setEvents();
     }
 
     private setEvents(): void {
         this.model.onMetadataDidChange$.subscribe(() => {
+            this.onResize();
             this.columnsData = this.model.getColumnsData();
         });
         this.model.onDataDidChange$.subscribe(() => {
-            this.rows = this.model.getData().rows;
+            this.dataFrame = this.model.getData();
             this.renderSelf();
             this.notifyRenderChanges();
         });
+        this.model.onDataDidTranslatedVertically$.subscribe(() => {
+
+        })
     }
 
     public onResize(): void {
@@ -39,6 +45,8 @@ export class CFlatGridDataLayer extends AbstractCanvasLayer {
     }
 
     protected renderSelf(): void {
-        this.painter.drawDataCells(this.layerContext, this.getLayerRect(), this.rows, this.columnsData);
+        this.clear();
+        this.painter.drawDataCells(this.layerContext, this.getLayerRect(), this.dataFrame.rows, this.columnsData);
+        this.notifyRenderChanges();
     };
 }

@@ -34,7 +34,7 @@ export class CFlatGridStage extends AbstractCanvasStage {
     private getDataLayerParams(layer: ILayer): TLayerRenderParams {
         const headerWidth: number = this.model.calculateHeaderWidth();
         const totalRowsHeight: number = this.model.getTotalRowsHeight();
-        const displayHeight: number = this.layerHeight - this.painter.getHeaderHeight();
+        const displayHeight: number = Math.max(this.layerHeight - this.painter.getHeaderHeight(), 0);
         const displayWidth: number = this.layerWidth;
         const sHeight: number = Math.min(totalRowsHeight, displayHeight);
         const sWidth: number = Math.min(displayWidth, headerWidth);

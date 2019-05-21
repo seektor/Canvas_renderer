@@ -21,8 +21,11 @@ export class CFlatGridPainter extends CanvasBasePainter {
     private readonly horizontalScrollHeight: number = 20;
     private readonly truncationSymbol: string = '...';
 
+    private dataLayerDisplayHeight: number;
+
     constructor() {
         super();
+        this.dataLayerDisplayHeight = 0;
         this.applyTheme();
     }
 
@@ -39,8 +42,20 @@ export class CFlatGridPainter extends CanvasBasePainter {
         return this.headerHeight;
     }
 
-    public getDataLayerDisplayHeight(flatGridHeight: number): number {
+    public getCalculatedDataLayerDisplayHeight(flatGridHeight: number): number {
         return Math.max(flatGridHeight - this.headerHeight, 0);
+    }
+
+    public getDataLayerDisplayHeight(): number {
+        return this.dataLayerDisplayHeight;
+    }
+
+    public getNumberOfRowsPerDisplay(): number {
+        return Math.ceil(this.getDataLayerDisplayHeight() / this.getRowHeight());
+    }
+
+    public setDataLayerDisplayHeight(height: number): void {
+        this.dataLayerDisplayHeight = height;
     }
 
     public getRowHeight(): number {

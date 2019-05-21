@@ -70,6 +70,9 @@ export class CVerticalSliderHandleLayer extends AbstractCanvasLayer {
 
     private updatePositionFromAction(deltaY: number) {
         const maxDY: number = this.trackLength - this.layerHeight;
+        const newDY: number = Utils.clampValue(this.dragStartDY + deltaY, 0, maxDY);
+        const ratio: number = newDY / maxDY;
+        this.model.setSelectedRatio(ratio);
         this.dY = Utils.clampValue(this.dragStartDY + deltaY, 0, maxDY);
     }
 }

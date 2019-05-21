@@ -17,12 +17,18 @@ export class CFlatGridMainStage extends AbstractCanvasStage {
         super(params);
         this.canvasPainter = this.model.getCanvasPainter();
         this.createLayers();
+        this.updateParams();
     }
 
     public isVerticalScrollbarVisible(): boolean {
         const totalRowsHeight: number = this.model.getTotalRowsHeight();
-        const dataLayerHeight: number = this.canvasPainter.getDataLayerDisplayHeight(this.layerHeight);
+        const dataLayerHeight: number = this.canvasPainter.getCalculatedDataLayerDisplayHeight(this.layerHeight);
         return dataLayerHeight < totalRowsHeight;
+    }
+
+    protected updateParams(): void {
+        const dataLayerDisplayHeight: number = this.canvasPainter.getCalculatedDataLayerDisplayHeight(this.layerHeight);
+        this.canvasPainter.setDataLayerDisplayHeight(dataLayerDisplayHeight);
     }
 
     protected renderSelfLayer(): void {

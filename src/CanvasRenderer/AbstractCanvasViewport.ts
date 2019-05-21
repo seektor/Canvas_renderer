@@ -215,6 +215,9 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     }
 
     private onActionEnd(e: MouseEvent): void {
+        if (!this.eventsData.actionStartLayer) {
+            return;
+        }
         const displayCoords: TCoords = this.mapToDisplayCoords(e);
         const layerPlacement: TParentRelativeLayerPlacement = this.findTopActiveLayerDataFromCoords(displayCoords);
         const localCoords: TCoords = { x: displayCoords.x - layerPlacement.x, y: displayCoords.y - layerPlacement.y };
