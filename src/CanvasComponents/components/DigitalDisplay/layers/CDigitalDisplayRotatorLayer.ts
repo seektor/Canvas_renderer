@@ -2,16 +2,18 @@ import { AbstractCanvasLayer } from '../../../../CanvasRenderer/AbstractCanvasLa
 import { TCoords } from '../../../../CanvasRenderer/structures/TCoords';
 import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
 import { TRect } from '../../../../CanvasRenderer/structures/TRect';
-import { CDigitalDisplayPainter } from '../styles/CDigitalDisplayPainter';
 import { CDigitalDisplayModel } from '../CDigitalDIsplayModel';
+import { CDigitalDisplayViewport } from '../CDigitalDisplayViewport';
+import { CDigitalDisplayPainter } from '../styles/CDigitalDisplayPainter';
 
 export class CDigitalDisplayRotatorLayer extends AbstractCanvasLayer {
 
     protected model: CDigitalDisplayModel;
+    protected viewport: CDigitalDisplayViewport;
     private painter: CDigitalDisplayPainter;
     private hostLayerCenter: TCoords;
 
-    constructor(params: TLayerParams<CDigitalDisplayModel, unknown>) {
+    constructor(params: TLayerParams<CDigitalDisplayModel, CDigitalDisplayViewport, unknown>) {
         super(params);
         this.painter = this.model.getCanvasPainter();
         this.hostLayerCenter = { x: 0, y: 0 };
@@ -27,7 +29,7 @@ export class CDigitalDisplayRotatorLayer extends AbstractCanvasLayer {
 
     private rotate() {
         this.notifyRenderChanges();
-        this.globalViewport.forceRerender();
+        this.viewport.forceRerender();
     }
 
     public render(context: CanvasRenderingContext2D): void {

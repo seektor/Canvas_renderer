@@ -1,7 +1,7 @@
 import { AbstractCanvasModel } from './AbstractCanvasModel';
 import { AbstractCanvasViewport } from './AbstractCanvasViewport';
-import { ViewportCtor } from './interfaces/ViewportCtor';
 import { ILayer } from './interfaces/ILayer';
+import { ViewportCtor } from './interfaces/ViewportCtor';
 import { TLayerHostingParams } from './structures/TLayerHostingParams';
 
 export abstract class AbstractCanvasComponent {

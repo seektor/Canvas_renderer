@@ -11,14 +11,14 @@ export class CDigitalDisplayViewport extends AbstractCanvasViewport implements I
     protected model: CDigitalDisplayModel;
 
     constructor(params: TCanvasViewportParams<CDigitalDisplayModel>) {
-        const abstractParams: TAbstractCanvasViewportParams<CDigitalDisplayMainStage, CDigitalDisplayModel> = { ...params, mainStageCtor: (p) => new CDigitalDisplayMainStage(p) }
+        const abstractParams: TAbstractCanvasViewportParams<CDigitalDisplayMainStage, CDigitalDisplayViewport, CDigitalDisplayModel> = { ...params, mainStageCtor: (p) => new CDigitalDisplayMainStage(p) }
         super(abstractParams);
         this.setResizeService();
         this.renderMainStage();
     }
 
     private setResizeService(): void {
-        if (!this.isHosted) {
+        if (!this.isHosted()) {
             ResizeService.subscribeToWindow(this.container, () => requestAnimationFrame(() => {
                 this.onResize();
             }), 500);

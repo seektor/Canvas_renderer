@@ -11,14 +11,14 @@ export class CLineChartViewport extends AbstractCanvasViewport implements ILayer
     protected model: CLineChartModel;
 
     constructor(params: TCanvasViewportParams<CLineChartModel>) {
-        const abstractParams: TAbstractCanvasViewportParams<CLineChartMainStage, CLineChartModel> = { ...params, mainStageCtor: (p) => new CLineChartMainStage(p) }
+        const abstractParams: TAbstractCanvasViewportParams<CLineChartMainStage, CLineChartViewport, CLineChartModel> = { ...params, mainStageCtor: (p) => new CLineChartMainStage(p) }
         super(abstractParams);
         this.setResizeService();
         this.renderMainStage();
     }
 
     private setResizeService(): void {
-        if (!this.isHosted) {
+        if (!this.isHosted()) {
             ResizeService.subscribeToWindow(this.container, () => requestAnimationFrame(() => {
                 this.onResize();
             }), 500);

@@ -3,6 +3,7 @@ import { CursorType } from '../../../../CanvasRenderer/structures/CursorType';
 import { Direction } from '../../../../CanvasRenderer/structures/Direction';
 import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
 import { CVerticalSliderModel } from '../CVerticalSliderModel';
+import { CVerticalSliderViewport } from '../CVerticalSliderViewport';
 import { TVerticalSliderButtonParams } from '../structures/TVerticalSliderButtonParams';
 import { CVerticalSliderPainter } from '../styles/CVerticalSliderPainter';
 
@@ -12,7 +13,7 @@ export class CVerticalSliderButtonLayer extends AbstractCanvasLayer {
     private painter: CVerticalSliderPainter;
     private direction: Direction.Up | Direction.Down;
 
-    constructor(params: TLayerParams<CVerticalSliderModel, TVerticalSliderButtonParams>) {
+    constructor(params: TLayerParams<CVerticalSliderModel, CVerticalSliderViewport, TVerticalSliderButtonParams>) {
         super(params);
         this.direction = params.config.direction;
         this.painter = this.model.getCanvasPainter();
@@ -27,12 +28,12 @@ export class CVerticalSliderButtonLayer extends AbstractCanvasLayer {
 
     public onActionEnter() {
         this.renderSelf(true);
-        this.globalViewport.setCursor(CursorType.Pointer);
+        this.viewport.setCursor(CursorType.Pointer);
     }
 
     public onActionLeave() {
         this.renderSelf(false);
-        this.globalViewport.setCursor(CursorType.Auto);
+        this.viewport.setCursor(CursorType.Auto);
     }
 
     public onViewportLeave() {

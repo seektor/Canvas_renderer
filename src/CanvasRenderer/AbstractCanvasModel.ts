@@ -1,24 +1,19 @@
-import { AbstractCanvasViewport } from './AbstractCanvasViewport';
-import { TLayerRect } from './structures/TLayerRect';
+import { Observable, Subject } from 'rxjs';
 import { CanvasBasePainter } from './utils/painter/CanvasBasePainter';
 
 export abstract class AbstractCanvasModel {
 
-    protected ownViewport: AbstractCanvasViewport;
+    public readonly onForceRerender$: Observable<void>;
+    protected forceRerender$: Subject<void>;
+
+    constructor() {
+        this.forceRerender$ = new Subject();
+        this.onForceRerender$ = this.forceRerender$.asObservable();
+    }
+
     protected canvasPainter: CanvasBasePainter;
 
-    public setViewport(viewport: AbstractCanvasViewport): void {
-        this.ownViewport = viewport;
-        this.onGlobalViewportInit();
-    }
-
-    public onMainStageCreation(): void { }
-
     public onResize(): void { };
-
-    public getDisplayRect(): TLayerRect {
-        return this.ownViewport.getLayerDisplayRect();
-    }
 
     public getCanvasPainter(): CanvasBasePainter {
         if (!this.canvasPainter) {
@@ -26,8 +21,5 @@ export abstract class AbstractCanvasModel {
         }
         return this.canvasPainter;
     }
-
-    protected onGlobalViewportInit(): void { };
-
 
 }

@@ -1,6 +1,7 @@
 import { AbstractCanvasComponent } from './AbstractCanvasComponent';
 import { AbstractCanvasLayer } from './AbstractCanvasLayer';
 import { AbstractCanvasModel } from './AbstractCanvasModel';
+import { AbstractCanvasViewport } from './AbstractCanvasViewport';
 import { ILayer } from './interfaces/ILayer';
 import { ILayerHost } from './interfaces/ILayerHost';
 import { LayerType } from './structures/LayerType';
@@ -15,7 +16,7 @@ export abstract class AbstractCanvasStage extends AbstractCanvasLayer implements
     private subLayersComponentsMap: WeakMap<ILayer, AbstractCanvasComponent>;
     private hasRenderChanges: boolean;
 
-    constructor(params: TLayerParams<AbstractCanvasModel, unknown>) {
+    constructor(params: TLayerParams<AbstractCanvasModel, AbstractCanvasViewport, unknown>) {
         super(params);
         this.hasRenderChanges = true;
         this.subLayers = [];

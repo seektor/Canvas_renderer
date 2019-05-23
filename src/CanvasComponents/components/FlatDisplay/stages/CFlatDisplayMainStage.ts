@@ -2,6 +2,7 @@ import { AbstractCanvasStage } from '../../../../CanvasRenderer/AbstractCanvasSt
 import { ILayer } from '../../../../CanvasRenderer/interfaces/ILayer';
 import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
 import { CFlatDisplayModel } from '../CFlatDisplayModel';
+import { CFlatDisplayViewport } from '../CFlatDisplayViewport';
 import { CFlatDisplayContentLayer } from '../layers/CFlatDisplayContentLayer';
 import { CFlatDisplayPainter } from '../styles/CFlatDisplayPainter';
 
@@ -9,9 +10,10 @@ import { CFlatDisplayPainter } from '../styles/CFlatDisplayPainter';
 export class CFlatDisplayMainStage extends AbstractCanvasStage {
 
     protected model: CFlatDisplayModel;
+    protected viewport: CFlatDisplayViewport;
     private painter: CFlatDisplayPainter;
 
-    constructor(params: TLayerParams<CFlatDisplayModel, unknown>) {
+    constructor(params: TLayerParams<CFlatDisplayModel, CFlatDisplayViewport, unknown>) {
         super(params);
         this.painter = this.model.getCanvasPainter();
         this.createLayers();
@@ -23,7 +25,7 @@ export class CFlatDisplayMainStage extends AbstractCanvasStage {
 
     protected createLayers(): void {
         const contentLayer: ILayer = new CFlatDisplayContentLayer({
-            layerHost: this, globalViewport: this.globalViewport, model: this.model, layerParamsExtractor: () => ({
+            layerHost: this, viewport: this.viewport, model: this.model, layerParamsExtractor: () => ({
                 dX: 0, dY: 0, height: this.layerHeight, width: this.layerWidth
             })
         });

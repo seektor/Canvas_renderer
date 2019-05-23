@@ -4,6 +4,7 @@ import { TCoords } from '../../../../CanvasRenderer/structures/TCoords';
 import { TDeltas } from '../../../../CanvasRenderer/structures/TDeltas';
 import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
 import { CFlatGridModel } from '../CFlatGridModel';
+import { CFlatGridViewport } from '../CFlatGridViewport';
 import { TColumnData } from '../structures/TColumnData';
 import { CFlatGridPainter } from '../styles/CFLatGridPainter';
 
@@ -18,7 +19,7 @@ export class CFlatGridHeaderLayer extends AbstractCanvasLayer {
     private contentWidth: number;
     private columnResizeData: { columnIndex: number, initialWidth: number } | null = null;
 
-    constructor(params: TLayerParams<CFlatGridModel, unknown>, shadowHeight: number) {
+    constructor(params: TLayerParams<CFlatGridModel, CFlatGridViewport, unknown>, shadowHeight: number) {
         super(params);
         this.painter = this.model.getCanvasPainter();
         this.shadowHeight = shadowHeight;
@@ -68,14 +69,14 @@ export class CFlatGridHeaderLayer extends AbstractCanvasLayer {
 
     public onActionMove(coords: TCoords): void {
         if (this.getResizableColumn(coords)) {
-            this.globalViewport.setCursor(CursorType.ColResize);
+            this.viewport.setCursor(CursorType.ColResize);
         } else {
-            this.globalViewport.setCursor(CursorType.Auto);
+            this.viewport.setCursor(CursorType.Auto);
         }
     }
 
     public onActionLeave() {
-        this.globalViewport.setCursor(CursorType.Auto);
+        this.viewport.setCursor(CursorType.Auto);
     }
 
     public onViewportLeave() {

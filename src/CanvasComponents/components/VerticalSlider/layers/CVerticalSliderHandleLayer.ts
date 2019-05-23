@@ -6,18 +6,20 @@ import { TParentRelativeCoords } from '../../../../CanvasRenderer/structures/TLa
 import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
 import { Utils } from '../../../../CanvasRenderer/utils/Utils';
 import { CVerticalSliderModel } from '../CVerticalSliderModel';
+import { CVerticalSliderViewport } from '../CVerticalSliderViewport';
 import { CVerticalSliderPainter } from '../styles/CVerticalSliderPainter';
 
 export class CVerticalSliderHandleLayer extends AbstractCanvasLayer {
 
     protected model: CVerticalSliderModel;
+    protected viewport: CVerticalSliderViewport;
     private painter: CVerticalSliderPainter;
 
     private isDragged: boolean;
     private trackLength: number;
     private dragStartDY: number;
 
-    constructor(params: TLayerParams<CVerticalSliderModel, unknown>) {
+    constructor(params: TLayerParams<CVerticalSliderModel, CVerticalSliderViewport, unknown>) {
         super(params);
         this.painter = this.model.getCanvasPainter();
         this.isDragged = false;
@@ -42,7 +44,7 @@ export class CVerticalSliderHandleLayer extends AbstractCanvasLayer {
     }
 
     public onActionEnter(): void {
-        this.globalViewport.setCursor(CursorType.Grab);
+        this.viewport.setCursor(CursorType.Grab);
     }
 
     public onActionStart(coords: TParentRelativeCoords): void {
@@ -53,7 +55,7 @@ export class CVerticalSliderHandleLayer extends AbstractCanvasLayer {
     public onActionEnd(coords: TCoords): void {
         this.isDragged = false;
         if (!this.isPierced(coords)) {
-            this.globalViewport.setCursor(CursorType.Auto);
+            this.viewport.setCursor(CursorType.Auto);
         }
     }
 
@@ -64,7 +66,7 @@ export class CVerticalSliderHandleLayer extends AbstractCanvasLayer {
 
     public onActionLeave(): void {
         if (!this.isDragged) {
-            this.globalViewport.setCursor(CursorType.Auto);
+            this.viewport.setCursor(CursorType.Auto);
         }
     }
 

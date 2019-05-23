@@ -6,6 +6,7 @@ import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams
 import { TLayerRect } from '../../../../CanvasRenderer/structures/TLayerRect';
 import { TLayerRenderParams } from '../../../../CanvasRenderer/structures/TLayerRenderParams';
 import { CVerticalSliderModel } from '../CVerticalSliderModel';
+import { CVerticalSliderViewport } from '../CVerticalSliderViewport';
 import { CVerticalSliderBaseLayer } from '../layers/CVerticalSliderBaseLayer';
 import { CVerticalSliderButtonLayer } from '../layers/CVerticalSliderButtonLayer';
 import { CVerticalSliderPainter } from '../styles/CVerticalSliderPainter';
@@ -14,9 +15,10 @@ import { CVerticalSliderTrackStage } from './CVerticalSliderTrackStage';
 export class CVerticalSliderMainStage extends AbstractCanvasStage {
 
     protected model: CVerticalSliderModel;
+    protected viewport: CVerticalSliderViewport;
     protected painter: CVerticalSliderPainter;
 
-    constructor(params: TLayerParams<CVerticalSliderModel, unknown>) {
+    constructor(params: TLayerParams<CVerticalSliderModel, CVerticalSliderViewport, unknown>) {
         super(params);
         this.painter = this.model.getCanvasPainter();
         this.createLayers();
@@ -62,18 +64,32 @@ export class CVerticalSliderMainStage extends AbstractCanvasStage {
     }
 
     protected createLayers(): void {
-        const baseLayer: ILayer = new CVerticalSliderBaseLayer({ layerHost: this, globalViewport: this.globalViewport, model: this.model, layerParamsExtractor: (_layer) => this.getMainStageLayerParams() });
+        const baseLayer: ILayer = new CVerticalSliderBaseLayer({
+            layerHost: this, viewport
+                : this.viewport
+            , model: this.model, layerParamsExtractor: (_layer) => this.getMainStageLayerParams()
+        });
         this.addLayer(baseLayer);
 
-        const upBtn: ILayer = new CVerticalSliderButtonLayer({ layerHost: this, globalViewport: this.globalViewport, model: this.model, layerParamsExtractor: () => this.getUpBtnLayerParams(), config: { direction: Direction.Up, callback: () => console.log("xD") } });
+        const upBtn: ILayer = new CVerticalSliderButtonLayer({
+            layerHost: this, viewport
+                : this.viewport
+            , model: this.model, layerParamsExtractor: () => this.getUpBtnLayerParams(), config: { direction: Direction.Up, callback: () => console.log("xD") }
+        });
         this.addLayer(upBtn);
 
         const trackStage: ILayer = new CVerticalSliderTrackStage({
-            layerHost: this, globalViewport: this.globalViewport, model: this.model, layerParamsExtractor: (_layer) => this.getTrackStageLayerParams()
+            layerHost: this, viewport
+                : this.viewport
+            , model: this.model, layerParamsExtractor: (_layer) => this.getTrackStageLayerParams()
         });
         this.addLayer(trackStage);
 
-        const downBtn: ILayer = new CVerticalSliderButtonLayer({ layerHost: this, globalViewport: this.globalViewport, model: this.model, layerParamsExtractor: () => this.getDownBtnLayerParams(), config: { direction: Direction.Down, callback: () => console.log("xD") } });
+        const downBtn: ILayer = new CVerticalSliderButtonLayer({
+            layerHost: this, viewport
+                : this.viewport
+            , model: this.model, layerParamsExtractor: () => this.getDownBtnLayerParams(), config: { direction: Direction.Down, callback: () => console.log("xD") }
+        });
         this.addLayer(downBtn);
     }
 }

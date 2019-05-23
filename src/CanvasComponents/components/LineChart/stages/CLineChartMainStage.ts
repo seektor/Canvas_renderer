@@ -3,6 +3,7 @@ import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams
 import { TLayerRenderParams } from '../../../../CanvasRenderer/structures/TLayerRenderParams';
 import { TRect } from '../../../../CanvasRenderer/structures/TRect';
 import { CLineChartModel } from '../CLineChartModel';
+import { CLineChartViewport } from '../CLineChartViewport';
 import { CLineChartAxesLayer } from '../layers/CLineChartAxesLayer';
 import { CLineChartDataLayer } from '../layers/CLineChartDataLayer';
 import { CLineChartPainter } from '../styles/CLineChartPainter';
@@ -10,9 +11,10 @@ import { CLineChartPainter } from '../styles/CLineChartPainter';
 export class CLineChartMainStage extends AbstractCanvasStage {
 
     protected model: CLineChartModel;
+    protected viewport: CLineChartViewport;
     protected canvasPainter: CLineChartPainter;
 
-    constructor(params: TLayerParams<CLineChartModel, unknown>) {
+    constructor(params: TLayerParams<CLineChartModel, CLineChartViewport, unknown>) {
         super(params);
         this.canvasPainter = this.model.getCanvasPainter();
         this.createLayers();
@@ -42,10 +44,10 @@ export class CLineChartMainStage extends AbstractCanvasStage {
     }
 
     protected createLayers(): void {
-        const axesLayer: CLineChartAxesLayer = new CLineChartAxesLayer({ layerHost: this, globalViewport: this.globalViewport, model: this.model, layerParamsExtractor: (layer) => this.getAxesLayerRenderParams() });
+        const axesLayer: CLineChartAxesLayer = new CLineChartAxesLayer({ layerHost: this, viewport: this.viewport, model: this.model, layerParamsExtractor: (layer) => this.getAxesLayerRenderParams() });
         this.addLayer(axesLayer);
 
-        const dataLayer: CLineChartDataLayer = new CLineChartDataLayer({ layerHost: this, globalViewport: this.globalViewport, model: this.model, layerParamsExtractor: (layer) => this.getDataLayerRenderParams() });
+        const dataLayer: CLineChartDataLayer = new CLineChartDataLayer({ layerHost: this, viewport: this.viewport, model: this.model, layerParamsExtractor: (layer) => this.getDataLayerRenderParams() });
         this.addLayer(dataLayer);
     }
 }

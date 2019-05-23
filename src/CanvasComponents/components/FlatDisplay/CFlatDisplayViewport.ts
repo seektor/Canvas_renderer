@@ -11,14 +11,14 @@ export class CFlatDisplayViewport extends AbstractCanvasViewport implements ILay
     protected model: CFlatDisplayModel;
 
     constructor(params: TCanvasViewportParams<CFlatDisplayModel>) {
-        const abstractParams: TAbstractCanvasViewportParams<CFlatDisplayMainStage, CFlatDisplayModel> = { ...params, mainStageCtor: (p) => new CFlatDisplayMainStage(p) }
+        const abstractParams: TAbstractCanvasViewportParams<CFlatDisplayMainStage, CFlatDisplayViewport, CFlatDisplayModel> = { ...params, mainStageCtor: (p) => new CFlatDisplayMainStage(p) }
         super(abstractParams);
         this.setResizeService();
         this.renderMainStage();
     }
 
     private setResizeService(): void {
-        if (!this.isHosted) {
+        if (!this.isHosted()) {
             ResizeService.subscribeToWindow(this.container, () => requestAnimationFrame(() => {
                 this.onResize();
             }), 500);

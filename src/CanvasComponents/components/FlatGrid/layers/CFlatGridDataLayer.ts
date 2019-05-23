@@ -2,6 +2,7 @@ import { AbstractCanvasLayer } from '../../../../CanvasRenderer/AbstractCanvasLa
 import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
 import { TLayerRenderParams } from '../../../../CanvasRenderer/structures/TLayerRenderParams';
 import { CFlatGridModel } from '../CFlatGridModel';
+import { CFlatGridViewport } from '../CFlatGridViewport';
 import { TColumnData } from '../structures/TColumnData';
 import { TDataFrame } from '../structures/TDataFrame';
 import { CFlatGridPainter } from '../styles/CFLatGridPainter';
@@ -14,7 +15,7 @@ export class CFlatGridDataLayer extends AbstractCanvasLayer {
     private columnsData: TColumnData[];
     private dataFrame: TDataFrame;
 
-    constructor(params: TLayerParams<CFlatGridModel, unknown>) {
+    constructor(params: TLayerParams<CFlatGridModel, CFlatGridViewport, unknown>) {
         super(params);
         this.painter = this.model.getCanvasPainter();
         this.dataFrame = { from: 0, to: 0, rows: [] };

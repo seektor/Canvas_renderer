@@ -3,6 +3,7 @@ import { ILayer } from '../../../../CanvasRenderer/interfaces/ILayer';
 import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
 import { TLayerRenderParams } from '../../../../CanvasRenderer/structures/TLayerRenderParams';
 import { CFlatGridModel } from '../CFlatGridModel';
+import { CFlatGridViewport } from '../CFlatGridViewport';
 import { CFlatGridDataLayer } from '../layers/CFlatGridDataLayer';
 import { CFlatGridHeaderLayer } from '../layers/CFlatGridHeaderLayer';
 import { CFlatGridPainter } from '../styles/CFLatGridPainter';
@@ -10,10 +11,11 @@ import { CFlatGridPainter } from '../styles/CFLatGridPainter';
 export class CFlatGridStage extends AbstractCanvasStage {
 
     protected model: CFlatGridModel;
+    protected viewport: CFlatGridViewport;
     protected painter: CFlatGridPainter;
     private readonly headerShadowHeight: number = 4;
 
-    constructor(params: TLayerParams<CFlatGridModel, unknown>) {
+    constructor(params: TLayerParams<CFlatGridModel, CFlatGridViewport, unknown>) {
         super(params);
         this.painter = this.model.getCanvasPainter();
         this.createLayers();
@@ -52,11 +54,11 @@ export class CFlatGridStage extends AbstractCanvasStage {
 
     protected createLayers(): void {
         const headerLayer: ILayer = new CFlatGridHeaderLayer({
-            layerHost: this, globalViewport: this.globalViewport, model: this.model, layerParamsExtractor: (layer) => this.getHeaderLayerParams(layer)
+            layerHost: this, viewport: this.viewport, model: this.model, layerParamsExtractor: (layer) => this.getHeaderLayerParams(layer)
         }, this.headerShadowHeight);
         this.addLayer(headerLayer);
 
-        const flatGridDataLayer: ILayer = new CFlatGridDataLayer({ layerHost: this, globalViewport: this.globalViewport, model: this.model, layerParamsExtractor: (layer) => this.getDataLayerParams(layer) });
+        const flatGridDataLayer: ILayer = new CFlatGridDataLayer({ layerHost: this, viewport: this.viewport, model: this.model, layerParamsExtractor: (layer) => this.getDataLayerParams(layer) });
         this.addLayer(flatGridDataLayer);
     }
 }

@@ -11,14 +11,14 @@ export class CTextViewport extends AbstractCanvasViewport implements ILayerHost 
     protected model: CTextModel;
 
     constructor(params: TCanvasViewportParams<CTextModel>) {
-        const abstractParams: TAbstractCanvasViewportParams<CTextMainStage, CTextModel> = { ...params, mainStageCtor: (p) => new CTextMainStage(p) }
+        const abstractParams: TAbstractCanvasViewportParams<CTextMainStage, CTextViewport, CTextModel> = { ...params, mainStageCtor: (p) => new CTextMainStage(p) }
         super(abstractParams);
         this.setResizeService();
         this.renderMainStage();
     }
 
     private setResizeService(): void {
-        if (!this.isHosted) {
+        if (!this.isHosted()) {
             ResizeService.subscribeToWindow(this.container, () => requestAnimationFrame(() => {
                 this.onResize();
             }), 500);

@@ -1,12 +1,12 @@
-import { ILayerHost } from "../interfaces/ILayerHost";
-import { ILayerViewport } from "../interfaces/ILayerViewport";
 import { AbstractCanvasModel } from "../AbstractCanvasModel";
+import { AbstractCanvasViewport } from "../AbstractCanvasViewport";
+import { ILayerHost } from "../interfaces/ILayerHost";
 import { ILayerParamsExtractor } from "../interfaces/ILayerParamsExtractor";
 
-export interface TLayerParams<T extends AbstractCanvasModel, U> {
+export interface TLayerParams<MODEL extends AbstractCanvasModel, VIEWPORT extends AbstractCanvasViewport, CONFIG> {
     layerHost: ILayerHost;
-    globalViewport: ILayerViewport;
-    model: T;
+    model: MODEL;
+    viewport: VIEWPORT;
     layerParamsExtractor: ILayerParamsExtractor;
-    config?: U
+    config?: CONFIG
 }

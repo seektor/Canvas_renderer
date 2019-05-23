@@ -1,14 +1,15 @@
 import { AbstractCanvasModel } from '../AbstractCanvasModel';
-import { TLayerHostingParams } from './TLayerHostingParams';
-import { LayerCtor } from '../interfaces/LayerCtor';
 import { AbstractCanvasStage } from '../AbstractCanvasStage';
+import { AbstractCanvasViewport } from '../AbstractCanvasViewport';
+import { LayerCtor } from '../interfaces/LayerCtor';
+import { TLayerHostingParams } from './TLayerHostingParams';
 
-export interface TCanvasViewportParams<T extends AbstractCanvasModel> {
+export interface TCanvasViewportParams<MODEL extends AbstractCanvasModel> {
     container: HTMLElement;
-    model: T;
+    model: MODEL;
     hostingParams?: TLayerHostingParams;
 }
 
-export interface TAbstractCanvasViewportParams<T extends AbstractCanvasStage, U extends AbstractCanvasModel> extends TCanvasViewportParams<U> {
-    mainStageCtor: LayerCtor<T, U, null>;
+export interface TAbstractCanvasViewportParams<STAGE extends AbstractCanvasStage, VIEWPORT extends AbstractCanvasViewport, MODEL extends AbstractCanvasModel> extends TCanvasViewportParams<MODEL> {
+    mainStageCtor: LayerCtor<STAGE, MODEL, VIEWPORT, null>;
 }

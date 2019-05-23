@@ -5,15 +5,17 @@ import { TLayerRenderParams } from '../../../../CanvasRenderer/structures/TLayer
 import { CVerticalSlider } from '../../VerticalSlider/CVerticalSlider';
 import { ISliderHandlers } from '../../VerticalSlider/interfaces/ISliderHandlers';
 import { CFlatGridModel } from '../CFlatGridModel';
+import { CFlatGridViewport } from '../CFlatGridViewport';
 import { CFlatGridPainter } from '../styles/CFLatGridPainter';
 import { CFlatGridStage } from './CFlatGridStage';
 
 export class CFlatGridMainStage extends AbstractCanvasStage {
 
     protected model: CFlatGridModel;
+    protected viewport: CFlatGridViewport;
     protected canvasPainter: CFlatGridPainter;
 
-    constructor(params: TLayerParams<CFlatGridModel, unknown>) {
+    constructor(params: TLayerParams<CFlatGridModel, CFlatGridViewport, unknown>) {
         super(params);
         this.canvasPainter = this.model.getCanvasPainter();
         this.createLayers();
@@ -59,15 +61,15 @@ export class CFlatGridMainStage extends AbstractCanvasStage {
 
     protected createLayers(): void {
         const flatGridStage: ILayer = new CFlatGridStage({
-            layerHost: this, globalViewport: this.globalViewport, model: this.model, layerParamsExtractor: () => this.getFlatGridLayerParams()
+            layerHost: this, viewport: this.viewport, model: this.model, layerParamsExtractor: () => this.getFlatGridLayerParams()
         });
         this.addLayer(flatGridStage);
 
         const verticalSlider: CVerticalSlider = new CVerticalSlider();
         const verticalSliderHandlers: ISliderHandlers = verticalSlider.getSliderHandlers();
         this.model.setVerticalSliderHandlers(verticalSliderHandlers);
-        verticalSlider.createViewport(this.globalViewport.getContainer(), {
-            globalViewport: this.globalViewport,
+        verticalSlider.createViewport(this.viewport.getContainer(), {
+            hostingViewport: this.viewport,
             displayLayerRectExtractor: (_layer: ILayer) => this.getVerticalSliderLayerParams(),
             layerHost: this
         });

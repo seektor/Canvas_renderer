@@ -3,13 +3,15 @@ import { ILayer } from '../../../../CanvasRenderer/interfaces/ILayer';
 import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
 import { TLayerRenderParams } from '../../../../CanvasRenderer/structures/TLayerRenderParams';
 import { CVerticalSliderModel } from '../CVerticalSliderModel';
+import { CVerticalSliderViewport } from '../CVerticalSliderViewport';
 import { CVerticalSliderHandleLayer } from '../layers/CVerticalSliderHandleLayer';
 
 export class CVerticalSliderTrackStage extends AbstractCanvasStage {
 
+    protected viewport: CVerticalSliderViewport;
     protected model: CVerticalSliderModel;
 
-    constructor(params: TLayerParams<CVerticalSliderModel, unknown>) {
+    constructor(params: TLayerParams<CVerticalSliderModel, CVerticalSliderViewport, unknown>) {
         super(params);
         this.createLayers();
     }
@@ -25,7 +27,7 @@ export class CVerticalSliderTrackStage extends AbstractCanvasStage {
 
     protected createLayers(): void {
         const handleLayer: ILayer = new CVerticalSliderHandleLayer({
-            layerHost: this, globalViewport: this.globalViewport, model: this.model, layerParamsExtractor: (_layer) => this.getHandlerLayerParams()
+            layerHost: this, viewport: this.viewport, model: this.model, layerParamsExtractor: (_layer) => this.getHandlerLayerParams()
         });
         this.addLayer(handleLayer);
     }

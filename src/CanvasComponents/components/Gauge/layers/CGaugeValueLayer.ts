@@ -5,19 +5,21 @@ import { TDeltas } from '../../../../CanvasRenderer/structures/TDeltas';
 import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
 import { TRange } from '../../../../CanvasRenderer/structures/TRange';
 import { CGaugeModel } from '../CGaugeModel';
+import { CGaugeViewport } from '../CGaugeViewport';
 import { TGaugeDimensions } from '../structures/TGaugeDimensions';
 import { CGaugePainter } from '../styles/CGaugePainter';
 
 export class CGaugeValueLayer extends AbstractCanvasLayer {
 
     protected model: CGaugeModel;
+    protected viewport: CGaugeViewport;
     private painter: CGaugePainter;
     private gaugeDimensions: TGaugeDimensions;
     private gaugeAngleRange: TRange;
     private isDragging: boolean;
     private normalizedActionStartCoords: TCoords | null;
 
-    constructor(params: TLayerParams<CGaugeModel, unknown>) {
+    constructor(params: TLayerParams<CGaugeModel, CGaugeViewport, unknown>) {
         super(params);
         this.painter = this.model.getCanvasPainter();
         this.isDragging = false;
@@ -41,12 +43,12 @@ export class CGaugeValueLayer extends AbstractCanvasLayer {
     }
 
     public onActionEnter(): void {
-        this.globalViewport.setCursor(CursorType.Pointer);
+        this.viewport.setCursor(CursorType.Pointer);
     }
 
     public onActionLeave(): void {
         if (!this.isDragging) {
-            this.globalViewport.setCursor(CursorType.Auto);
+            this.viewport.setCursor(CursorType.Auto);
         }
     }
 
@@ -72,12 +74,12 @@ export class CGaugeValueLayer extends AbstractCanvasLayer {
     public onActionEnd(coords: TCoords): void {
         this.isDragging = false;
         if (!this.isPierced(coords)) {
-            this.globalViewport.setCursor(CursorType.Auto);
+            this.viewport.setCursor(CursorType.Auto);
         }
     }
 
     public onViewportLeave(): void {
-        this.globalViewport.setCursor(CursorType.Auto);
+        this.viewport.setCursor(CursorType.Auto);
     }
 
     public isPierced(coords: TCoords): boolean {

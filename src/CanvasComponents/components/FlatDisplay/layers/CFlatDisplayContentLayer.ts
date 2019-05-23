@@ -1,13 +1,15 @@
 import { AbstractCanvasLayer } from '../../../../CanvasRenderer/AbstractCanvasLayer';
 import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
 import { CFlatDisplayModel } from '../CFlatDisplayModel';
+import { CFlatDisplayViewport } from '../CFlatDisplayViewport';
 import { CFlatDisplayPainter } from '../styles/CFlatDisplayPainter';
+
 export class CFlatDisplayContentLayer extends AbstractCanvasLayer {
 
     protected model: CFlatDisplayModel;
     private painter: CFlatDisplayPainter;
 
-    constructor(params: TLayerParams<CFlatDisplayModel, unknown>) {
+    constructor(params: TLayerParams<CFlatDisplayModel, CFlatDisplayViewport, unknown>) {
         super(params);
         this.painter = this.model.getCanvasPainter();
         this.renderSelf();

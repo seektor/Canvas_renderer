@@ -22,7 +22,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     protected container: HTMLElement;
     protected model: AbstractCanvasModel;
 
-    protected isHosted: boolean;
+    protected hostingViewport: AbstractCanvasViewport | null;
     protected mainStage: AbstractCanvasStage;
     private displayCanvas: HTMLCanvasElement;
     private displayCanvasContext: CanvasRenderingContext2D;
@@ -30,8 +30,9 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     private eventsData: TCanvasViewportEventsData;
     private hasRenderChanges: boolean;
 
-    constructor(params: TAbstractCanvasViewportParams<AbstractCanvasStage, AbstractCanvasModel>) {
+    constructor(params: TAbstractCanvasViewportParams<AbstractCanvasStage, AbstractCanvasViewport, AbstractCanvasModel>) {
         this.container = params.container;
+        this.hostingViewport = null;
         this.model = params.model;
         this.hasRenderChanges = true;
 
@@ -50,6 +51,10 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         return this.mainStage;
     }
 
+    public getDisplayCanvas(): HTMLCanvasElement {
+        return this.displayCanvas;
+    }
+
     public getLayerDisplayRect(): TLayerRect {
         const displayLayerParams: TLayerRenderParams = this.displayLayerRectExtractor(this.mainStage);
         return { height: displayLayerParams.height, width: displayLayerParams.width, y: displayLayerParams.dY, x: displayLayerParams.dX };
@@ -57,6 +62,14 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
 
     public setCursor(type: CursorType): void {
         this.displayCanvas.style.cursor = type;
+    }
+
+    protected isHosted(): boolean {
+        return this.hostingViewport != null;
+    }
+
+    public getContainer(): HTMLElement {
+        return this.container;
     }
 
     protected getContainerDimensions(): TDimensions {
@@ -80,48 +93,49 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         this.renderMainStage();
     }
 
-    private construct(params: TAbstractCanvasViewportParams<AbstractCanvasStage, AbstractCanvasModel>): void {
+    private construct(params: TAbstractCanvasViewportParams<AbstractCanvasStage, AbstractCanvasViewport, AbstractCanvasModel>): void {
         if (params.hostingParams) {
-            this.isHosted = true;
-            this.displayLayerRectExtractor = params.hostingParams.displayLayerRectExtractor;
-            this.displayCanvas = params.hostingParams.globalViewport.getDisplayCanvas();
-            this.displayCanvasContext = this.displayCanvas.getContext('2d');
-            this.model.setViewport(this);
-            this.mainStage = params.mainStageCtor({ layerHost: params.hostingParams.layerHost, globalViewport: params.hostingParams.globalViewport, model: params.model, layerParamsExtractor: () => params.hostingParams.displayLayerRectExtractor(this.mainStage) });
+            this.constructHostedViewport(params);
         } else {
-            this.isHosted = false;
-            const containerDimensions: TDimensions = this.getContainerDimensions();
-            this.displayLayerRectExtractor = () => ({ dX: 0, dY: 0, ...this.getContainerDimensions() });
-            this.createDisplayCanvas(containerDimensions);
-            this.model.setViewport(this);
-            this.mainStage = params.mainStageCtor({ layerHost: this, globalViewport: this, model: this.model, layerParamsExtractor: () => this.displayLayerRectExtractor(this.mainStage) });
-            params.container.appendChild(this.displayCanvas);
-            this.setBaseEvents();
-            this.eventsData = {
-                displayOffsetLeft: 0,
-                displayOffsetTop: 0,
-                topActiveLayerPlacement: { layer: this.mainStage, ...this.mainStage.getParentRelativeCoords() },
-                actionStartLayer: null,
-            };
-            this.updateEventsData();
+            this.constructMainViewport(params);
         }
-        this.model.onMainStageCreation();
+        this.model.onForceRerender$.subscribe(() => this.forceRerender());
+    }
+
+    private constructHostedViewport(params: TAbstractCanvasViewportParams<AbstractCanvasStage, AbstractCanvasViewport, AbstractCanvasModel>): void {
+        this.hostingViewport = params.hostingParams.hostingViewport;
+        this.displayLayerRectExtractor = params.hostingParams.displayLayerRectExtractor;
+        this.displayCanvas = params.hostingParams.hostingViewport.getDisplayCanvas();
+        this.displayCanvasContext = this.displayCanvas.getContext('2d');
+        this.mainStage = params.mainStageCtor({ layerHost: params.hostingParams.layerHost, viewport: params.hostingParams.hostingViewport, model: params.model, layerParamsExtractor: () => params.hostingParams.displayLayerRectExtractor(this.mainStage) });
+    }
+
+    private constructMainViewport(params: TAbstractCanvasViewportParams<AbstractCanvasStage, AbstractCanvasViewport, AbstractCanvasModel>): void {
+        const containerDimensions: TDimensions = this.getContainerDimensions();
+        this.displayLayerRectExtractor = () => ({ dX: 0, dY: 0, ...this.getContainerDimensions() });
+        this.createDisplayCanvas(containerDimensions);
+        this.mainStage = params.mainStageCtor({ layerHost: this, viewport: this, model: this.model, layerParamsExtractor: () => this.displayLayerRectExtractor(this.mainStage) });
+        params.container.appendChild(this.displayCanvas);
+        this.setBaseEvents();
+        this.eventsData = {
+            displayOffsetLeft: 0,
+            displayOffsetTop: 0,
+            topActiveLayerPlacement: { layer: this.mainStage, ...this.mainStage.getParentRelativeCoords() },
+            actionStartLayer: null,
+        };
+        this.updateEventsData();
     }
 
     public forceRerender(): void {
-        this.renderMainStage();
+        if (this.isHosted()) {
+            this.hostingViewport.forceRerender();
+        } else {
+            this.renderMainStage();
+        }
     }
 
     public notifyRenderChanges() {
         this.hasRenderChanges = true;
-    }
-
-    public getContainer(): HTMLElement {
-        return this.container;
-    }
-
-    public getDisplayCanvas(): HTMLCanvasElement {
-        return this.displayCanvas;
     }
 
     private createDisplayCanvas(dimensions: TDimensions): void {

@@ -1,8 +1,8 @@
 import { AbstractCanvasModel } from './AbstractCanvasModel';
+import { AbstractCanvasViewport } from './AbstractCanvasViewport';
 import { ILayer } from './interfaces/ILayer';
 import { ILayerHost } from './interfaces/ILayerHost';
 import { ILayerParamsExtractor } from './interfaces/ILayerParamsExtractor';
-import { ILayerViewport } from './interfaces/ILayerViewport';
 import { LayerRelativity } from './structures/LayerRelativity';
 import { LayerType } from './structures/LayerType';
 import { TCoords } from './structures/TCoords';
@@ -35,12 +35,12 @@ export abstract class AbstractCanvasLayer implements ILayer {
 
     public layerHost: ILayerHost;
     protected model: AbstractCanvasModel;
-    protected globalViewport: ILayerViewport;
+    protected viewport: AbstractCanvasViewport;
     protected layerParamsExtractor: ILayerParamsExtractor;
 
-    constructor(params: TLayerParams<AbstractCanvasModel, unknown>) {
+    constructor(params: TLayerParams<AbstractCanvasModel, AbstractCanvasViewport, unknown>) {
         this.layerHost = params.layerHost;
-        this.globalViewport = params.globalViewport;
+        this.viewport = params.viewport;
         this.model = params.model;
         this.layerParamsExtractor = params.layerParamsExtractor;
         this.initializeParameters(params.layerParamsExtractor);
