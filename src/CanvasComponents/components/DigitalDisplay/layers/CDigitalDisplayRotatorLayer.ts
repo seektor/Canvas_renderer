@@ -29,7 +29,7 @@ export class CDigitalDisplayRotatorLayer extends AbstractCanvasLayer {
 
     private rotate() {
         this.notifyRenderChanges();
-        this.viewport.forceRerender();
+        this.viewport.forceRender();
     }
 
     public render(context: CanvasRenderingContext2D): void {

@@ -1,0 +1,1 @@
+1. For the time being the user has to manually trigger notifyRenderChanges at the end ot he renderSelf method. When it comes to rerender which is currently used to theme changing the notify is always triggered which is sparse due to the fact that the whole view will be rerendered anyway at the end.

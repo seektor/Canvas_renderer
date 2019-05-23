@@ -76,7 +76,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         return Utils.getElementDimensions(this.container);
     }
 
-    protected renderMainStage(): void {
+    protected render(): void {
         if (this.hasRenderChanges) {
             this.mainStage.render(this.displayCanvasContext);
             this.hasRenderChanges = false;
@@ -90,7 +90,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         this.updateEventsData();
         this.model.onResize();
         this.mainStage.onResize();
-        this.renderMainStage();
+        this.render();
     }
 
     private construct(params: TAbstractCanvasViewportParams<AbstractCanvasStage, AbstractCanvasViewport, AbstractCanvasModel>): void {
@@ -99,6 +99,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         } else {
             this.constructMainViewport(params);
         }
+        this.model.onForceRender$.subscribe(() => this.forceRender());
         this.model.onForceRerender$.subscribe(() => this.forceRerender());
     }
 
@@ -126,11 +127,20 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         this.updateEventsData();
     }
 
+    public forceRender(): void {
+        if (this.isHosted()) {
+            this.hostingViewport.forceRender();
+        } else {
+            this.render();
+        }
+    }
+
     public forceRerender(): void {
         if (this.isHosted()) {
             this.hostingViewport.forceRerender();
         } else {
-            this.renderMainStage();
+            this.mainStage.rerenderSelf();
+            this.forceRender();
         }
     }
 
@@ -169,7 +179,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
                 const layer: ILayer = layers[i];
                 const rTranslations: TLayerCoords = layer.getParentRelativeCoords();
                 const localCoords: TCoords = { x: layerCoords.x - rTranslations.x, y: layerCoords.y - rTranslations.y };
-                if (layer.isPierced(localCoords)) {
+                if (layer.isVisible() && layer.isPierced(localCoords)) {
                     topLayerPlacement.layer = layer;
                     topLayerPlacement.x = coords.x - localCoords.x;
                     topLayerPlacement.y = coords.y - localCoords.y;
@@ -206,7 +216,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
             y: displayCoords.y
         };
         layerPlacement.layer.onActionStart(localCoords);
-        this.renderMainStage();
+        this.render();
     }
 
     private onActionMove(e: MouseEvent): void {
@@ -224,7 +234,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         if (this.eventsData.actionStartLayer) {
             this.eventsData.actionStartLayer.layer.onActionDrag({ dX: displayCoords.x - this.eventsData.actionStartLayer.x, dY: displayCoords.y - this.eventsData.actionStartLayer.y });
         }
-        this.renderMainStage();
+        this.render();
         // console.timeEnd("Action Move time");
     }
 
@@ -246,6 +256,6 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         this.eventsData.topActiveLayerPlacement.x = 0;
         this.eventsData.topActiveLayerPlacement.y = 0;
         this.eventsData.actionStartLayer = null;
-        this.renderMainStage();
+        this.render();
     }
 }

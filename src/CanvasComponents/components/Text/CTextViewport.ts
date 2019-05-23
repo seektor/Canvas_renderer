@@ -14,7 +14,7 @@ export class CTextViewport extends AbstractCanvasViewport implements ILayerHost 
         const abstractParams: TAbstractCanvasViewportParams<CTextMainStage, CTextViewport, CTextModel> = { ...params, mainStageCtor: (p) => new CTextMainStage(p) }
         super(abstractParams);
         this.setResizeService();
-        this.renderMainStage();
+        this.render();
     }
 
     private setResizeService(): void {

@@ -14,7 +14,7 @@ export class CGaugeViewport extends AbstractCanvasViewport implements ILayerHost
         const abstractParams: TAbstractCanvasViewportParams<CGaugeMainStage, CGaugeViewport, CGaugeModel> = { ...params, mainStageCtor: (p) => new CGaugeMainStage(p) }
         super(abstractParams);
         this.setResizeService();
-        this.renderMainStage();
+        this.render();
     }
 
     private setResizeService(): void {

@@ -77,7 +77,7 @@ export class CFlatGridModel extends AbstractCanvasModel {
         this.host.requestMetadata((metadata) => {
             this.setMetadata(metadata);
             this.requestData(0, this.minimumRowBuffer);
-            this.forceRerender$.next();
+            this.forceRender$.next();
         });
     }
 
@@ -100,14 +100,14 @@ export class CFlatGridModel extends AbstractCanvasModel {
             }
         });
         this.metadataDidChange$.next();
-        this.forceRerender$.next();
+        this.forceRender$.next();
     }
 
     private setData(data: TDataFrame): void {
         this.dataFrame = data;
         this.dataDidChange$.next();
         this.dataDidTranslatedVertically$.next();
-        this.forceRerender$.next();
+        this.forceRender$.next();
     }
 
     public calculateHeaderWidth(): number {

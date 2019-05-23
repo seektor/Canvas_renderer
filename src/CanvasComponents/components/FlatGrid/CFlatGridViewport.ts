@@ -14,7 +14,7 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
         const abstractParams: TAbstractCanvasViewportParams<CFlatGridMainStage, CFlatGridViewport, CFlatGridModel> = { ...params, mainStageCtor: (p) => new CFlatGridMainStage(p) }
         super(abstractParams);
         this.setResizeService();
-        this.renderMainStage();
+        this.render();
     }
 
     private setResizeService(): void {

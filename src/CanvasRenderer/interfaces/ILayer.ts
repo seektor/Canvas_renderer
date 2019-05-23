@@ -6,8 +6,10 @@ import { TLayerCoords } from "../structures/TLayerCoords";
 export interface ILayer {
     readonly type: LayerType;
     render(context: CanvasRenderingContext2D): void;
+    rerenderSelf();
     onResize();
     getParentRelativeCoords(): TLayerCoords;
+    isVisible(): boolean;
     isPierced(coords: TCoords): boolean;
 
     onActionEnter(coords: TCoords): void;

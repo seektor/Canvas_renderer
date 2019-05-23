@@ -14,7 +14,7 @@ export class CFlatDisplayViewport extends AbstractCanvasViewport implements ILay
         const abstractParams: TAbstractCanvasViewportParams<CFlatDisplayMainStage, CFlatDisplayViewport, CFlatDisplayModel> = { ...params, mainStageCtor: (p) => new CFlatDisplayMainStage(p) }
         super(abstractParams);
         this.setResizeService();
-        this.renderMainStage();
+        this.render();
     }
 
     private setResizeService(): void {

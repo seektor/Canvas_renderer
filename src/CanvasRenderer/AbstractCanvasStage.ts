@@ -31,6 +31,11 @@ export abstract class AbstractCanvasStage extends AbstractCanvasLayer implements
         this.hasRenderChanges = false;
     }
 
+    public rerenderSelf(): void {
+        this.subLayers.forEach((layer) => layer.rerenderSelf());
+        this.renderSelf(true);
+    }
+
     public getSublayers(): ReadonlyArray<ILayer> {
         return this.subLayers;
     }
@@ -58,7 +63,7 @@ export abstract class AbstractCanvasStage extends AbstractCanvasLayer implements
     protected renderSelf(notifyChanges: boolean): void {
         this.clear();
         this.renderSelfLayer();
-        this.subLayers.forEach(layer => layer.render(this.layerContext));
+        this.subLayers.forEach(layer => layer.isVisible() && layer.render(this.layerContext));
         if (notifyChanges) {
             this.notifyRenderChanges();
         }

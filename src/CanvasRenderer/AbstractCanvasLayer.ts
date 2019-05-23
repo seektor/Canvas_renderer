@@ -37,6 +37,7 @@ export abstract class AbstractCanvasLayer implements ILayer {
     protected model: AbstractCanvasModel;
     protected viewport: AbstractCanvasViewport;
     protected layerParamsExtractor: ILayerParamsExtractor;
+    protected visible: boolean;
 
     constructor(params: TLayerParams<AbstractCanvasModel, AbstractCanvasViewport, unknown>) {
         this.layerHost = params.layerHost;
@@ -49,6 +50,10 @@ export abstract class AbstractCanvasLayer implements ILayer {
 
     public render(context: CanvasRenderingContext2D): void {
         this.drawImage(context);
+    }
+
+    public rerenderSelf(): void {
+        this.renderSelf();
     }
 
     public onResize(): void {
@@ -110,6 +115,11 @@ export abstract class AbstractCanvasLayer implements ILayer {
         this.sY = layerParams.sY || 0;
         this.sHeight = layerParams.sHeight || layerParams.height;
         this.sWidth = layerParams.sWidth || layerParams.width;
+        this.visible = true;
+    }
+
+    public isVisible(): boolean {
+        return this.visible;
     }
 
     private createDrawBufferCanvas(): void {
