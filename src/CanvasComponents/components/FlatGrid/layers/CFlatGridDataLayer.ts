@@ -10,6 +10,7 @@ import { CFlatGridPainter } from '../styles/CFLatGridPainter';
 export class CFlatGridDataLayer extends AbstractCanvasLayer {
 
     protected model: CFlatGridModel;
+    protected viewport: CFlatGridViewport;
     protected painter: CFlatGridPainter;
 
     private columnsData: TColumnData[];
@@ -17,7 +18,7 @@ export class CFlatGridDataLayer extends AbstractCanvasLayer {
 
     constructor(params: TLayerParams<CFlatGridModel, CFlatGridViewport, unknown>) {
         super(params);
-        this.painter = this.model.getCanvasPainter();
+        this.painter = this.viewport.getCanvasPainter();
         this.dataFrame = { from: 0, to: 0, rows: [] };
         this.columnsData = [];
         this.setEvents();

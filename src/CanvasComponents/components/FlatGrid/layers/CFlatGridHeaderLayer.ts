@@ -14,14 +14,15 @@ export class CFlatGridHeaderLayer extends AbstractCanvasLayer {
     private readonly resizeHorizontalTriggerWidth: number = 5;
 
     protected model: CFlatGridModel;
-    private painter: CFlatGridPainter;
+    protected viewport: CFlatGridViewport;
+    private canvasPainter: CFlatGridPainter;
     private columnsData: TColumnData[];
     private contentWidth: number;
     private columnResizeData: { columnIndex: number, initialWidth: number } | null = null;
 
     constructor(params: TLayerParams<CFlatGridModel, CFlatGridViewport, unknown>, shadowHeight: number) {
         super(params);
-        this.painter = this.model.getCanvasPainter();
+        this.canvasPainter = this.viewport.getCanvasPainter();
         this.shadowHeight = shadowHeight;
         this.setEvents();
         this.updateParams();
@@ -42,7 +43,7 @@ export class CFlatGridHeaderLayer extends AbstractCanvasLayer {
 
     public renderSelf(): void {
         this.clear();
-        this.painter.drawHeader(this.layerContext, { y: 0, x: 0, height: this.layerHeight, width: this.contentWidth }, this.shadowHeight, this.columnsData);
+        this.canvasPainter.drawHeader(this.layerContext, { y: 0, x: 0, height: this.layerHeight, width: this.contentWidth }, this.shadowHeight, this.columnsData);
     }
 
     public isPierced(coords: TCoords): boolean {

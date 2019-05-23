@@ -1,12 +1,9 @@
 import { Observable, Subject } from 'rxjs';
 import { AbstractCanvasModel } from '../../../CanvasRenderer/AbstractCanvasModel';
-import { TRange } from '../../../CanvasRenderer/structures/TRange';
 import { TableMetadata } from '../../../Database/Redux/JarvisDb/types/DataTypes';
-import { ISliderHandlers } from '../VerticalSlider/interfaces/ISliderHandlers';
 import { IHostGridModel } from './interfaces/IHostGridModel';
 import { TColumnData } from './structures/TColumnData';
 import { TDataFrame } from './structures/TDataFrame';
-import { CFlatGridPainter } from './styles/CFLatGridPainter';
 
 export class CFlatGridModel extends AbstractCanvasModel {
 
@@ -19,15 +16,13 @@ export class CFlatGridModel extends AbstractCanvasModel {
 
     private readonly baseColumnWidth: number = 250;
     private readonly minColumnWidth: number = 100;
-    private readonly minimumRowBuffer: number = 60;
 
-    protected canvasPainter: CFlatGridPainter;
     private columnsData: TColumnData[];
     private rowCount: number;
     private dataFrame: TDataFrame;
     private host: IHostGridModel;
 
-    private verticalSliderHandlers: ISliderHandlers;
+    // private verticalSliderHandlers: ISliderHandlers;
     private verticalSliderRatio: number;
 
     constructor(host: IHostGridModel) {
@@ -48,11 +43,6 @@ export class CFlatGridModel extends AbstractCanvasModel {
         this.rowCount = 0;
         this.verticalSliderRatio = 0;
         this.dataFrame = { from: 0, to: 0, rows: [] };
-        this.canvasPainter = new CFlatGridPainter();
-    }
-
-    public getCanvasPainter(): CFlatGridPainter {
-        return this.canvasPainter;
     }
 
     public getColumnsData(): TColumnData[] {
@@ -63,10 +53,14 @@ export class CFlatGridModel extends AbstractCanvasModel {
         return this.dataFrame;
     }
 
-    public setVerticalSliderHandlers(handlers: ISliderHandlers): void {
-        this.verticalSliderHandlers = handlers;
-        handlers.onSelectedRatioDidChange$.subscribe((ratio) => this.onVertialSliderSelectedRatioDidChange(ratio));
+    public getRowCount(): number {
+        return this.rowCount;
     }
+
+    // public setVerticalSliderHandlers(handlers: ISliderHandlers): void {
+    //     this.verticalSliderHandlers = handlers;
+    //     handlers.onSelectedRatioDidChange$.subscribe((ratio) => this.onVertialSliderSelectedRatioDidChange(ratio));
+    // }
 
     private requestData(from: number, to: number): void {
         const cb: (data: TDataFrame) => void = (data) => this.setData(data);
@@ -76,19 +70,8 @@ export class CFlatGridModel extends AbstractCanvasModel {
     private requestMetadata(): void {
         this.host.requestMetadata((metadata) => {
             this.setMetadata(metadata);
-            this.requestData(0, this.minimumRowBuffer);
             this.forceRender$.next();
         });
-    }
-
-    public getRowBufferHeight(): number {
-        return this.getRowBuffer() * this.canvasPainter.getRowHeight();
-    }
-
-    private getRowBuffer(): number {
-        const displayRowsBuffer: number = this.getNumberOfRowsPerDisplay() * 2;
-        const calculatedRowsBuffer: number = Math.max(displayRowsBuffer, this.minimumRowBuffer);
-        return Math.min(calculatedRowsBuffer, this.rowCount);
     }
 
     private setMetadata(data: TableMetadata): void {
@@ -114,50 +97,30 @@ export class CFlatGridModel extends AbstractCanvasModel {
         return this.columnsData.reduce((p, c) => p += c.width, 0);
     }
 
-    public getTotalRowsHeight(): number {
-        return this.rowCount * this.canvasPainter.getRowHeight();
-    }
-
     public setColumnWidth(columnIndex: number, width: number): void {
         const column: TColumnData = this.columnsData[columnIndex];
         column.width = Math.max(this.minColumnWidth, width);
     }
 
-    private onVertialSliderSelectedRatioDidChange(ratio: number): void {
-        this.verticalSliderRatio = ratio;
-        const rowHeight: number = this.canvasPainter.getRowHeight();
-        const dataLayerDisplayHeight: number = this.canvasPainter.getDataLayerDisplayHeight();
-        const numberOfRowsPerDisplay: number = this.getNumberOfRowsPerDisplay();
-        const scrollableHeight: number = Math.max(this.getTotalRowsHeight() - dataLayerDisplayHeight, 0);
-        const firstVisiblePartialRow: number = scrollableHeight * ratio / rowHeight;
-        const firstVisibleFullRow: number = Math.floor(firstVisiblePartialRow);
-        const lastVisibleRow: number = firstVisibleFullRow + numberOfRowsPerDisplay;
+    // private onVertialSliderSelectedRatioDidChange(ratio: number): void {
+    //     this.verticalSliderRatio = ratio;
+    //     const rowHeight: number = this.canvasPainter.getRowHeight();
+    //     const dataLayerDisplayHeight: number = this.canvasPainter.getDataLayerDisplayHeight();
+    //     const numberOfRowsPerDisplay: number = this.getNumberOfRowsPerDisplay();
+    //     const scrollableHeight: number = Math.max(this.getTotalRowsHeight() - dataLayerDisplayHeight, 0);
+    //     const firstVisiblePartialRow: number = scrollableHeight * ratio / rowHeight;
+    //     const firstVisibleFullRow: number = Math.floor(firstVisiblePartialRow);
+    //     const lastVisibleRow: number = firstVisibleFullRow + numberOfRowsPerDisplay;
 
-        const isOutOfDataRange: boolean = firstVisibleFullRow < this.dataFrame.from || lastVisibleRow > this.dataFrame.to;
-        if (isOutOfDataRange) {
-            const requestDataRange: TRange = this.createDataRequestRange(firstVisibleFullRow, lastVisibleRow);
-            this.requestData(requestDataRange.from, requestDataRange.to);
-        }
-    }
+    //     const isOutOfDataRange: boolean = firstVisibleFullRow < this.dataFrame.from || lastVisibleRow > this.dataFrame.to;
+    //     if (isOutOfDataRange) {
+    //         const requestDataRange: TRange = this.createDataRequestRange(firstVisibleFullRow, lastVisibleRow);
+    //         this.requestData(requestDataRange.from, requestDataRange.to);
+    //     }
+    // }
 
     public getScrollTop(): number {
         return 0;
         // return scrollableHeight * this.verticalSliderRatio;
-    }
-
-    private createDataRequestRange(firstVisibleRowNumber: number, lastVisibleRowNumber): TRange {
-        const rowBuffer: number = this.getRowBuffer();
-        const visibleRowsCount: number = lastVisibleRowNumber - firstVisibleRowNumber;
-        const rowBufferPerSide: number = Math.ceil(rowBuffer / 2);
-        let from: number = Math.max(0, firstVisibleRowNumber - rowBufferPerSide);
-        const fromDiff: number = rowBufferPerSide - (firstVisibleRowNumber - from);
-        let to: number = Math.min(this.rowCount, from + visibleRowsCount + rowBufferPerSide + fromDiff);
-        const diff: number = rowBuffer - (to - from);
-        from = Math.max(0, from - diff);
-        return { from, to };
-    }
-
-    private getNumberOfRowsPerDisplay(): number {
-        return Math.ceil(this.canvasPainter.getDataLayerDisplayHeight() / this.canvasPainter.getRowHeight());
     }
 }

@@ -1,7 +1,7 @@
 import { AbstractCanvasModel } from '../AbstractCanvasModel';
 import { AbstractCanvasStage } from '../AbstractCanvasStage';
 import { AbstractCanvasViewport } from '../AbstractCanvasViewport';
-import { LayerCtor } from '../interfaces/LayerCtor';
+import { StageCtor } from '../interfaces/StageCtor';
 import { TLayerHostingParams } from './TLayerHostingParams';
 
 export interface TCanvasViewportParams<MODEL extends AbstractCanvasModel> {
@@ -11,5 +11,5 @@ export interface TCanvasViewportParams<MODEL extends AbstractCanvasModel> {
 }
 
 export interface TAbstractCanvasViewportParams<STAGE extends AbstractCanvasStage, VIEWPORT extends AbstractCanvasViewport, MODEL extends AbstractCanvasModel> extends TCanvasViewportParams<MODEL> {
-    mainStageCtor: LayerCtor<STAGE, MODEL, VIEWPORT, null>;
+    mainStageCtor: StageCtor<STAGE, MODEL, VIEWPORT, null>;
 }

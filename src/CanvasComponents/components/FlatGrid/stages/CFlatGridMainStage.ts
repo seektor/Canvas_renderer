@@ -2,8 +2,6 @@ import { AbstractCanvasStage } from '../../../../CanvasRenderer/AbstractCanvasSt
 import { ILayer } from '../../../../CanvasRenderer/interfaces/ILayer';
 import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
 import { TLayerRenderParams } from '../../../../CanvasRenderer/structures/TLayerRenderParams';
-import { CVerticalSlider } from '../../VerticalSlider/CVerticalSlider';
-import { ISliderHandlers } from '../../VerticalSlider/interfaces/ISliderHandlers';
 import { CFlatGridModel } from '../CFlatGridModel';
 import { CFlatGridViewport } from '../CFlatGridViewport';
 import { CFlatGridPainter } from '../styles/CFLatGridPainter';
@@ -17,13 +15,13 @@ export class CFlatGridMainStage extends AbstractCanvasStage {
 
     constructor(params: TLayerParams<CFlatGridModel, CFlatGridViewport, unknown>) {
         super(params);
-        this.canvasPainter = this.model.getCanvasPainter();
+        this.canvasPainter = this.viewport.getCanvasPainter();
         this.createLayers();
         this.updateParams();
     }
 
     public isVerticalScrollbarVisible(): boolean {
-        const totalRowsHeight: number = this.model.getTotalRowsHeight();
+        const totalRowsHeight: number = this.viewport.getTotalRowsHeight();
         const dataLayerHeight: number = this.canvasPainter.getCalculatedDataLayerDisplayHeight(this.layerHeight);
         return dataLayerHeight < totalRowsHeight;
     }
@@ -34,7 +32,7 @@ export class CFlatGridMainStage extends AbstractCanvasStage {
     }
 
     protected renderSelfLayer(): void {
-        this.model.getCanvasPainter().drawBackground(this.layerContext, this.getLayerRect());
+        this.canvasPainter.drawBackground(this.layerContext, this.getLayerRect());
     }
 
     private getFlatGridLayerParams(): TLayerRenderParams {
@@ -65,14 +63,14 @@ export class CFlatGridMainStage extends AbstractCanvasStage {
         });
         this.addLayer(flatGridStage);
 
-        const verticalSlider: CVerticalSlider = new CVerticalSlider();
-        const verticalSliderHandlers: ISliderHandlers = verticalSlider.getSliderHandlers();
-        this.model.setVerticalSliderHandlers(verticalSliderHandlers);
-        verticalSlider.createViewport(this.viewport.getContainer(), {
-            hostingViewport: this.viewport,
-            displayLayerRectExtractor: (_layer: ILayer) => this.getVerticalSliderLayerParams(),
-            layerHost: this
-        });
-        this.addComponent(verticalSlider);
+        // const verticalSlider: CVerticalSlider = new CVerticalSlider();
+        // const verticalSliderHandlers: ISliderHandlers = verticalSlider.getSliderHandlers();
+        // this.model.setVerticalSliderHandlers(verticalSliderHandlers);
+        // verticalSlider.createViewport(this.viewport.getContainer(), {
+        //     hostingViewport: this.viewport,
+        //     displayLayerRectExtractor: (_layer: ILayer) => this.getVerticalSliderLayerParams(),
+        //     layerHost: this
+        // });
+        // this.addComponent(verticalSlider);
     }
 }

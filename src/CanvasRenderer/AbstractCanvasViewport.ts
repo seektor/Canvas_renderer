@@ -1,3 +1,4 @@
+import ResizeService from '../app/services/resizeService/ResizeService';
 import { AbstractCanvasModel } from './AbstractCanvasModel';
 import { AbstractCanvasStage } from './AbstractCanvasStage';
 import { ILayer } from './interfaces/ILayer';
@@ -15,12 +16,14 @@ import { TLayerCoords } from './structures/TLayerCoords';
 import { TParentRelativeLayerPlacement } from './structures/TLayerPlacement';
 import { TLayerRect } from './structures/TLayerRect';
 import { TLayerRenderParams } from './structures/TLayerRenderParams';
+import { CanvasBasePainter } from './utils/painter/CanvasBasePainter';
 import { Utils } from './utils/Utils';
 
 export abstract class AbstractCanvasViewport implements ILayerHost {
 
     protected container: HTMLElement;
     protected model: AbstractCanvasModel;
+    protected canvasPainter: CanvasBasePainter;
 
     protected hostingViewport: AbstractCanvasViewport | null;
     protected mainStage: AbstractCanvasStage;
@@ -45,6 +48,13 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         this.onActionMove = this.onActionMove.bind(this);
         this.onActionEnd = this.onActionEnd.bind(this);
         this.onViewportOut = this.onViewportOut.bind(this);
+    }
+
+    public getCanvasPainter(): CanvasBasePainter {
+        if (!this.canvasPainter) {
+            this.canvasPainter = new CanvasBasePainter();
+        }
+        return this.canvasPainter;
     }
 
     public getMainStage(): AbstractCanvasStage {
@@ -88,7 +98,6 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         this.displayCanvas.width = containerDimensions.width;
         this.displayCanvas.height = containerDimensions.height;
         this.updateEventsData();
-        this.model.onResize();
         this.mainStage.onResize();
         this.render();
     }
@@ -125,6 +134,15 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
             actionStartLayer: null,
         };
         this.updateEventsData();
+        this.setResizeService();
+    }
+
+    private setResizeService(): void {
+        if (!this.isHosted()) {
+            ResizeService.subscribeToWindow(this.container, () => requestAnimationFrame(() => {
+                this.onResize();
+            }), 500);
+        }
     }
 
     public forceRender(): void {

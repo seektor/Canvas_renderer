@@ -1,5 +1,4 @@
 import { Observable, Subject } from 'rxjs';
-import { CanvasBasePainter } from './utils/painter/CanvasBasePainter';
 
 export abstract class AbstractCanvasModel {
 
@@ -14,16 +13,4 @@ export abstract class AbstractCanvasModel {
         this.forceRerender$ = new Subject();
         this.onForceRerender$ = this.forceRender$.asObservable();
     }
-
-    protected canvasPainter: CanvasBasePainter;
-
-    public onResize(): void { };
-
-    public getCanvasPainter(): CanvasBasePainter {
-        if (!this.canvasPainter) {
-            this.canvasPainter = new CanvasBasePainter();
-        }
-        return this.canvasPainter;
-    }
-
 }
