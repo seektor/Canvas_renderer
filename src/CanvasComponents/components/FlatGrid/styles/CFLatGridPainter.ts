@@ -1,5 +1,4 @@
 import { TThemeStyles } from '../../../../app/services/themingService/structures/TThemeStyles';
-import ThemingService from '../../../../app/services/themingService/ThemingService';
 import { Constants } from '../../../../app/utils/Constants';
 import { TCoords } from '../../../../CanvasRenderer/structures/TCoords';
 import { TRect } from '../../../../CanvasRenderer/structures/TRect';
@@ -23,14 +22,13 @@ export class CFlatGridPainter extends CanvasBasePainter {
 
     private dataLayerDisplayHeight: number;
 
-    constructor() {
+    constructor(theme: TThemeStyles) {
         super();
         this.dataLayerDisplayHeight = 0;
-        this.applyTheme();
+        this.applyTheme(theme);
     }
 
-    private applyTheme() {
-        const theme: TThemeStyles = ThemingService.getTheme();
+    public applyTheme(theme: TThemeStyles) {
         this.styles = {
             colorBackground: theme.colorBackgroundDark,
             colorHeaderMain: theme.colorPrimary,

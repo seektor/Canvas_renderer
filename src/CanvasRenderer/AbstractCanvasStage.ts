@@ -25,15 +25,21 @@ export abstract class AbstractCanvasStage extends AbstractCanvasLayer implements
 
     public render(context: CanvasRenderingContext2D): void {
         if (this.hasRenderChanges) {
-            this.renderSelf(false);
+            this.renderSelf();
         }
         super.render(context);
         this.hasRenderChanges = false;
     }
 
-    public rerenderSelf(): void {
+    public rerenderSelf(notifyChanges: boolean = false): void {
+        this.clear();
+        this.renderSelfLayer();
         this.subLayers.forEach((layer) => layer.rerenderSelf());
-        this.renderSelf(true);
+        this.subLayers.forEach(layer => layer.isVisible() && layer.render(this.layerContext));
+        this.hasRenderChanges = false;
+        if (notifyChanges) {
+            this.notifyRenderChanges();
+        }
     }
 
     public getSublayers(): ReadonlyArray<ILayer> {
@@ -45,7 +51,8 @@ export abstract class AbstractCanvasStage extends AbstractCanvasLayer implements
         this.updateLayer(layerParams, true);
         this.updateParams();
         this.subLayers.forEach(layer => layer.onResize());
-        this.renderSelf(true);
+        this.renderSelf();
+        this.notifyRenderChanges();
     }
 
     protected abstract createLayers(): void;
@@ -60,13 +67,10 @@ export abstract class AbstractCanvasStage extends AbstractCanvasLayer implements
         this.subLayersComponentsMap.set(layer, component);
     }
 
-    protected renderSelf(notifyChanges: boolean): void {
+    protected renderSelf(): void {
         this.clear();
         this.renderSelfLayer();
         this.subLayers.forEach(layer => layer.isVisible() && layer.render(this.layerContext));
-        if (notifyChanges) {
-            this.notifyRenderChanges();
-        }
     }
 
     protected renderSelfLayer(): void { }

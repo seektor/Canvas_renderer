@@ -1,3 +1,4 @@
+import ThemingService from '../../../app/services/themingService/ThemingService';
 import { AbstractCanvasViewport } from '../../../CanvasRenderer/AbstractCanvasViewport';
 import { ILayerHost } from '../../../CanvasRenderer/interfaces/ILayerHost';
 import { ILayerParamsExtractor } from '../../../CanvasRenderer/interfaces/ILayerParamsExtractor';
@@ -15,7 +16,13 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
 
     constructor(model: CFlatGridModel) {
         super(model);
-        this.canvasPainter = new CFlatGridPainter();
+        this.canvasPainter = new CFlatGridPainter(ThemingService.getTheme());
+        ThemingService.onThemeDidChange$.subscribe(() => this.onThemeDidChange());
+    }
+
+    private onThemeDidChange(): void {
+        this.canvasPainter.applyTheme(ThemingService.getTheme());
+        this.forceRerender();
     }
 
     protected createMainStage(layerHost: ILayerHost, layerParamsExtractor: ILayerParamsExtractor): CFlatGridMainStage {

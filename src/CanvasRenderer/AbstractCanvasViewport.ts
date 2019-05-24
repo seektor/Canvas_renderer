@@ -80,7 +80,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     }
 
     protected isHosted(): boolean {
-        return this.hostingViewport != null;
+        return this.viewportType === ViewportType.Hosted;
     }
 
     public getContainer(): HTMLElement {
@@ -121,6 +121,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     }
 
     private constructHostedViewport(hostingParams: TLayerHostingParams): void {
+        this.viewportType = ViewportType.Hosted;
         this.hostingViewport = hostingParams.hostingViewport;
         this.displayLayerRectExtractor = hostingParams.displayLayerRectExtractor;
         this.displayCanvas = hostingParams.hostingViewport.getDisplayCanvas();
@@ -131,6 +132,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     protected abstract createMainStage(layerHost: ILayerHost, layerParamsExtractor: ILayerParamsExtractor): AbstractCanvasStage;
 
     private constructMainViewport(): void {
+        this.viewportType = ViewportType.SelfContained;
         this.createDisplayCanvas(this.getContainerDimensions());
         this.mainStage = this.createMainStage(this, () => this.displayLayerRectExtractor(undefined));
         this.container.appendChild(this.displayCanvas);
@@ -170,7 +172,8 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
             this.hostingViewport.forceRerender();
         } else {
             this.mainStage.rerenderSelf();
-            this.forceRender();
+            this.mainStage.render(this.displayCanvasContext);
+            this.hasRenderChanges = false;
         }
     }
 
