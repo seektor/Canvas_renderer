@@ -1,6 +1,5 @@
 import CommunicationService from '../../../app/services/communicationService/CommunicationService';
 import { AbstractCanvasComponent } from '../../../CanvasRenderer/AbstractCanvasComponent';
-import { ViewportCtor } from '../../../CanvasRenderer/interfaces/ViewportCtor';
 import { DataRow, TableMetadata } from '../../../Database/Redux/JarvisDb/types/DataTypes';
 import { CFlatGridModel } from './CFlatGridModel';
 import { CFlatGridViewport } from './CFlatGridViewport';
@@ -16,11 +15,11 @@ export class CFlatGrid extends AbstractCanvasComponent {
     private tableName: string;
 
     constructor(params: TFlatGridParams) {
-        const viewportCtor: ViewportCtor<CFlatGridViewport, CFlatGridModel> = (params) => new CFlatGridViewport(params);
-        super(viewportCtor);
+        super();
         this.tableName = params.tableName;
         this.lastDataRequestGuid = null;
         this.model = new CFlatGridModel(this);
+        this.viewport = new CFlatGridViewport(this.model)
     }
 
     public async requestData(from: number, to: number, cb: (data: TDataFrame) => void): Promise<void> {

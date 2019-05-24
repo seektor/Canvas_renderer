@@ -9,38 +9,43 @@ import { CursorType } from './structures/CursorType';
 import { LayerRelativity } from './structures/LayerRelativity';
 import { LayerType } from './structures/LayerType';
 import { TCanvasViewportEventsData } from './structures/TCanvasViewportEventsData';
-import { TAbstractCanvasViewportParams } from './structures/TCanvasViewportParams';
 import { TCoords } from './structures/TCoords';
 import { TDimensions } from './structures/TDimensions';
 import { TLayerCoords } from './structures/TLayerCoords';
+import { TLayerHostingParams } from './structures/TLayerHostingParams';
 import { TParentRelativeLayerPlacement } from './structures/TLayerPlacement';
 import { TLayerRect } from './structures/TLayerRect';
 import { TLayerRenderParams } from './structures/TLayerRenderParams';
+import { ViewportType } from './structures/ViewportType';
 import { CanvasBasePainter } from './utils/painter/CanvasBasePainter';
 import { Utils } from './utils/Utils';
 
 export abstract class AbstractCanvasViewport implements ILayerHost {
 
-    protected container: HTMLElement;
+    protected container: HTMLElement | undefined;
     protected model: AbstractCanvasModel;
     protected canvasPainter: CanvasBasePainter;
 
-    protected hostingViewport: AbstractCanvasViewport | null;
+    protected isInitialized: boolean;
+    protected viewportType: ViewportType | undefined;
+    protected hostingViewport: AbstractCanvasViewport | undefined;
     protected mainStage: AbstractCanvasStage;
     private displayCanvas: HTMLCanvasElement;
     private displayCanvasContext: CanvasRenderingContext2D;
-    private displayLayerRectExtractor: ILayerParamsExtractor;
+    protected displayLayerRectExtractor: ILayerParamsExtractor;
     private eventsData: TCanvasViewportEventsData;
     private hasRenderChanges: boolean;
 
-    constructor(params: TAbstractCanvasViewportParams<AbstractCanvasStage, AbstractCanvasViewport, AbstractCanvasModel>) {
-        this.container = params.container;
-        this.hostingViewport = null;
-        this.model = params.model;
-        this.hasRenderChanges = true;
-
+    constructor(model: AbstractCanvasModel) {
+        this.model = model;
+        this.initSelf();
         this.bindMethods();
-        this.construct(params);
+    }
+
+    private initSelf(): void {
+        this.isInitialized = false;
+        this.hasRenderChanges = true;
+        this.displayLayerRectExtractor = () => ({ dX: 0, dY: 0, ...this.getContainerDimensions() });
     }
 
     private bindMethods(): void {
@@ -102,39 +107,46 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         this.render();
     }
 
-    private construct(params: TAbstractCanvasViewportParams<AbstractCanvasStage, AbstractCanvasViewport, AbstractCanvasModel>): void {
-        if (params.hostingParams) {
-            this.constructHostedViewport(params);
+    public initViewport(container: HTMLElement, hostingParams: TLayerHostingParams | undefined): void {
+        this.container = container;
+        if (hostingParams) {
+            this.constructHostedViewport(hostingParams);
         } else {
-            this.constructMainViewport(params);
+            this.constructMainViewport();
         }
         this.model.onForceRender$.subscribe(() => this.forceRender());
         this.model.onForceRerender$.subscribe(() => this.forceRerender());
+        this.isInitialized = true;
+        this.model.onViewportInit();
     }
 
-    private constructHostedViewport(params: TAbstractCanvasViewportParams<AbstractCanvasStage, AbstractCanvasViewport, AbstractCanvasModel>): void {
-        this.hostingViewport = params.hostingParams.hostingViewport;
-        this.displayLayerRectExtractor = params.hostingParams.displayLayerRectExtractor;
-        this.displayCanvas = params.hostingParams.hostingViewport.getDisplayCanvas();
+    private constructHostedViewport(hostingParams: TLayerHostingParams): void {
+        this.hostingViewport = hostingParams.hostingViewport;
+        this.displayLayerRectExtractor = hostingParams.displayLayerRectExtractor;
+        this.displayCanvas = hostingParams.hostingViewport.getDisplayCanvas();
         this.displayCanvasContext = this.displayCanvas.getContext('2d');
-        this.mainStage = params.mainStageCtor({ layerHost: params.hostingParams.layerHost, viewport: params.hostingParams.hostingViewport, model: params.model, layerParamsExtractor: () => params.hostingParams.displayLayerRectExtractor(this.mainStage) });
+        this.mainStage = this.createMainStage(hostingParams.hostingViewport, () => this.displayLayerRectExtractor(undefined));
     }
 
-    private constructMainViewport(params: TAbstractCanvasViewportParams<AbstractCanvasStage, AbstractCanvasViewport, AbstractCanvasModel>): void {
-        const containerDimensions: TDimensions = this.getContainerDimensions();
-        this.displayLayerRectExtractor = () => ({ dX: 0, dY: 0, ...this.getContainerDimensions() });
-        this.createDisplayCanvas(containerDimensions);
-        this.mainStage = params.mainStageCtor({ layerHost: this, viewport: this, model: this.model, layerParamsExtractor: () => this.displayLayerRectExtractor(this.mainStage) });
-        params.container.appendChild(this.displayCanvas);
+    protected abstract createMainStage(layerHost: ILayerHost, layerParamsExtractor: ILayerParamsExtractor): AbstractCanvasStage;
+
+    private constructMainViewport(): void {
+        this.createDisplayCanvas(this.getContainerDimensions());
+        this.mainStage = this.createMainStage(this, () => this.displayLayerRectExtractor(undefined));
+        this.container.appendChild(this.displayCanvas);
         this.setBaseEvents();
-        this.eventsData = {
+        this.eventsData = this.createEmptyEventsData();
+        this.updateEventsData();
+        this.setResizeService();
+    }
+
+    private createEmptyEventsData(): TCanvasViewportEventsData {
+        return {
             displayOffsetLeft: 0,
             displayOffsetTop: 0,
             topActiveLayerPlacement: { layer: this.mainStage, ...this.mainStage.getParentRelativeCoords() },
             actionStartLayer: null,
-        };
-        this.updateEventsData();
-        this.setResizeService();
+        }
     }
 
     private setResizeService(): void {

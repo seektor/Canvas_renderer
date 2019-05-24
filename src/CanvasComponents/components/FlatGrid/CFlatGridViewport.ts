@@ -1,7 +1,6 @@
 import { AbstractCanvasViewport } from '../../../CanvasRenderer/AbstractCanvasViewport';
 import { ILayerHost } from '../../../CanvasRenderer/interfaces/ILayerHost';
-import { TAbstractCanvasViewportParams, TCanvasViewportParams } from '../../../CanvasRenderer/structures/TCanvasViewportParams';
-import { TLayerParams } from '../../../CanvasRenderer/structures/TLayerParams';
+import { ILayerParamsExtractor } from '../../../CanvasRenderer/interfaces/ILayerParamsExtractor';
 import { TRange } from '../../../CanvasRenderer/structures/TRange';
 import { CFlatGridModel } from './CFlatGridModel';
 import { CFlatGridMainStage } from './stages/CFlatGridMainStage';
@@ -11,20 +10,16 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
 
     private readonly minimumRowBuffer: number = 60;
 
-    protected mainStage: CFlatGridMainStage;
     protected model: CFlatGridModel;
     protected canvasPainter: CFlatGridPainter;
 
-    constructor(params: TCanvasViewportParams<CFlatGridModel>) {
-        super({
-            ...params,
-            mainStageCtor: (p: TLayerParams<CFlatGridModel, CFlatGridViewport, unknown>): CFlatGridMainStage => {
-                return new CFlatGridMainStage(p);
-            }
-        } as TAbstractCanvasViewportParams<CFlatGridMainStage, CFlatGridViewport, CFlatGridModel>);
-
+    constructor(model: CFlatGridModel) {
+        super(model);
         this.canvasPainter = new CFlatGridPainter();
-        this.render();
+    }
+
+    protected createMainStage(layerHost: ILayerHost, layerParamsExtractor: ILayerParamsExtractor): CFlatGridMainStage {
+        return new CFlatGridMainStage({ viewport: this, model: this.model, layerHost, layerParamsExtractor });
     }
 
     public getTotalRowsHeight(): number {

@@ -68,7 +68,7 @@ export class Body {
         const elementTitle: HTMLElement = Utils.getElementByAttribute(gridElement, GIWAttributeHooks.title);
         const elementContent: HTMLElement = Utils.getElementByAttribute(gridElement, GIWAttributeHooks.content);
         elementTitle.innerHTML = title;
-        element.createViewport(elementContent);
+        element.initViewport(elementContent, undefined);
         return gridElement;
     }
 
