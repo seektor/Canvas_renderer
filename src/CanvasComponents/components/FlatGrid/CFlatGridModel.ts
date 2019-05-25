@@ -11,8 +11,8 @@ export class CFlatGridModel extends AbstractCanvasModel {
     private metadataDidChange$: Subject<void>;
     public readonly onDataDidChange$: Observable<void>;
     private dataDidChange$: Subject<void>;
-    public readonly onDataDidTranslatedVertically$: Observable<void>;
-    private dataDidTranslatedVertically$: Subject<void>;
+    // public readonly onDataDidTranslatedVertically$: Observable<void>;
+    // private dataDidTranslatedVertically$: Subject<void>;
 
     private readonly baseColumnWidth: number = 250;
     private readonly minColumnWidth: number = 100;
@@ -22,9 +22,6 @@ export class CFlatGridModel extends AbstractCanvasModel {
     private dataFrame: TDataFrame;
     private host: IHostGridModel;
 
-    // private verticalSliderHandlers: ISliderHandlers;
-    private verticalSliderRatio: number;
-
     constructor(host: IHostGridModel) {
         super();
         this.host = host;
@@ -32,8 +29,6 @@ export class CFlatGridModel extends AbstractCanvasModel {
         this.onMetadataDidChange$ = this.metadataDidChange$.asObservable();
         this.dataDidChange$ = new Subject();
         this.onDataDidChange$ = this.dataDidChange$.asObservable();
-        this.dataDidTranslatedVertically$ = new Subject();
-        this.onDataDidTranslatedVertically$ = this.dataDidTranslatedVertically$.asObservable();
         this.init();
         this.requestMetadata();
     }
@@ -41,7 +36,6 @@ export class CFlatGridModel extends AbstractCanvasModel {
     private init(): void {
         this.columnsData = [];
         this.rowCount = 0;
-        this.verticalSliderRatio = 0;
         this.dataFrame = { from: 0, to: 0, rows: [] };
     }
 
@@ -57,12 +51,7 @@ export class CFlatGridModel extends AbstractCanvasModel {
         return this.rowCount;
     }
 
-    // public setVerticalSliderHandlers(handlers: ISliderHandlers): void {
-    //     this.verticalSliderHandlers = handlers;
-    //     handlers.onSelectedRatioDidChange$.subscribe((ratio) => this.onVertialSliderSelectedRatioDidChange(ratio));
-    // }
-
-    private requestData(from: number, to: number): void {
+    public requestData(from: number, to: number): void {
         const cb: (data: TDataFrame) => void = (data) => this.setData(data);
         this.host.requestData(from, to, cb);
     }
@@ -89,12 +78,7 @@ export class CFlatGridModel extends AbstractCanvasModel {
     private setData(data: TDataFrame): void {
         this.dataFrame = data;
         this.dataDidChange$.next();
-        this.dataDidTranslatedVertically$.next();
         this.forceRender$.next();
-    }
-
-    public calculateHeaderWidth(): number {
-        return this.columnsData.reduce((p, c) => p += c.width, 0);
     }
 
     public setColumnWidth(columnIndex: number, width: number): void {

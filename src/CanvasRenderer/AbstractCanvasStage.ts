@@ -49,7 +49,7 @@ export abstract class AbstractCanvasStage extends AbstractCanvasLayer implements
     public onResize(): void {
         const layerParams: TLayerRenderParams = this.layerParamsExtractor(this);
         this.updateLayer(layerParams, true);
-        this.updateParams();
+        this.onAfterLayerUpdate();
         this.subLayers.forEach(layer => layer.onResize());
         this.renderSelf();
         this.notifyRenderChanges();

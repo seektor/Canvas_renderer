@@ -34,15 +34,12 @@ export class CFlatGridDataLayer extends AbstractCanvasLayer {
             this.renderSelf();
             this.notifyRenderChanges();
         });
-        this.model.onDataDidTranslatedVertically$.subscribe(() => {
-
-        })
     }
 
     public onResize(): void {
         const layerParams: TLayerRenderParams = this.layerParamsExtractor(this);
         this.updateLayer(layerParams, false);
-        this.updateParams();
+        this.onAfterLayerUpdate();
         this.renderSelf();
     }
 

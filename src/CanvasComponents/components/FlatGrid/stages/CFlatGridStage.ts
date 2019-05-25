@@ -22,11 +22,11 @@ export class CFlatGridStage extends AbstractCanvasStage {
     }
 
     private getHeaderLayerParams(layer: ILayer): TLayerRenderParams {
-        const headerWidth: number = this.model.calculateHeaderWidth();
+        const headerWidth: number = this.viewport.calculateHeaderWidth();
         return {
             dX: this.dX,
             dY: this.dY,
-            height: this.painter.getHeaderHeight() + this.headerShadowHeight,
+            height: this.viewport.getHeaderHeight() + this.headerShadowHeight,
             width: Math.max(headerWidth, this.layerWidth),
             sWidth: Math.min(headerWidth, this.layerWidth),
             dWidth: Math.min(headerWidth, this.layerWidth),
@@ -34,15 +34,15 @@ export class CFlatGridStage extends AbstractCanvasStage {
     }
 
     private getDataLayerParams(layer: ILayer): TLayerRenderParams {
-        const headerWidth: number = this.model.calculateHeaderWidth();
+        const headerWidth: number = this.viewport.calculateHeaderWidth();
         const totalRowsHeight: number = this.viewport.getTotalRowsHeight();
-        const displayHeight: number = Math.max(this.layerHeight - this.painter.getHeaderHeight(), 0);
+        const displayHeight: number = this.viewport.getDataLayerDisplayHeight();
         const displayWidth: number = this.layerWidth;
         const sHeight: number = Math.min(totalRowsHeight, displayHeight);
         const sWidth: number = Math.min(displayWidth, headerWidth);
         return {
             dX: 0,
-            dY: this.painter.getHeaderHeight(),
+            dY: this.viewport.getHeaderHeight(),
             height: this.viewport.getRowBufferHeight(),
             width: Math.max(headerWidth, this.layerWidth),
             sHeight,

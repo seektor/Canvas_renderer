@@ -13,6 +13,4 @@ export abstract class AbstractCanvasModel {
         this.forceRerender$ = new Subject();
         this.onForceRerender$ = this.forceRender$.asObservable();
     }
-
-    public onViewportInit(): void { }
 }

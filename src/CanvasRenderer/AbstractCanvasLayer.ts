@@ -59,11 +59,11 @@ export abstract class AbstractCanvasLayer implements ILayer {
     public onResize(): void {
         const layerParams: TLayerRenderParams = this.layerParamsExtractor(this);
         this.updateLayer(layerParams, true);
-        this.updateParams();
+        this.onAfterLayerUpdate();
         this.renderSelf();
     }
 
-    protected updateParams(): void { }
+    protected onAfterLayerUpdate(): void { }
 
     public getParentRelativeCoords(): TParentRelativeCoords {
         return { x: this.dX, y: this.dY, relativity: LayerRelativity.Parent };

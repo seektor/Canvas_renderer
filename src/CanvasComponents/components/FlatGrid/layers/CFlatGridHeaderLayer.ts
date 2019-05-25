@@ -25,20 +25,20 @@ export class CFlatGridHeaderLayer extends AbstractCanvasLayer {
         this.canvasPainter = this.viewport.getCanvasPainter();
         this.shadowHeight = shadowHeight;
         this.setEvents();
-        this.updateParams();
+        this.onAfterLayerUpdate();
     }
 
     private setEvents(): void {
         this.model.onMetadataDidChange$.subscribe(() => {
-            this.updateParams();
+            this.onAfterLayerUpdate();
             this.renderSelf();
             this.notifyRenderChanges();
         });
     }
 
-    protected updateParams(): void {
+    protected onAfterLayerUpdate(): void {
         this.columnsData = this.model.getColumnsData();
-        this.contentWidth = this.model.calculateHeaderWidth();
+        this.contentWidth = this.viewport.calculateHeaderWidth();
     }
 
     public renderSelf(): void {
