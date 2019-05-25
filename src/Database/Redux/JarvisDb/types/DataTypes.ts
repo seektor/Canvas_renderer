@@ -38,12 +38,14 @@ export interface TargetsTableData extends TableData {
 
 export interface TargetsTableRow {
     id: number;
-    firstName: string;
+    isActive: boolean;
+    bounty: string;
+    name: string;
+    age: number;
     gender: string;
-    country: string;
-    bounty: number;
-    lastSeen: string;
-    isCaught: boolean;
+    address: string;
+    latitude: number;
+    longitude: number;
 }
 
 export interface VariableMetadata {

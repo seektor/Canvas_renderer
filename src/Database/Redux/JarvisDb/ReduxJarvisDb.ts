@@ -1,10 +1,10 @@
 import { createStore, Store } from 'redux';
-import { variableReducers } from "./reducers/variableReducers";
-import { tableReducers } from "./reducers/tableReducers";
-import { TargetsTableRow, TestDbState, DataType, FieldType } from './types/DataTypes';
 import { TestDbActions } from './actions';
-import { VariableActions } from './types/VariableActionsTypes';
+import { tableReducers } from "./reducers/tableReducers";
+import { variableReducers } from "./reducers/variableReducers";
+import { DataType, FieldType, TargetsTableRow, TestDbState } from './types/DataTypes';
 import { TableActions } from './types/TableActionsTypes';
+import { VariableActions } from './types/VariableActionsTypes';
 
 export class ReduxJarvisDb {
 
@@ -32,12 +32,14 @@ export class ReduxJarvisDb {
                         rowCount: 1000,
                         fields: [
                             { id: "id", name: "Id", dataType: DataType.Number, fieldType: FieldType.Id },
-                            { id: "firstName", name: "First Name", dataType: DataType.String, fieldType: FieldType.Characteristic },
+                            { id: "isActive", name: "Is Active", dataType: DataType.Boolean, fieldType: FieldType.Metric },
+                            { id: "bounty", name: "Bounty", dataType: DataType.String, fieldType: FieldType.Metric },
+                            { id: "name", name: "First Name", dataType: DataType.String, fieldType: FieldType.Characteristic },
+                            { id: "age", name: "Age", dataType: DataType.Number, fieldType: FieldType.Metric },
                             { id: "gender", name: "Gender", dataType: DataType.String, fieldType: FieldType.Characteristic },
-                            { id: "country", name: "Country", dataType: DataType.String, fieldType: FieldType.Characteristic },
-                            { id: "bounty", name: "Bounty", dataType: DataType.Number, fieldType: FieldType.Metric },
-                            { id: "lastSeen", name: "Last seen", dataType: DataType.String, fieldType: FieldType.Metric },
-                            { id: "terminated", name: "Terminated", dataType: DataType.Boolean, fieldType: FieldType.Metric },
+                            { id: "address", name: "Address", dataType: DataType.String, fieldType: FieldType.Metric },
+                            { id: "latitude", name: "Latitude", dataType: DataType.Number, fieldType: FieldType.Metric },
+                            { id: "longitude", name: "Longitude", dataType: DataType.Number, fieldType: FieldType.Metric },
                         ]
                     },
                     values: this.targetsTable
