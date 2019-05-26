@@ -23,32 +23,35 @@ export class CFlatGridStage extends AbstractCanvasStage {
 
     private getHeaderLayerParams(layer: ILayer): TLayerRenderParams {
         const headerWidth: number = this.viewport.calculateHeaderWidth();
+        const layerHeight: number = this.viewport.getHeaderHeight() + this.headerShadowHeight;
+        const layerWidth: number = Math.max(headerWidth, this.layerWidth);
+        const layerRenderWidth: number = this.layerWidth;
         return {
             dX: this.dX,
             dY: this.dY,
-            height: this.viewport.getHeaderHeight() + this.headerShadowHeight,
-            width: Math.max(headerWidth, this.layerWidth),
-            sWidth: Math.min(headerWidth, this.layerWidth),
-            dWidth: Math.min(headerWidth, this.layerWidth),
+            height: layerHeight,
+            width: layerWidth,
+            sWidth: layerRenderWidth,
+            dWidth: layerRenderWidth,
         }
     }
 
     private getDataLayerParams(layer: ILayer): TLayerRenderParams {
         const headerWidth: number = this.viewport.calculateHeaderWidth();
-        const totalRowsHeight: number = this.viewport.getTotalRowsHeight();
-        const displayHeight: number = this.viewport.getDataLayerDisplayHeight();
-        const displayWidth: number = this.layerWidth;
-        const sHeight: number = Math.min(totalRowsHeight, displayHeight);
-        const sWidth: number = Math.min(displayWidth, headerWidth);
+        const bufferHeight: number = this.viewport.getRowBufferHeight();
+        const layerRenderHeight: number = Math.max(this.layerHeight - this.viewport.getHeaderHeight(), 0);
+        const layerHeight: number = Math.max(bufferHeight, layerRenderHeight);
+        const layerWidth: number = Math.max(headerWidth, this.layerWidth);
+        const layerRenderWidth: number = this.layerWidth;
         return {
             dX: 0,
             dY: this.viewport.getHeaderHeight(),
-            height: this.viewport.getRowBufferHeight(),
-            width: Math.max(headerWidth, this.layerWidth),
-            sHeight,
-            sWidth,
-            dHeight: sHeight,
-            dWidth: sWidth
+            height: layerHeight,
+            width: layerWidth,
+            sHeight: layerRenderHeight,
+            sWidth: layerRenderWidth,
+            dHeight: layerRenderHeight,
+            dWidth: layerRenderWidth
         }
     }
 

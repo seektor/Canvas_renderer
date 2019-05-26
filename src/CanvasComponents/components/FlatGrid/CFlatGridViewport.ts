@@ -63,8 +63,8 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
         let from: number = Math.max(0, firstVisibleRowNumber - rowBufferPerSide);
         const fromDiff: number = rowBufferPerSide - (firstVisibleRowNumber - from);
         let to: number = Math.min(this.model.getRowCount(), from + visibleRowsCount + rowBufferPerSide + fromDiff);
-        const diff: number = rowBuffer - (to - from);
-        from = Math.max(0, from - diff);
+        const toDiff: number = Math.abs(rowBuffer - Math.abs(to - from));
+        from = Math.max(0, from - toDiff);
         return { from, to };
     }
 
@@ -75,8 +75,8 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
         this.model.requestData(dataRequestRange.from, dataRequestRange.to);
     }
 
-    public getDataLayerDisplayHeight(): number {
-        return Math.max(this.viewportDimensions.height - this.headerHeight, 0);
+    public getDataLayerRenderHeight(): number {
+        return this.viewportDimensions.height - this.headerHeight;
     }
 
     public getHeaderHeight(): number {
@@ -84,7 +84,7 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
     }
 
     private getNumberOfRowsPerDisplay(): number {
-        return Math.ceil(this.getDataLayerDisplayHeight() / this.canvasPainter.getRowHeight());
+        return Math.ceil(this.getDataLayerRenderHeight() / this.canvasPainter.getRowHeight());
     }
 
 }

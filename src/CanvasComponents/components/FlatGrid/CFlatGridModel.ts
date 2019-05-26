@@ -103,8 +103,8 @@ export class CFlatGridModel extends AbstractCanvasModel {
     //     }
     // }
 
-    public getScrollTop(): number {
-        return 0;
-        // return scrollableHeight * this.verticalSliderRatio;
-    }
+    // public getScrollTop(): number {
+    //     return 0;
+    //     // return scrollableHeight * this.verticalSliderRatio;
+    // }
 }
