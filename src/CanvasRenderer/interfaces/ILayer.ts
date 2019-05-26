@@ -11,6 +11,7 @@ export interface ILayer {
     getParentRelativeCoords(): TLayerCoords;
     isVisible(): boolean;
     isPierced(coords: TCoords): boolean;
+    setVisibility(isVisible: boolean): void;
 
     onActionEnter(coords: TCoords): void;
     onActionStart(coords: TCoords): void;

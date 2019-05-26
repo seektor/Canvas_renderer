@@ -13,6 +13,7 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
 
     private readonly minimumRowBuffer: number = 60;
     private readonly headerHeight: number = 40;
+    private readonly verticalScrollBarWidth: number = 20;
 
     private viewportDimensions: TDimensions;
 
@@ -40,6 +41,10 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
 
     public getTotalRowsHeight(): number {
         return this.model.getRowCount() * this.canvasPainter.getRowHeight();
+    }
+
+    public getVerticalScrollbarWidth(): number {
+        return this.verticalScrollBarWidth;
     }
 
     public getCanvasPainter(): CFlatGridPainter {

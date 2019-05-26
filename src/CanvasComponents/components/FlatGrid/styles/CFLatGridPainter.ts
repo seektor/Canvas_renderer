@@ -16,7 +16,6 @@ export class CFlatGridPainter extends CanvasBasePainter {
     private readonly headerCellLineWidth: number = 2;
     private readonly dataCellLineWidth: number = 1;
     private readonly cellHorizontalPadding: number = 25;
-    private readonly verticalScrollWidth: number = 20;
     private readonly horizontalScrollHeight: number = 20;
     private readonly truncationSymbol: string = '...';
 
@@ -37,10 +36,6 @@ export class CFlatGridPainter extends CanvasBasePainter {
 
     public getRowHeight(): number {
         return this.rowHeight;
-    }
-
-    public getVerticalScrollWidth(): number {
-        return this.verticalScrollWidth;
     }
 
     public getHorizontalScrollHeight(): number {

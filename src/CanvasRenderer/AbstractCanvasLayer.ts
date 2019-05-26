@@ -73,6 +73,10 @@ export abstract class AbstractCanvasLayer implements ILayer {
         return this.layerContext;
     }
 
+    public setVisibility(isVisible): void {
+        this.visible = isVisible;
+    }
+
     protected clear(): void {
         this.layerContext.clearRect(this.sX, this.sY, this.sWidth, this.sHeight);
     }
