@@ -45,7 +45,7 @@ export class CFlatGridDataLayer extends AbstractCanvasLayer {
 
     protected renderSelf(): void {
         this.clear();
-        this.painter.drawDataCells(this.layerContext, this.getLayerRect(), this.dataFrame.rows, this.columnsData);
+        this.painter.drawDataCells(this.layerContext, this.getLayerRect(), this.columnsData, this.dataFrame);
         this.notifyRenderChanges();
     };
 }

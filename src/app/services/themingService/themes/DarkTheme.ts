@@ -6,9 +6,10 @@ export default {
     colorBackgroundDark: DarkColors.BLACK,
     colorBackgroundLight: DarkColors.DARK_GREY,
 
-    colorPrimaryLight: "#B1E1E4",
+    colorPrimaryLight: "#c8ffff",
     colorPrimary: "#40FEFF",
-    colorPrimaryDark: "#209090",
+    colorPrimaryDark: "#004040",
+    colorPrimaryDarker: "#001e1e",
 
     colorSecondaryLight: "#ffffff",
     colorSecondary: "#ffffff",

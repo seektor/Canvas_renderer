@@ -13,7 +13,7 @@ export class CFlatGridStage extends AbstractCanvasStage {
     protected model: CFlatGridModel;
     protected viewport: CFlatGridViewport;
     protected painter: CFlatGridPainter;
-    private readonly headerShadowHeight: number = 4;
+    private readonly headerShadowOffset: number = 10;
 
     constructor(params: TLayerParams<CFlatGridModel, CFlatGridViewport, unknown>) {
         super(params);
@@ -23,7 +23,7 @@ export class CFlatGridStage extends AbstractCanvasStage {
 
     private getHeaderLayerParams(layer: ILayer): TLayerRenderParams {
         const headerWidth: number = this.viewport.calculateHeaderWidth();
-        const layerHeight: number = this.viewport.getHeaderHeight() + this.headerShadowHeight;
+        const layerHeight: number = this.viewport.getHeaderHeight() + this.headerShadowOffset;
         const layerWidth: number = Math.max(headerWidth, this.layerWidth);
         const layerRenderWidth: number = this.layerWidth;
         return {
@@ -56,12 +56,12 @@ export class CFlatGridStage extends AbstractCanvasStage {
     }
 
     protected createLayers(): void {
-        const headerLayer: ILayer = new CFlatGridHeaderLayer({
-            layerHost: this, viewport: this.viewport, model: this.model, layerParamsExtractor: (layer) => this.getHeaderLayerParams(layer)
-        }, this.headerShadowHeight);
-        this.addLayer(headerLayer);
-
         const flatGridDataLayer: ILayer = new CFlatGridDataLayer({ layerHost: this, viewport: this.viewport, model: this.model, layerParamsExtractor: (layer) => this.getDataLayerParams(layer) });
         this.addLayer(flatGridDataLayer);
+
+        const headerLayer: ILayer = new CFlatGridHeaderLayer({
+            layerHost: this, viewport: this.viewport, model: this.model, layerParamsExtractor: (layer) => this.getHeaderLayerParams(layer)
+        }, this.headerShadowOffset);
+        this.addLayer(headerLayer);
     }
 }

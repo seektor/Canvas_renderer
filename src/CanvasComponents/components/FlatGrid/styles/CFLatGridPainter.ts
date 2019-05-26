@@ -6,6 +6,7 @@ import { CanvasBasePainter } from '../../../../CanvasRenderer/utils/painter/Canv
 import { TCanvasStyles } from '../../../../CanvasRenderer/utils/painter/structures/TCanvasStyles';
 import { DataRow, DataType } from '../../../../Database/Redux/JarvisDb/types/DataTypes';
 import { TColumnData } from '../structures/TColumnData';
+import { TDataFrame } from '../structures/TDataFrame';
 import { TFlatGridStyles } from './TFlatGridStyles';
 
 export class CFlatGridPainter extends CanvasBasePainter {
@@ -28,7 +29,9 @@ export class CFlatGridPainter extends CanvasBasePainter {
         this.styles = {
             colorBackground: theme.colorBackgroundDark,
             colorHeaderMain: theme.colorPrimary,
-            colorDataCellBorder: theme.colorPrimary
+            colorDataCellBorder: theme.colorPrimary,
+            colorEvenRow: theme.colorPrimaryDark,
+            colorOddRow: theme.colorPrimaryDarker
         }
     }
 
@@ -48,8 +51,8 @@ export class CFlatGridPainter extends CanvasBasePainter {
         this.fillRect(ctx, rect, { fillStyle: this.styles.colorBackground });
     }
 
-    public drawHeader(ctx: CanvasRenderingContext2D, rect: TRect, shadowHeight: number, columnsData: TColumnData[]): void {
-        const effectiveRect: TRect = { ...rect, height: Math.round(rect.height - shadowHeight * 1.5) };
+    public drawHeader(ctx: CanvasRenderingContext2D, rect: TRect, shadowOffset: number, columnsData: TColumnData[]): void {
+        const effectiveRect: TRect = { ...rect, height: Math.round(rect.height - shadowOffset) };
         const headerFrameRect: TRect = {
             width: rect.width - this.headerCellLineWidth * 0.5,
             height: effectiveRect.height - this.headerCellLineWidth * 0.5,
@@ -61,10 +64,10 @@ export class CFlatGridPainter extends CanvasBasePainter {
             lineWidth: this.headerCellLineWidth, strokeStyle: this.styles.colorHeaderMain
         });
         this.strokeLines(ctx, [{ x: 0, y: effectiveRect.height }, { x: effectiveRect.width, y: effectiveRect.height }], {
-            lineWidth: shadowHeight,
-            shadowBlur: 4,
+            lineWidth: this.headerCellLineWidth * 2,
+            shadowBlur: 5,
             shadowColor: this.styles.colorHeaderMain,
-            shadowOffsetY: shadowHeight,
+            shadowOffsetY: shadowOffset * 0.25,
             strokeStyle: this.styles.colorHeaderMain
         })
         this.drawHeaderCells(ctx, effectiveRect, columnsData);
@@ -94,7 +97,7 @@ export class CFlatGridPainter extends CanvasBasePainter {
         this.applyStyles(ctx, savedStyles);
     }
 
-    public drawDataCells(ctx: CanvasRenderingContext2D, rect: TRect, rows: DataRow[], columnsData: TColumnData[]) {
+    public drawDataCells(ctx: CanvasRenderingContext2D, rect: TRect, columnsData: TColumnData[], dataFrame: TDataFrame) {
         const styles: Partial<TCanvasStyles> = {
             lineWidth: 1,
             strokeStyle: this.styles.colorDataCellBorder,
@@ -109,8 +112,11 @@ export class CFlatGridPainter extends CanvasBasePainter {
         const initialY: number = initialX;
         let currentX: number = initialX;
         let currentY: number = initialY;
-        rows.forEach((row: DataRow) => {
+        let currentRowNumber = dataFrame.from;
+        dataFrame.rows.forEach((row: DataRow) => {
             currentX = initialX;
+            const rowColor: string = currentRowNumber % 2 === 0 ? this.styles.colorEvenRow : this.styles.colorOddRow;
+            this.fillRect(ctx, { height: this.rowHeight, width: rect.width, x: currentX, y: currentY }, { fillStyle: rowColor });
             columnsData.forEach((column: TColumnData) => {
                 this.strokeRectPure(ctx, { height: this.rowHeight, width: column.width, x: currentX, y: currentY });
                 const maxCellContentWidth: number = column.width - 2 * this.cellHorizontalPadding;
@@ -121,6 +127,7 @@ export class CFlatGridPainter extends CanvasBasePainter {
                 this.fillTextPure(ctx, truncatedText, { x: centerX, y: centerY });
                 currentX += column.width;
             });
+            currentRowNumber++;
             currentY += Math.floor(this.rowHeight);
         });
 

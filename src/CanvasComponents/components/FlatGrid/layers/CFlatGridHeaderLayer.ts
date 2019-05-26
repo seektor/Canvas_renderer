@@ -20,10 +20,10 @@ export class CFlatGridHeaderLayer extends AbstractCanvasLayer {
     private contentWidth: number;
     private columnResizeData: { columnIndex: number, initialWidth: number } | null = null;
 
-    constructor(params: TLayerParams<CFlatGridModel, CFlatGridViewport, unknown>, shadowHeight: number) {
+    constructor(params: TLayerParams<CFlatGridModel, CFlatGridViewport, unknown>, shadowOffset: number) {
         super(params);
         this.canvasPainter = this.viewport.getCanvasPainter();
-        this.shadowHeight = shadowHeight;
+        this.shadowHeight = shadowOffset;
         this.setEvents();
         this.onLayerDidUpdate();
     }
