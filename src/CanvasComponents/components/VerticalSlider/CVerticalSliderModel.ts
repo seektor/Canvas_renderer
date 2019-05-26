@@ -1,9 +1,8 @@
 import { Observable, Subject } from 'rxjs';
 import { AbstractCanvasModel } from '../../../CanvasRenderer/AbstractCanvasModel';
-import { ISliderHandlers } from './interfaces/ISliderHandlers';
 import { CVerticalSliderPainter } from './styles/CVerticalSliderPainter';
 
-export class CVerticalSliderModel extends AbstractCanvasModel implements ISliderHandlers {
+export class CVerticalSliderModel extends AbstractCanvasModel {
 
     protected canvasPainter: CVerticalSliderPainter;
 

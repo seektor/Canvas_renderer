@@ -30,4 +30,8 @@ export class CVerticalSliderViewport extends AbstractCanvasViewport {
         return this.canvasPainter;
     }
 
+    public setVisibility(isVisible: boolean): void {
+        this.mainStage.setVisibility(isVisible);
+    }
+
 }

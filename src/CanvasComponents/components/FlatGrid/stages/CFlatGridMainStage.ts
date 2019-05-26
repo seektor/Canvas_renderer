@@ -1,35 +1,24 @@
-import { AbstractCanvasStage } from '../../../../CanvasRenderer/AbstractCanvasStage';
+import { AbstractCanvasMainStage } from '../../../../CanvasRenderer/AbstractCanvasMainStage';
 import { ILayer } from '../../../../CanvasRenderer/interfaces/ILayer';
 import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
 import { TLayerRenderParams } from '../../../../CanvasRenderer/structures/TLayerRenderParams';
 import { CVerticalSlider } from '../../VerticalSlider/CVerticalSlider';
+import { ISliderHandlers } from '../../VerticalSlider/interfaces/ISliderHandlers';
 import { CFlatGridModel } from '../CFlatGridModel';
 import { CFlatGridViewport } from '../CFlatGridViewport';
 import { CFlatGridPainter } from '../styles/CFLatGridPainter';
 import { CFlatGridStage } from './CFlatGridStage';
 
-export class CFlatGridMainStage extends AbstractCanvasStage {
+export class CFlatGridMainStage extends AbstractCanvasMainStage {
 
     protected model: CFlatGridModel;
     protected viewport: CFlatGridViewport;
     protected canvasPainter: CFlatGridPainter;
-    private verticalSliderMainStage: ILayer;
 
     constructor(params: TLayerParams<CFlatGridModel, CFlatGridViewport, unknown>) {
         super(params);
         this.canvasPainter = this.viewport.getCanvasPainter();
-        this.onLayerDidUpdate();
         this.createLayers();
-    }
-
-    public isVerticalScrollbarVisible(): boolean {
-        const totalRowsHeight: number = this.viewport.getTotalRowsHeight();
-        // const dataLayerHeight: number = this.canvasPainter.getCalculatedDataLayerDisplayHeight(this.layerHeight);
-        return false;
-    }
-
-    protected onLayerDidUpdate(): void {
-        this.viewport.onFlatGridResize();
     }
 
     protected renderSelfLayer(): void {
@@ -37,18 +26,15 @@ export class CFlatGridMainStage extends AbstractCanvasStage {
     }
 
     private getFlatGridLayerParams(): TLayerRenderParams {
-        const isVScrollbarVisible: boolean = this.isVerticalScrollbarVisible();
-        const layerWidth: number = isVScrollbarVisible ? Math.max(this.layerWidth - this.viewport.getVerticalScrollbarWidth(), 0) : this.layerWidth;
         return {
             dX: this.dX,
             dY: this.dY,
             height: this.layerHeight,
-            width: layerWidth
+            width: this.layerWidth
         }
     }
 
     private getVerticalSliderLayerParams(): TLayerRenderParams {
-        // const isVScrollbarVisible: boolean = this.isVerticalScrollbarVisible();
         const verticalScrollbarWidth: number = this.viewport.getVerticalScrollbarWidth();
         return {
             dX: Math.max(this.layerWidth - verticalScrollbarWidth, 0),
@@ -65,15 +51,13 @@ export class CFlatGridMainStage extends AbstractCanvasStage {
         this.addLayer(flatGridStage);
 
         const verticalSlider: CVerticalSlider = new CVerticalSlider();
-        //const verticalSliderHandlers: ISliderHandlers = verticalSlider.getSliderHandlers();
-        //this.model.setVerticalSliderHandlers(verticalSliderHandlers);
+        const verticalSliderHandlers: ISliderHandlers = verticalSlider.getSliderHandlers();
+        this.viewport.setVerticalSliderHandlers(verticalSliderHandlers);
         verticalSlider.initViewport(this.viewport.getContainer(), {
             hostingViewport: this.viewport,
             displayLayerRectExtractor: (_layer: ILayer) => this.getVerticalSliderLayerParams(),
             layerHost: this
         });
-        this.verticalSliderMainStage = verticalSlider.getMainStage();
-        this.verticalSliderMainStage.setVisibility(false);
         this.addComponent(verticalSlider);
     }
 }

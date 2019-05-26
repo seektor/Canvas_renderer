@@ -1,4 +1,5 @@
 import ResizeService from '../app/services/resizeService/ResizeService';
+import { AbstractCanvasMainStage } from './AbstractCanvasMainStage';
 import { AbstractCanvasModel } from './AbstractCanvasModel';
 import { AbstractCanvasStage } from './AbstractCanvasStage';
 import { ILayer } from './interfaces/ILayer';
@@ -29,7 +30,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     protected isInitialized: boolean;
     protected viewportType: ViewportType | undefined;
     protected hostingViewport: AbstractCanvasViewport | undefined;
-    protected mainStage: AbstractCanvasStage;
+    protected mainStage: AbstractCanvasMainStage;
     private displayCanvas: HTMLCanvasElement;
     private displayCanvasContext: CanvasRenderingContext2D;
     protected layerRenderRectExtractor: ILayerParamsExtractor;
@@ -62,7 +63,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         return this.canvasPainter;
     }
 
-    public getMainStage(): AbstractCanvasStage {
+    public getMainStage(): AbstractCanvasMainStage {
         return this.mainStage;
     }
 
@@ -128,14 +129,20 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         this.layerRenderRectExtractor = hostingParams.displayLayerRectExtractor;
         this.displayCanvas = hostingParams.hostingViewport.getDisplayCanvas();
         this.displayCanvasContext = this.displayCanvas.getContext('2d');
+        this.onBeforeMainStageCreation();
         this.mainStage = this.createMainStage(hostingParams.hostingViewport, () => this.layerRenderRectExtractor(undefined));
     }
+
+    protected onBeforeMainStageCreation(): void { }
+
+    public onBeforeMainStageResize(): void { }
 
     protected abstract createMainStage(layerHost: ILayerHost, layerParamsExtractor: ILayerParamsExtractor): AbstractCanvasStage;
 
     private constructMainViewport(): void {
         this.viewportType = ViewportType.SelfContained;
         this.createDisplayCanvas(this.getContainerDimensions());
+        this.onBeforeMainStageCreation();
         this.mainStage = this.createMainStage(this, () => this.layerRenderRectExtractor(undefined));
         this.container.appendChild(this.displayCanvas);
         this.setBaseEvents();
@@ -161,7 +168,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         }
     }
 
-    public forceRender(): void {
+    protected forceRender(): void {
         if (this.isHosted()) {
             this.hostingViewport.forceRender();
         } else {
@@ -169,7 +176,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         }
     }
 
-    public forceRerender(): void {
+    protected forceRerender(): void {
         if (this.isHosted()) {
             this.hostingViewport.forceRerender();
         } else {

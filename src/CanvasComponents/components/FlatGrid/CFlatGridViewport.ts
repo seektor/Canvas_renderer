@@ -5,6 +5,7 @@ import { ILayerParamsExtractor } from '../../../CanvasRenderer/interfaces/ILayer
 import { TDimensions } from '../../../CanvasRenderer/structures/TDimensions';
 import { TLayerRenderParams } from '../../../CanvasRenderer/structures/TLayerRenderParams';
 import { TRange } from '../../../CanvasRenderer/structures/TRange';
+import { ISliderHandlers } from '../VerticalSlider/interfaces/ISliderHandlers';
 import { CFlatGridModel } from './CFlatGridModel';
 import { CFlatGridMainStage } from './stages/CFlatGridMainStage';
 import { CFlatGridPainter } from './styles/CFLatGridPainter';
@@ -15,6 +16,8 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
     private readonly headerHeight: number = 40;
     private readonly verticalScrollBarWidth: number = 20;
 
+    private verticalSliderHandlers: ISliderHandlers;
+    private verticalSliderVisible: boolean;
     private viewportDimensions: TDimensions;
 
     protected model: CFlatGridModel;
@@ -52,17 +55,21 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
     }
 
     public getRowBufferHeight(): number {
-        return this.getRowBuffer() * this.canvasPainter.getRowHeight();
+        return this.getRowBufferCount() * this.canvasPainter.getRowHeight();
     }
 
-    private getRowBuffer(): number {
+    private getRowBufferCount(): number {
         const displayRowsBuffer: number = this.getNumberOfRowsPerDisplay() * 2;
         const calculatedRowsBuffer: number = Math.max(displayRowsBuffer, this.minimumRowBuffer);
         return Math.min(calculatedRowsBuffer, this.model.getRowCount());
     }
 
+    public setVerticalSliderHandlers(handlers: ISliderHandlers): void {
+        this.verticalSliderHandlers = handlers;
+    }
+
     private createDataRequestRange(firstVisibleRowNumber: number, lastVisibleRowNumber: number): TRange {
-        const rowBuffer: number = this.getRowBuffer();
+        const rowBuffer: number = this.getRowBufferCount();
         const visibleRowsCount: number = lastVisibleRowNumber - firstVisibleRowNumber;
         const rowBufferPerSide: number = Math.ceil(rowBuffer / 2);
         let from: number = Math.max(0, firstVisibleRowNumber - rowBufferPerSide);
@@ -73,11 +80,28 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
         return { from, to };
     }
 
-    public onFlatGridResize(): void {
+    protected onBeforeMainStageCreation(): void {
+        const layerRect: TLayerRenderParams = this.layerRenderRectExtractor(undefined);
+        this.viewportDimensions = { height: layerRect.height, width: layerRect.width };
+    }
+
+    public onBeforeMainStageResize(): void {
         const layerRect: TLayerRenderParams = this.layerRenderRectExtractor(undefined);
         this.viewportDimensions = { height: layerRect.height, width: layerRect.width };
         const dataRequestRange: TRange = this.createDataRequestRange(0, this.getNumberOfRowsPerDisplay());
         this.model.requestData(dataRequestRange.from, dataRequestRange.to);
+
+        const isVerticalScrollbarVisible: boolean = this.isVerticalScrollbarVisible();
+        if (this.verticalSliderVisible !== isVerticalScrollbarVisible) {
+            this.verticalSliderVisible = isVerticalScrollbarVisible;
+            this.verticalSliderHandlers.setVisibility(isVerticalScrollbarVisible);
+        }
+    }
+
+    public isVerticalScrollbarVisible(): boolean {
+        const totalRowsHeight: number = this.getTotalRowsHeight();
+        const dataLayerRenderHeight: number = this.getDataLayerRenderHeight();
+        return totalRowsHeight > dataLayerRenderHeight;
     }
 
     public getDataLayerRenderHeight(): number {
