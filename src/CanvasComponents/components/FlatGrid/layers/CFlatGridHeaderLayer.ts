@@ -17,7 +17,6 @@ export class CFlatGridHeaderLayer extends AbstractCanvasLayer {
     protected viewport: CFlatGridViewport;
     private canvasPainter: CFlatGridPainter;
     private columnsData: TColumnData[];
-    private contentWidth: number;
     private columnResizeData: { columnIndex: number, initialWidth: number } | null = null;
 
     constructor(params: TLayerParams<CFlatGridModel, CFlatGridViewport, unknown>, shadowOffset: number) {
@@ -30,20 +29,19 @@ export class CFlatGridHeaderLayer extends AbstractCanvasLayer {
 
     private setEvents(): void {
         this.model.onMetadataDidChange$.subscribe(() => {
-            this.onLayerDidResize();
+            this.columnsData = this.model.getColumnsData();
+            this.renderSelf();
+            this.notifyRenderChanges();
+        });
+        this.model.onColumnWidthDidChange$.subscribe(() => {
             this.renderSelf();
             this.notifyRenderChanges();
         });
     }
 
-    protected onLayerDidResize(): void {
-        this.columnsData = this.model.getColumnsData();
-        this.contentWidth = this.viewport.calculateHeaderWidth();
-    }
-
     public renderSelf(): void {
         this.clear();
-        this.canvasPainter.drawHeader(this.layerContext, { y: 0, x: 0, height: this.layerHeight, width: this.contentWidth }, this.shadowHeight, this.columnsData);
+        this.canvasPainter.drawHeader(this.layerContext, { y: 0, x: 0, height: this.layerHeight, width: this.layerWidth }, this.shadowHeight, this.columnsData);
     }
 
     public isPierced(coords: TCoords): boolean {
@@ -52,23 +50,31 @@ export class CFlatGridHeaderLayer extends AbstractCanvasLayer {
 
     public onActionStart(coords: TCoords): void {
         const column: TColumnData | null = this.getResizableColumn(coords);
-        this.columnResizeData = column ? { columnIndex: this.columnsData.indexOf(column), initialWidth: column.width } : null;
+        if (column) {
+            this.columnResizeData = { columnIndex: this.columnsData.indexOf(column), initialWidth: column.width };
+            this.viewport.columnResizeDidStart$.next(column.id);
+        }
     }
 
     public onActionDrag(deltas: TDeltas) {
         if (this.columnResizeData) {
             const newWidth: number = this.columnResizeData.initialWidth + deltas.dX;
             this.model.setColumnWidth(this.columnResizeData.columnIndex, newWidth);
-            this.renderSelf();
-            this.notifyRenderChanges();
         }
     }
 
-    public onActionEnd(): void {
+    public onActionEnd(coords: TCoords): void {
         this.columnResizeData = null;
+        if (!this.isPierced(coords)) {
+            this.viewport.setCursor(CursorType.Auto);
+        }
+        this.viewport.columnResizeDidEnd$.next();
     }
 
     public onActionMove(coords: TCoords): void {
+        if (this.columnResizeData) {
+            return;
+        }
         if (this.getResizableColumn(coords)) {
             this.viewport.setCursor(CursorType.ColResize);
         } else {
@@ -77,6 +83,9 @@ export class CFlatGridHeaderLayer extends AbstractCanvasLayer {
     }
 
     public onActionLeave() {
+        if (this.columnResizeData) {
+            return;
+        }
         this.viewport.setCursor(CursorType.Auto);
     }
 

@@ -1,3 +1,4 @@
+import { Observable, Subject } from 'rxjs';
 import ThemingService from '../../../app/services/themingService/ThemingService';
 import { AbstractCanvasViewport } from '../../../CanvasRenderer/AbstractCanvasViewport';
 import { ILayerHost } from '../../../CanvasRenderer/interfaces/ILayerHost';
@@ -11,6 +12,11 @@ import { CFlatGridMainStage } from './stages/CFlatGridMainStage';
 import { CFlatGridPainter } from './styles/CFLatGridPainter';
 
 export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerHost {
+
+    public readonly onColumnResizeDidStart$: Observable<string>;
+    public readonly columnResizeDidStart$: Subject<string>;
+    public readonly onColumnResizeDidEnd$: Observable<string>;
+    public readonly columnResizeDidEnd$: Subject<string>;
 
     private readonly minimumRowBuffer: number = 60;
     private readonly headerHeight: number = 40;
@@ -27,6 +33,10 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
         super(model);
         this.canvasPainter = new CFlatGridPainter(ThemingService.getTheme());
         ThemingService.onThemeDidChange$.subscribe(() => this.onThemeDidChange());
+        this.columnResizeDidStart$ = new Subject();
+        this.onColumnResizeDidStart$ = this.columnResizeDidStart$.asObservable();
+        this.columnResizeDidEnd$ = new Subject();
+        this.onColumnResizeDidEnd$ = this.columnResizeDidEnd$.asObservable();
     }
 
     private onThemeDidChange(): void {
@@ -74,7 +84,8 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
         const rowBufferPerSide: number = Math.ceil(rowBuffer / 2);
         let from: number = Math.max(0, firstVisibleRowNumber - rowBufferPerSide);
         const fromDiff: number = rowBufferPerSide - (firstVisibleRowNumber - from);
-        let to: number = Math.min(this.model.getRowCount(), from + visibleRowsCount + rowBufferPerSide + fromDiff);
+        const calculatedTo: number = Math.min(from + visibleRowsCount + rowBufferPerSide + fromDiff, rowBuffer);
+        let to: number = Math.min(this.model.getRowCount(), calculatedTo);
         const toDiff: number = Math.abs(rowBuffer - Math.abs(to - from));
         from = Math.max(0, from - toDiff);
         return { from, to };

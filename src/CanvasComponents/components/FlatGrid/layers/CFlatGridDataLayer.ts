@@ -1,9 +1,9 @@
 import { AbstractCanvasLayer } from '../../../../CanvasRenderer/AbstractCanvasLayer';
 import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
-import { TLayerRenderParams } from '../../../../CanvasRenderer/structures/TLayerRenderParams';
 import { CFlatGridModel } from '../CFlatGridModel';
 import { CFlatGridViewport } from '../CFlatGridViewport';
 import { TColumnData } from '../structures/TColumnData';
+import { TColumnResizeDataLayerData } from '../structures/TColumnResizeDataLayerData';
 import { TDataFrame } from '../structures/TDataFrame';
 import { CFlatGridPainter } from '../styles/CFLatGridPainter';
 
@@ -11,41 +11,80 @@ export class CFlatGridDataLayer extends AbstractCanvasLayer {
 
     protected model: CFlatGridModel;
     protected viewport: CFlatGridViewport;
-    protected painter: CFlatGridPainter;
+    protected canvasPainter: CFlatGridPainter;
 
     private columnsData: TColumnData[];
     private dataFrame: TDataFrame;
+    private columnResizeData: TColumnResizeDataLayerData | null;
 
     constructor(params: TLayerParams<CFlatGridModel, CFlatGridViewport, unknown>) {
         super(params);
-        this.painter = this.viewport.getCanvasPainter();
+        this.canvasPainter = this.viewport.getCanvasPainter();
         this.dataFrame = { from: 0, to: 0, rows: [] };
         this.columnsData = [];
+        this.columnResizeData = null;
         this.setEvents();
     }
 
     private setEvents(): void {
         this.model.onMetadataDidChange$.subscribe(() => {
-            this.onResize();
             this.columnsData = this.model.getColumnsData();
+            this.onResize();
         });
         this.model.onDataDidChange$.subscribe(() => {
             this.dataFrame = this.model.getData();
             this.renderSelf();
             this.notifyRenderChanges();
         });
+        this.model.onColumnWidthDidChange$.subscribe(() => {
+            this.redrawResizedColumn();
+            this.notifyRenderChanges();
+        });
+        this.viewport.onColumnResizeDidStart$.subscribe((columnId) => {
+            this.onColumnResizeDidStart(columnId);
+        });
+        this.viewport.onColumnResizeDidEnd$.subscribe((columnId) => {
+            this.onColumnResizeDidEnd();
+        });
     }
 
-    public onResize(): void {
-        const layerParams: TLayerRenderParams = this.layerParamsExtractor(this);
-        this.updateLayer(layerParams, false);
-        this.onLayerDidResize();
-        this.renderSelf();
+    private onColumnResizeDidStart(columnId: string): void {
+        const columnIndex: number = this.columnsData.findIndex(column => column.id === columnId);
+        const column: TColumnData = this.columnsData[columnIndex];
+        let leftWidth: number = 0;
+        let rightWidth: number = 0;
+        for (let i = 0; i < columnIndex; i++) {
+            leftWidth += this.columnsData[i].width;
+        }
+        for (let i = columnIndex + 1; i < this.columnsData.length; i++) {
+            rightWidth += this.columnsData[i].width;
+        }
+        const leftBuffer: HTMLCanvasElement = document.createElement('canvas');
+        leftBuffer.width = leftWidth;
+        leftBuffer.height = this.layerHeight;
+        leftBuffer.getContext('2d').drawImage(this.layer, 0, 0, leftWidth, this.layerHeight, 0, 0, leftBuffer.width, leftBuffer.height);
+        const rightBuffer: HTMLCanvasElement = document.createElement('canvas');
+        rightBuffer.width = rightWidth;
+        rightBuffer.height = this.layerHeight;
+        rightBuffer.getContext('2d').drawImage(this.layer, leftWidth + column.width, 0, rightWidth, this.layerHeight, 0, 0, rightBuffer.width, rightBuffer.height);
+        this.columnResizeData = {
+            column,
+            leftBuffer,
+            rightBuffer,
+        }
+    }
+
+    private onColumnResizeDidEnd(): void {
+        this.columnResizeData = null;
+    }
+
+    private redrawResizedColumn(): void {
+        this.clear();
+        this.canvasPainter.drawResizedColumn(this.layerContext, this.getLayerRect(), this.columnResizeData, this.dataFrame);
     }
 
     protected renderSelf(): void {
         this.clear();
-        this.painter.drawDataCells(this.layerContext, this.getLayerRect(), this.columnsData, this.dataFrame);
-        this.notifyRenderChanges();
+        this.canvasPainter.drawDataCells(this.layerContext, this.getLayerRect(), this.columnsData, this.dataFrame);
     };
 }

@@ -6,6 +6,7 @@ import { CanvasBasePainter } from '../../../../CanvasRenderer/utils/painter/Canv
 import { TCanvasStyles } from '../../../../CanvasRenderer/utils/painter/structures/TCanvasStyles';
 import { DataRow, DataType } from '../../../../Database/Redux/JarvisDb/types/DataTypes';
 import { TColumnData } from '../structures/TColumnData';
+import { TColumnResizeDataLayerData } from '../structures/TColumnResizeDataLayerData';
 import { TDataFrame } from '../structures/TDataFrame';
 import { TFlatGridStyles } from './TFlatGridStyles';
 
@@ -80,20 +81,54 @@ export class CFlatGridPainter extends CanvasBasePainter {
         const savedStyles: Partial<TCanvasStyles> = this.extractStyles(ctx, Object.keys(styles) as Array<(keyof TCanvasStyles)>);
         this.applyStyles(ctx, styles);
         let currentX: number = 0;
-        let currentCellCenter: TCoords = { x: 0, y: rect.height * 0.5 };
+        let currentCellCenter: TCoords = { x: 0, y: rect.height * 0.5 + 2 };
+        const truncationSymbolWidth: number = ctx.measureText(this.truncationSymbol).width;
         columnsData.forEach(column => {
             ctx.strokeRect(currentX, rect.y, column.width, rect.height);
             currentCellCenter.x = Math.round(currentX + column.width * 0.5);
             const maxWidth: number = column.width - this.cellHorizontalPadding * 2;
-            const processedText: string = this.truncateTextPure(ctx, column.name, maxWidth, this.truncationSymbol);
-            this.fillTextPure(ctx, processedText, currentCellCenter);
+            const processedText: string = this.truncateTextPure(ctx, column.name, maxWidth, this.truncationSymbol, truncationSymbolWidth);
+            ctx.fillText(processedText, currentCellCenter.x, currentCellCenter.y);
             currentX += column.width;
         })
         this.applyStyles(ctx, savedStyles);
     }
 
     public drawDataCells(ctx: CanvasRenderingContext2D, rect: TRect, columnsData: TColumnData[], dataFrame: TDataFrame) {
-        const styles: Partial<TCanvasStyles> = {
+        const styles: Partial<TCanvasStyles> = this.getDataCellsStyles();
+        const savedStyles: Partial<TCanvasStyles> = this.extractStyles(ctx, Object.keys(styles) as Array<(keyof TCanvasStyles)>);
+        this.applyStyles(ctx, styles);
+        const initialX: number = this.dataCellLineWidth % 2 === 0 ? 0 : 0.5;
+        const initialY: number = initialX;
+        let currentX: number = initialX;
+        const truncationSymbolWidth: number = ctx.measureText(this.truncationSymbol).width;
+        const rowCount: number = dataFrame.rows.length;
+        this.drawStripes(ctx, rect, dataFrame.from, rowCount);
+        const rows: DataRow[] = dataFrame.rows;
+        for (let columnIndex: number = 0; columnIndex < columnsData.length; columnIndex++) {
+            const column: TColumnData = columnsData[columnIndex];
+            const maxCellContentWidth: number = column.width - 2 * this.cellHorizontalPadding;
+            const centerX: number = currentX + column.width * 0.5;
+            let currentY: number = initialY;
+            for (let rowIndex: number = 0; rowIndex < rowCount; rowIndex++) {
+                this.drawDataCellPure(ctx, currentX, currentY, centerX, column, rows[rowIndex][column.id], maxCellContentWidth, truncationSymbolWidth)
+                currentY += this.rowHeight;
+            }
+            currentX += column.width;
+        }
+        this.applyStyles(ctx, savedStyles);
+    }
+
+    private drawDataCellPure(ctx: CanvasRenderingContext2D, x: number, y: number, centerX: number, column: TColumnData, rawValue: unknown, maxCellContentWidth: number, truncationSymbolWidth: number): void {
+        ctx.strokeRect(x, y, column.width, this.rowHeight);
+        const formattedText: string = this.getFormattedCellValue(rawValue, column.dataType);
+        const truncatedText: string = this.truncateTextPure(ctx, formattedText, maxCellContentWidth, this.truncationSymbol, truncationSymbolWidth);
+        const centerY: number = y + this.rowHeight * 0.5 + this.headerCellLineWidth;
+        ctx.fillText(truncatedText, centerX, centerY);
+    }
+
+    private getDataCellsStyles(): Partial<TCanvasStyles> {
+        return {
             lineWidth: 1,
             strokeStyle: this.styles.colorDataCellBorder,
             fillStyle: this.styles.colorDataCellBorder,
@@ -101,32 +136,43 @@ export class CFlatGridPainter extends CanvasBasePainter {
             font: this.getFontStyle(Constants.fontMain, this.rowHeight * 0.5),
             textBaseline: "middle"
         }
+    }
+
+    public drawResizedColumn(ctx: CanvasRenderingContext2D, rect: TRect, columnResizeData: TColumnResizeDataLayerData, dataFrame: TDataFrame): void {
+        const styles: Partial<TCanvasStyles> = this.getDataCellsStyles();
         const savedStyles: Partial<TCanvasStyles> = this.extractStyles(ctx, Object.keys(styles) as Array<(keyof TCanvasStyles)>);
-        this.applyStyles(ctx, styles);
         const initialX: number = this.dataCellLineWidth % 2 === 0 ? 0 : 0.5;
         const initialY: number = initialX;
-        let currentX: number = initialX;
-        let currentY: number = initialY;
-        let currentRowNumber = dataFrame.from;
-        dataFrame.rows.forEach((row: DataRow) => {
-            currentX = initialX;
-            const rowColor: string = currentRowNumber % 2 === 0 ? this.styles.colorEvenRow : this.styles.colorOddRow;
-            this.fillRect(ctx, { height: this.rowHeight, width: rect.width, x: currentX, y: currentY }, { fillStyle: rowColor });
-            columnsData.forEach((column: TColumnData) => {
-                this.strokeRectPure(ctx, { height: this.rowHeight, width: column.width, x: currentX, y: currentY });
-                const maxCellContentWidth: number = column.width - 2 * this.cellHorizontalPadding;
-                const formattedText: string = this.getFormattedCellValue(row[column.id], column.dataType);
-                const truncatedText: string = this.truncateTextPure(ctx, formattedText, maxCellContentWidth, this.truncationSymbol);
-                const centerX: number = currentX + column.width * 0.5;
-                const centerY: number = currentY + this.rowHeight * 0.5 + this.headerCellLineWidth;
-                this.fillTextPure(ctx, truncatedText, { x: centerX, y: centerY });
-                currentX += column.width;
-            });
-            currentRowNumber++;
-            currentY += Math.floor(this.rowHeight);
-        });
+        const columnX: number = initialX + columnResizeData.leftBuffer.width;
+        columnResizeData.leftBuffer.width && ctx.drawImage(columnResizeData.leftBuffer, 0, 0);
+        columnResizeData.rightBuffer.width && ctx.drawImage(columnResizeData.rightBuffer, columnResizeData.leftBuffer.width + columnResizeData.column.width, 0);
 
+        const columnWidth: number = columnResizeData.column.width;
+        const rowCount: number = dataFrame.rows.length;
+        this.drawStripes(ctx, { x: columnX, y: 0, width: columnWidth, height: rect.height }, dataFrame.from, rowCount);
+
+        this.applyStyles(ctx, styles);
+        const centerX: number = columnX + columnWidth * 0.5;
+        const column: TColumnData = columnResizeData.column;
+        const maxCellContentWidth: number = column.width - 2 * this.cellHorizontalPadding;
+        const truncationSymbolWidth: number = ctx.measureText(this.truncationSymbol).width;
+        for (let rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+            const currentY: number = initialY + rowIndex * this.rowHeight;
+            const rawValue: unknown = dataFrame.rows[rowIndex][column.id];
+            this.drawDataCellPure(ctx, columnX, currentY, centerX, column, rawValue, maxCellContentWidth, truncationSymbolWidth);
+        }
         this.applyStyles(ctx, savedStyles);
+    }
+
+    private drawStripes(ctx: CanvasRenderingContext2D, rect: TRect, fromRowNumber: number, rowCount: number): void {
+        const initialFillStyles: string = ctx.fillStyle as string;
+        let currentY: number = 0;
+        for (let rowNumber = fromRowNumber; rowNumber < rowCount; rowNumber++) {
+            ctx.fillStyle = rowNumber % 2 === 0 ? this.styles.colorEvenRow : this.styles.colorOddRow;
+            ctx.fillRect(rect.x, currentY, rect.width, this.rowHeight);
+            currentY += this.rowHeight;
+        }
+        ctx.fillStyle = initialFillStyles;
     }
 
     private getFormattedCellValue(value: unknown, dataType: DataType): string {

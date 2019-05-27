@@ -11,6 +11,8 @@ export class CFlatGridModel extends AbstractCanvasModel {
     private metadataDidChange$: Subject<void>;
     public readonly onDataDidChange$: Observable<void>;
     private dataDidChange$: Subject<void>;
+    public readonly onColumnWidthDidChange$: Observable<void>;
+    public columnWidthDidChange$: Subject<void>;
     // public readonly onDataDidTranslatedVertically$: Observable<void>;
     // private dataDidTranslatedVertically$: Subject<void>;
 
@@ -29,6 +31,8 @@ export class CFlatGridModel extends AbstractCanvasModel {
         this.onMetadataDidChange$ = this.metadataDidChange$.asObservable();
         this.dataDidChange$ = new Subject();
         this.onDataDidChange$ = this.dataDidChange$.asObservable();
+        this.columnWidthDidChange$ = new Subject();
+        this.onColumnWidthDidChange$ = this.columnWidthDidChange$.asObservable();
         this.init();
         this.requestMetadata();
     }
@@ -84,6 +88,7 @@ export class CFlatGridModel extends AbstractCanvasModel {
     public setColumnWidth(columnIndex: number, width: number): void {
         const column: TColumnData = this.columnsData[columnIndex];
         column.width = Math.max(this.minColumnWidth, width);
+        this.columnWidthDidChange$.next();
     }
 
     // private onVertialSliderSelectedRatioDidChange(ratio: number): void {

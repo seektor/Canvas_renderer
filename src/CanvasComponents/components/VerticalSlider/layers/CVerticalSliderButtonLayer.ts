@@ -19,12 +19,12 @@ export class CVerticalSliderButtonLayer extends AbstractCanvasLayer {
         this.direction = params.config.direction;
         this.canvasPainter = this.viewport.getCanvasPainter();
         this.renderSelf(false);
+        this.notifyRenderChanges();
     }
 
     public renderSelf(isActive: boolean): void {
         this.clear();
         this.canvasPainter.drawArrowButton(this.layerContext, this.getLayerRenderRect(), this.direction, isActive);
-        this.notifyRenderChanges();
     }
 
     public onActionEnter() {

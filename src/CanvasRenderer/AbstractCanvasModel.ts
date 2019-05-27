@@ -11,6 +11,6 @@ export abstract class AbstractCanvasModel {
         this.forceRender$ = new Subject();
         this.onForceRender$ = this.forceRender$.asObservable();
         this.forceRerender$ = new Subject();
-        this.onForceRerender$ = this.forceRender$.asObservable();
+        this.onForceRerender$ = this.forceRerender$.asObservable();
     }
 }

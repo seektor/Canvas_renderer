@@ -1,6 +1,6 @@
 import { TCoords } from '../../structures/TCoords';
 import { TRect } from '../../structures/TRect';
-import { FontDecoration, TFillArcStyles, TFillCircleStyles, TFillRectStyles, TFillTextStyles, TLineStyles, TMeasureText, TRectStyles as TStrokeRectStyles, TRoundRectParams, TStrokeArcStyles } from './structures/CanvasPainterTypes';
+import { FontDecoration, TFillArcStyles, TFillCircleStyles, TFillRectStyles, TFillText, TLineStyles, TMeasureText, TRectStyles as TStrokeRectStyles, TRoundRectParams, TStrokeArcStyles } from './structures/CanvasPainterTypes';
 import { TCanvasStyles } from './structures/TCanvasStyles';
 
 export class CanvasBasePainter {
@@ -58,10 +58,6 @@ export class CanvasBasePainter {
         this.applyStyles(ctx, savedStyles);
     }
 
-    protected strokeRectPure(ctx: CanvasRenderingContext2D, rect: TRect): void {
-        ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
-    }
-
     protected fillCircle(ctx: CanvasRenderingContext2D, rect: TRect, styles: Partial<TFillCircleStyles>): void {
         const savedStyles: Partial<TCanvasStyles> = this.extractStyles(ctx, Object.keys(styles) as Array<(keyof TCanvasStyles)>);
         this.applyStyles(ctx, styles);
@@ -100,15 +96,11 @@ export class CanvasBasePainter {
         this.applyStyles(ctx, savedStyles);
     }
 
-    protected fillText(ctx: CanvasRenderingContext2D, text: string, coords: TCoords, styles: Partial<TFillTextStyles>) {
+    protected fillText(ctx: CanvasRenderingContext2D, text: string, coords: TCoords, styles: Partial<TFillText>) {
         const savedStyles: Partial<TCanvasStyles> = this.extractStyles(ctx, Object.keys(styles) as Array<(keyof TCanvasStyles)>);
         this.applyStyles(ctx, styles);
         ctx.fillText(text, coords.x, coords.y);
         this.applyStyles(ctx, savedStyles);
-    }
-
-    protected fillTextPure(ctx: CanvasRenderingContext2D, text: string, coords: TCoords) {
-        ctx.fillText(text, coords.x, coords.y);
     }
 
     protected getFontStyle(fontName: string, fontHeight: number, decoration?: FontDecoration): string {
@@ -121,10 +113,6 @@ export class CanvasBasePainter {
         const textWidth: number = ctx.measureText(text).width;
         this.applyStyles(ctx, savedStyles);
         return textWidth;
-    }
-
-    protected measureTextWidthPure(ctx: CanvasRenderingContext2D, text: string): number {
-        return ctx.measureText(text).width;
     }
 
     protected truncateText(ctx: CanvasRenderingContext2D, text: string, font: string, maxWidth: number, truncationSymbol: string): string {
@@ -168,8 +156,7 @@ export class CanvasBasePainter {
         return fontHeight;
     }
 
-    protected truncateTextPure(ctx: CanvasRenderingContext2D, text: string, maxWidth: number, truncationSymbol: string): string {
-        const truncationSymbolWidth: number = ctx.measureText(truncationSymbol).width;
+    protected truncateTextPure(ctx: CanvasRenderingContext2D, text: string, maxWidth: number, truncationSymbol: string, truncationSymbolWidth: number): string {
         if (truncationSymbolWidth > maxWidth) {
             return ``;
         }

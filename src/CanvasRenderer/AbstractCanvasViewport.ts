@@ -27,7 +27,6 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     protected model: AbstractCanvasModel;
     protected canvasPainter: CanvasBasePainter;
 
-    protected isInitialized: boolean;
     protected viewportType: ViewportType | undefined;
     protected hostingViewport: AbstractCanvasViewport | undefined;
     protected mainStage: AbstractCanvasMainStage;
@@ -44,7 +43,6 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     }
 
     private initSelf(): void {
-        this.isInitialized = false;
         this.hasRenderChanges = true;
         this.layerRenderRectExtractor = () => ({ dX: 0, dY: 0, ...this.getContainerDimensions() });
     }
@@ -117,7 +115,6 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         }
         this.model.onForceRender$.subscribe(() => this.forceRender());
         this.model.onForceRerender$.subscribe(() => this.forceRerender());
-        this.isInitialized = true;
         this.onViewportInit();
     }
 
