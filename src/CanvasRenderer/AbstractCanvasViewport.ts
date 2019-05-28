@@ -115,10 +115,10 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         }
         this.model.onForceRender$.subscribe(() => this.forceRender());
         this.model.onForceRerender$.subscribe(() => this.forceRerender());
-        this.onViewportInit();
+        this.onViewportDidInitialized();
     }
 
-    protected onViewportInit(): void { }
+    protected onViewportDidInitialized(): void { }
 
     private constructHostedViewport(hostingParams: TLayerHostingParams): void {
         this.viewportType = ViewportType.Hosted;
@@ -127,7 +127,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         this.displayCanvas = hostingParams.hostingViewport.getDisplayCanvas();
         this.displayCanvasContext = this.displayCanvas.getContext('2d');
         this.onBeforeMainStageCreation();
-        this.mainStage = this.createMainStage(hostingParams.hostingViewport, () => this.layerRenderRectExtractor(undefined));
+        this.mainStage = this.createMainStage(hostingParams.layerHost, () => this.layerRenderRectExtractor(undefined));
     }
 
     protected onBeforeMainStageCreation(): void { }

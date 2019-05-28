@@ -20,7 +20,7 @@ export class CVerticalSliderTrackStage extends AbstractCanvasStage {
         return {
             dX: 0,
             dY: 0,
-            height: this.model.getTheoreticalHandleHeight(),
+            height: this.model.getDisplayHandleHeight(),
             width: this.layerWidth
         }
     }

@@ -17,6 +17,10 @@ export class CVerticalSliderModel extends AbstractCanvasModel {
     private scrollWrapperScrollSize: number;
     private scrollWrapperDisplaySize: number;
 
+    private readonly minHandleHeight: number = 20;
+    private theoreticalHandleSize: number;
+    private displayHandleSize: number;
+
     constructor() {
         super();
         this.init();
@@ -28,23 +32,33 @@ export class CVerticalSliderModel extends AbstractCanvasModel {
         this.scrollWrapperDisplaySize = 0;
         this.value = 50;
         this.maxValue = 500;
+        this.theoreticalHandleSize = 0;
+        this.displayHandleSize = 0;
         this.dimensionsDidChange$ = new Subject();
         this.onDimensionsDidChange$ = this.dimensionsDidChange$.asObservable();
         this.ratioDidChange$ = new Subject();
         this.onSelectedRatioDidChange$ = this.ratioDidChange$.asObservable();
     }
 
-    public getTheoreticalHandleHeight(): number {
-        return 70; // this.scrollWrapperDisplaySize / Math.max(this.scrollWrapperScrollSize, 1) * this.scrollWrapperDisplaySize;
+    public updateHandleSizes(): void {
+        this.theoreticalHandleSize = this.scrollWrapperDisplaySize / Math.max(this.scrollWrapperScrollSize, 1) * this.scrollWrapperDisplaySize;
+        this.displayHandleSize = Math.max(this.theoreticalHandleSize, this.minHandleHeight);
+    }
+
+    public getDisplayHandleHeight(): number {
+        return this.displayHandleSize;
     }
 
     public setScrollWrapperScrollSize(size: number): void {
         this.scrollWrapperScrollSize = size;
+        this.dimensionsDidChange$.next();
     }
 
-    public setScrollWrapperDisplaySize(size: number): void {
+    public setScrollWrapperDisplaySize(size: number, notifyChange: boolean): void {
         this.scrollWrapperDisplaySize = size;
-        this.dimensionsDidChange$.next();
+        if (notifyChange) {
+            this.dimensionsDidChange$.next();
+        }
     }
 
     public setSelectedRatio(ratio: number): void {

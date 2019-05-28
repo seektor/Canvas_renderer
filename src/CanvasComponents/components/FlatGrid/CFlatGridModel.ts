@@ -13,8 +13,6 @@ export class CFlatGridModel extends AbstractCanvasModel {
     private dataDidChange$: Subject<void>;
     public readonly onColumnWidthDidChange$: Observable<void>;
     public columnWidthDidChange$: Subject<void>;
-    // public readonly onDataDidTranslatedVertically$: Observable<void>;
-    // private dataDidTranslatedVertically$: Subject<void>;
 
     private readonly baseColumnWidth: number = 250;
     private readonly minColumnWidth: number = 100;
@@ -90,26 +88,4 @@ export class CFlatGridModel extends AbstractCanvasModel {
         column.width = Math.max(this.minColumnWidth, width);
         this.columnWidthDidChange$.next();
     }
-
-    // private onVertialSliderSelectedRatioDidChange(ratio: number): void {
-    //     this.verticalSliderRatio = ratio;
-    //     const rowHeight: number = this.canvasPainter.getRowHeight();
-    //     const dataLayerDisplayHeight: number = this.canvasPainter.getDataLayerDisplayHeight();
-    //     const numberOfRowsPerDisplay: number = this.getNumberOfRowsPerDisplay();
-    //     const scrollableHeight: number = Math.max(this.getTotalRowsHeight() - dataLayerDisplayHeight, 0);
-    //     const firstVisiblePartialRow: number = scrollableHeight * ratio / rowHeight;
-    //     const firstVisibleFullRow: number = Math.floor(firstVisiblePartialRow);
-    //     const lastVisibleRow: number = firstVisibleFullRow + numberOfRowsPerDisplay;
-
-    //     const isOutOfDataRange: boolean = firstVisibleFullRow < this.dataFrame.from || lastVisibleRow > this.dataFrame.to;
-    //     if (isOutOfDataRange) {
-    //         const requestDataRange: TRange = this.createDataRequestRange(firstVisibleFullRow, lastVisibleRow);
-    //         this.requestData(requestDataRange.from, requestDataRange.to);
-    //     }
-    // }
-
-    // public getScrollTop(): number {
-    //     return 0;
-    //     // return scrollableHeight * this.verticalSliderRatio;
-    // }
 }

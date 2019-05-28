@@ -19,8 +19,9 @@ export class CVerticalSliderPainter extends CanvasBasePainter {
         this.styles = {
             colorBackground: theme.colorBackground,
             colorTrack: theme.colorBackgroundLight,
-            colorInteractiveElement_1: theme.colorPrimary,
-            colorInteractiveElement_2: theme.colorPrimaryDark
+            colorInteractiveElement: theme.colorPrimary,
+            colorInteractiveElementToGradient: theme.colorPrimaryDark,
+            colorInteractiveElementHovered: theme.colorSecondary
         }
     }
 
@@ -43,8 +44,8 @@ export class CVerticalSliderPainter extends CanvasBasePainter {
     public drawHandle(ctx: CanvasRenderingContext2D, rect: TRect): void {
         const radius: number = Math.round(rect.width * 0.5);
         const gradient = ctx.createLinearGradient(rect.x, rect.y, rect.x + rect.width, rect.y + rect.height);
-        gradient.addColorStop(0, this.styles.colorInteractiveElement_1);
-        gradient.addColorStop(1, this.styles.colorInteractiveElement_2);
+        gradient.addColorStop(0, this.styles.colorInteractiveElement);
+        gradient.addColorStop(1, this.styles.colorInteractiveElementToGradient);
         this.roundRect(ctx, rect, radius, false, true, { fillStyle: gradient });
     }
 
@@ -53,7 +54,7 @@ export class CVerticalSliderPainter extends CanvasBasePainter {
         const pointerPadding: number = Math.round(rect.height * 0.4);
         const contraryPointerPadding: number = Math.round(rect.height * 0.25);
         const styles: Partial<TLineStyles> = {
-            strokeStyle: active ? this.styles.colorInteractiveElement_1 : this.styles.colorInteractiveElement_2,
+            strokeStyle: active ? this.styles.colorInteractiveElementHovered : this.styles.colorInteractiveElement,
             lineWidth: 2
         };
         const point0: TCoords = {

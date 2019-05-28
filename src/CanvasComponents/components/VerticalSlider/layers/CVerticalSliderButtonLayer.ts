@@ -30,11 +30,13 @@ export class CVerticalSliderButtonLayer extends AbstractCanvasLayer {
     public onActionEnter() {
         this.renderSelf(true);
         this.viewport.setCursor(CursorType.Pointer);
+        this.notifyRenderChanges();
     }
 
     public onActionLeave() {
         this.renderSelf(false);
         this.viewport.setCursor(CursorType.Auto);
+        this.notifyRenderChanges();
     }
 
     public onViewportLeave() {

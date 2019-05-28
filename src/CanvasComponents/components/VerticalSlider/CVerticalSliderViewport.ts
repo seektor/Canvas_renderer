@@ -34,4 +34,8 @@ export class CVerticalSliderViewport extends AbstractCanvasViewport {
         this.mainStage.setVisibility(isVisible);
     }
 
+    public onBeforeMainStageResize(): void {
+        this.model.updateHandleSizes();
+    }
+
 }

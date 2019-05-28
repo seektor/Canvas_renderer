@@ -13,16 +13,16 @@ import { TFlatGridStyles } from './TFlatGridStyles';
 export class CFlatGridPainter extends CanvasBasePainter {
 
     private styles: TFlatGridStyles;
-    private readonly rowHeight: number = 25;
     private readonly headerCellLineWidth: number = 2;
     private readonly dataCellLineWidth: number = 1;
     private readonly cellHorizontalPadding: number = 25;
-    private readonly horizontalScrollHeight: number = 20;
     private readonly truncationSymbol: string = '...';
+    private readonly rowHeight: number;
 
-    constructor(theme: TThemeStyles) {
+    constructor(theme: TThemeStyles, rowHeight: number) {
         super();
         this.applyTheme(theme);
+        this.rowHeight = rowHeight;
     }
 
     public applyTheme(theme: TThemeStyles) {
@@ -33,14 +33,6 @@ export class CFlatGridPainter extends CanvasBasePainter {
             colorEvenRow: theme.colorPrimaryDark,
             colorOddRow: theme.colorPrimaryDarker
         }
-    }
-
-    public getRowHeight(): number {
-        return this.rowHeight;
-    }
-
-    public getHorizontalScrollHeight(): number {
-        return this.horizontalScrollHeight;
     }
 
     public drawBackground(ctx: CanvasRenderingContext2D, rect: TRect): void {
@@ -167,7 +159,8 @@ export class CFlatGridPainter extends CanvasBasePainter {
     private drawStripes(ctx: CanvasRenderingContext2D, rect: TRect, fromRowNumber: number, rowCount: number): void {
         const initialFillStyles: string = ctx.fillStyle as string;
         let currentY: number = 0;
-        for (let rowNumber = fromRowNumber; rowNumber < rowCount; rowNumber++) {
+        const toRowNumber: number = fromRowNumber + rowCount;
+        for (let rowNumber = fromRowNumber; rowNumber < toRowNumber; rowNumber++) {
             ctx.fillStyle = rowNumber % 2 === 0 ? this.styles.colorEvenRow : this.styles.colorOddRow;
             ctx.fillRect(rect.x, currentY, rect.width, this.rowHeight);
             currentY += this.rowHeight;

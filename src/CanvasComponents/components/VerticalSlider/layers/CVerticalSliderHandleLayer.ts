@@ -23,20 +23,19 @@ export class CVerticalSliderHandleLayer extends AbstractCanvasLayer {
         super(params);
         this.painter = this.viewport.getCanvasPainter();
         this.isDragged = false;
-        this.updateProperties();
+        this.onLayerDidResize();
         this.renderSelf();
         this.notifyRenderChanges();
         this.model.onDimensionsDidChange$.subscribe(() => this.onResize());
     }
 
-    private updateProperties(): void {
-        this.trackLength = this.layerHost.getLayerDisplayRect().height;
-        this.dragStartDY = this.dY;
+    public onResize(): void {
+        super.onResize();
     }
 
-    public onResize() {
-        super.onResize();
-        this.updateProperties();
+    protected onLayerDidResize(): void {
+        this.trackLength = this.layerHost.getLayerDisplayRect().height;
+        this.dragStartDY = this.dY;
     }
 
     public renderSelf(): void {

@@ -1,4 +1,4 @@
-import { AbstractCanvasStage } from '../../../../CanvasRenderer/AbstractCanvasStage';
+import { AbstractCanvasMainStage } from '../../../../CanvasRenderer/AbstractCanvasMainStage';
 import { ILayer } from '../../../../CanvasRenderer/interfaces/ILayer';
 import { Direction } from '../../../../CanvasRenderer/structures/Direction';
 import { TDimensions } from '../../../../CanvasRenderer/structures/TDimensions';
@@ -7,12 +7,12 @@ import { TLayerRect } from '../../../../CanvasRenderer/structures/TLayerRect';
 import { TLayerRenderParams } from '../../../../CanvasRenderer/structures/TLayerRenderParams';
 import { CVerticalSliderModel } from '../CVerticalSliderModel';
 import { CVerticalSliderViewport } from '../CVerticalSliderViewport';
-import { CVerticalSliderBaseLayer } from '../layers/CVerticalSliderBaseLayer';
+import { CVerticalSliderBackgroundLayer } from '../layers/CVerticalSliderBackgroundLayer';
 import { CVerticalSliderButtonLayer } from '../layers/CVerticalSliderButtonLayer';
 import { CVerticalSliderPainter } from '../styles/CVerticalSliderPainter';
 import { CVerticalSliderTrackStage } from './CVerticalSliderTrackStage';
 
-export class CVerticalSliderMainStage extends AbstractCanvasStage {
+export class CVerticalSliderMainStage extends AbstractCanvasMainStage {
 
     protected model: CVerticalSliderModel;
     protected viewport: CVerticalSliderViewport;
@@ -64,7 +64,7 @@ export class CVerticalSliderMainStage extends AbstractCanvasStage {
     }
 
     protected createLayers(): void {
-        const baseLayer: ILayer = new CVerticalSliderBaseLayer({
+        const baseLayer: ILayer = new CVerticalSliderBackgroundLayer({
             layerHost: this, viewport
                 : this.viewport
             , model: this.model, layerParamsExtractor: (_layer) => this.getMainStageLayerParams()

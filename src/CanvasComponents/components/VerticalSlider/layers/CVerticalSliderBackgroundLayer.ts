@@ -4,7 +4,7 @@ import { CVerticalSliderModel } from '../CVerticalSliderModel';
 import { CVerticalSliderViewport } from '../CVerticalSliderViewport';
 import { CVerticalSliderPainter } from '../styles/CVerticalSliderPainter';
 
-export class CVerticalSliderBaseLayer extends AbstractCanvasLayer {
+export class CVerticalSliderBackgroundLayer extends AbstractCanvasLayer {
 
     protected model: CVerticalSliderModel;
     protected viewport: CVerticalSliderViewport;
