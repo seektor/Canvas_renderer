@@ -46,6 +46,14 @@ export class CFlatGridDataLayer extends AbstractCanvasLayer {
         this.viewport.onColumnResizeDidEnd$.subscribe((columnId) => {
             this.onColumnResizeDidEnd();
         });
+        this.viewport.onDataTopDidChange$.subscribe((top) => {
+            this.onDataTopDidChange(top);
+        })
+    }
+
+    private onDataTopDidChange(top: number): void {
+        this.sY = top;
+        this.notifyRenderChanges();
     }
 
     private onColumnResizeDidStart(columnId: string): void {

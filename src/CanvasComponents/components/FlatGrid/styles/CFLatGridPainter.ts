@@ -90,13 +90,15 @@ export class CFlatGridPainter extends CanvasBasePainter {
         const styles: Partial<TCanvasStyles> = this.getDataCellsStyles();
         const savedStyles: Partial<TCanvasStyles> = this.extractStyles(ctx, Object.keys(styles) as Array<(keyof TCanvasStyles)>);
         this.applyStyles(ctx, styles);
-        const initialX: number = this.dataCellLineWidth % 2 === 0 ? 0 : 0.5;
+        const initialX: number = this.getLineWidthDelta(this.dataCellLineWidth);
         const initialY: number = initialX;
         let currentX: number = initialX;
         const truncationSymbolWidth: number = ctx.measureText(this.truncationSymbol).width;
         const rowCount: number = dataFrame.rows.length;
         this.drawStripes(ctx, rect, dataFrame.from, rowCount);
         const rows: DataRow[] = dataFrame.rows;
+        const leftBorderLineX: number = rect.x + this.dataCellLineWidth % 2 === 0 ? 0 : 0.5;
+        this.strokeLines(ctx, [{ x: leftBorderLineX, y: rect.y }, { x: leftBorderLineX, y: rect.y + rect.height }], styles);
         for (let columnIndex: number = 0; columnIndex < columnsData.length; columnIndex++) {
             const column: TColumnData = columnsData[columnIndex];
             const maxCellContentWidth: number = column.width - 2 * this.cellHorizontalPadding;
@@ -130,10 +132,14 @@ export class CFlatGridPainter extends CanvasBasePainter {
         }
     }
 
+    private getLineWidthDelta(lineWidth: number): number {
+        return lineWidth % 2 === 0 ? 0 : -0.5;
+    }
+
     public drawResizedColumn(ctx: CanvasRenderingContext2D, rect: TRect, columnResizeData: TColumnResizeDataLayerData, dataFrame: TDataFrame): void {
         const styles: Partial<TCanvasStyles> = this.getDataCellsStyles();
         const savedStyles: Partial<TCanvasStyles> = this.extractStyles(ctx, Object.keys(styles) as Array<(keyof TCanvasStyles)>);
-        const initialX: number = this.dataCellLineWidth % 2 === 0 ? 0 : 0.5;
+        const initialX: number = this.getLineWidthDelta(this.dataCellLineWidth);
         const initialY: number = initialX;
         const columnX: number = initialX + columnResizeData.leftBuffer.width;
         columnResizeData.leftBuffer.width && ctx.drawImage(columnResizeData.leftBuffer, 0, 0);

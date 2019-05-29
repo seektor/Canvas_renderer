@@ -29,7 +29,7 @@ export class ReduxJarvisDb {
             byId: {
                 'targets': {
                     metadata: {
-                        rowCount: 1000,
+                        rowCount: 1001,
                         fields: [
                             { id: "id", name: "Id", dataType: DataType.Number, fieldType: FieldType.Id },
                             { id: "isActive", name: "Is Active", dataType: DataType.Boolean, fieldType: FieldType.Metric },

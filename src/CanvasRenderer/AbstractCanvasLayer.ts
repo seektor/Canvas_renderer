@@ -58,7 +58,7 @@ export abstract class AbstractCanvasLayer implements ILayer {
 
     public onResize(): void {
         const layerParams: TLayerRenderParams = this.layerParamsExtractor(this);
-        this.updateLayer(layerParams, true);
+        this.updateLayer(layerParams);
         this.onLayerDidResize();
         this.renderSelf();
     }
@@ -81,28 +81,19 @@ export abstract class AbstractCanvasLayer implements ILayer {
         this.layerContext.clearRect(this.sX, this.sY, this.sWidth, this.sHeight);
     }
 
-    protected updateLayer(params: TLayerRenderParams, fitToView: boolean): void {
+    protected updateLayer(params: TLayerRenderParams): void {
         this.layer.height = params.height;
         this.layer.width = params.width;
         this.layerHeight = params.height;
         this.layerWidth = params.width;
         this.dX = params.dX;
         this.dY = params.dY;
-        if (fitToView) {
-            this.sX = params.sX || 0;
-            this.sY = params.sY || 0;
-            this.sWidth = params.sWidth || params.width;
-            this.sHeight = params.sHeight || params.height;
-            this.dWidth = params.dWidth || params.width;
-            this.dHeight = params.dHeight || params.height;
-        } else {
-            this.sX = params.sX || this.sX;
-            this.sY = params.sY || this.sY;
-            this.sWidth = params.sWidth || this.sWidth;
-            this.sHeight = params.sHeight || this.sHeight;
-            this.dWidth = params.dWidth || this.dWidth;
-            this.dHeight = params.dHeight || this.dHeight;
-        }
+        this.sX = params.sX || 0;
+        this.sY = params.sY || 0;
+        this.sWidth = params.sWidth || params.width;
+        this.sHeight = params.sHeight || params.height;
+        this.dWidth = params.dWidth || params.width;
+        this.dHeight = params.dHeight || params.height;
     }
 
     protected abstract renderSelf(...params: unknown[]): void;

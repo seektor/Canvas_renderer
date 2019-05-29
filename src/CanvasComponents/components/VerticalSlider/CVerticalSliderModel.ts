@@ -17,7 +17,7 @@ export class CVerticalSliderModel extends AbstractCanvasModel {
     private scrollWrapperScrollSize: number;
     private scrollWrapperDisplaySize: number;
 
-    private readonly minHandleHeight: number = 20;
+    private readonly minHandleHeight: number = 40;
     private theoreticalHandleSize: number;
     private displayHandleSize: number;
 
