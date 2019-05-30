@@ -101,12 +101,12 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
         const rowBuffer: number = this.getRowBufferCount();
         const visibleRowsCount: number = lastVisibleRowNumber - firstVisibleRowNumber;
         const rowBufferPerSide: number = Math.ceil((rowBuffer - visibleRowsCount) * 0.5);
-        let from: number = Math.max(0, firstVisibleRowNumber - rowBufferPerSide);
-        const fromDiff: number = rowBufferPerSide - (firstVisibleRowNumber - from);
-        const calculatedTo: number = Math.max(from + visibleRowsCount + rowBufferPerSide + fromDiff, rowBuffer);
-        let to: number = Math.min(this.model.getRowCount(), calculatedTo);
-        const toDiff: number = Math.abs(rowBuffer - Math.abs(to - from));
-        from = Math.max(0, from - toDiff);
+        const calculatedFrom: number = Math.max(0, firstVisibleRowNumber - rowBufferPerSide);
+        const calculatedFromDiff: number = rowBufferPerSide - (firstVisibleRowNumber - calculatedFrom);
+        const calculatedTo: number = Math.max(lastVisibleRowNumber + rowBufferPerSide + calculatedFromDiff, rowBuffer);
+        const to: number = Math.min(this.model.getRowCount(), calculatedTo);
+        const calculatedToDiff: number = Math.abs(rowBuffer - Math.abs(to - calculatedFrom));
+        const from = Math.max(0, calculatedFrom - calculatedToDiff);
         return { from, to };
     }
 
@@ -166,7 +166,7 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
         const scrollableHeight: number = Math.max(this.getTotalRowsHeight() - dataLayerRenderHeight, 0);
         const firstVisiblePartialRow: number = scrollableHeight * this.verticalSliderRatio / this.rowHeight;
         const firstVisibleWholeRow: number = Math.floor(firstVisiblePartialRow);
-        const lastVisibleRow: number = firstVisibleWholeRow + numberOfRowsPerDisplay;
+        const lastVisibleRow: number = Math.floor(firstVisiblePartialRow + numberOfRowsPerDisplay);
         const currentDataFrame: TDataFrame = this.model.getData();
         const isOutOfDataRange: boolean = firstVisibleWholeRow < currentDataFrame.from || lastVisibleRow > currentDataFrame.to;
         if (isOutOfDataRange) {

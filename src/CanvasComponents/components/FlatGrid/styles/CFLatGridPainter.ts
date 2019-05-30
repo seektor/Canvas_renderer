@@ -159,6 +159,8 @@ export class CFlatGridPainter extends CanvasBasePainter {
             const rawValue: unknown = dataFrame.rows[rowIndex][column.id];
             this.drawDataCellPure(ctx, columnX, currentY, centerX, column, rawValue, maxCellContentWidth, truncationSymbolWidth);
         }
+        const leftBorderLineX: number = rect.x + this.dataCellLineWidth % 2 === 0 ? 0 : 0.5;
+        this.strokeLines(ctx, [{ x: leftBorderLineX, y: rect.y }, { x: leftBorderLineX, y: rect.y + rect.height }], styles);
         this.applyStyles(ctx, savedStyles);
     }
 
