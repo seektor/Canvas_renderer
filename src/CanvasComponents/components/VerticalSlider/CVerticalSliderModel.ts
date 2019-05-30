@@ -6,14 +6,14 @@ export class CVerticalSliderModel extends AbstractCanvasModel {
 
     protected canvasPainter: CVerticalSliderPainter;
 
-    public onSelectedRatioDidChange$: Observable<number>;
-    private ratioDidChange$: Subject<number>;
+    public onSliderRatioExternalChange$: Observable<number>;
+    private sliderRatioExternalChange$: Subject<number>;
+    public onSliderRatioDidChange$: Observable<number>;
+    private sliderRatioDidChange$: Subject<number>;
     public onDimensionsDidChange$: Observable<void>;
     private dimensionsDidChange$: Subject<void>;
 
-    private value: number;
-    private maxValue: number;
-    private selectedRatio: number;
+    private sliderRatio: number;
     private scrollWrapperScrollSize: number;
     private scrollWrapperDisplaySize: number;
 
@@ -27,17 +27,17 @@ export class CVerticalSliderModel extends AbstractCanvasModel {
     }
 
     private init(): void {
-        this.selectedRatio = 0;
+        this.sliderRatio = 0;
         this.scrollWrapperScrollSize = 0;
         this.scrollWrapperDisplaySize = 0;
-        this.value = 50;
-        this.maxValue = 500;
         this.theoreticalHandleSize = 0;
         this.displayHandleSize = 0;
         this.dimensionsDidChange$ = new Subject();
         this.onDimensionsDidChange$ = this.dimensionsDidChange$.asObservable();
-        this.ratioDidChange$ = new Subject();
-        this.onSelectedRatioDidChange$ = this.ratioDidChange$.asObservable();
+        this.sliderRatioDidChange$ = new Subject();
+        this.onSliderRatioDidChange$ = this.sliderRatioDidChange$.asObservable();
+        this.sliderRatioExternalChange$ = new Subject();
+        this.onSliderRatioExternalChange$ = this.sliderRatioExternalChange$.asObservable();
     }
 
     public updateHandleSizes(): void {
@@ -61,17 +61,27 @@ export class CVerticalSliderModel extends AbstractCanvasModel {
         }
     }
 
-    public setSelectedRatio(ratio: number): void {
-        this.selectedRatio = ratio;
-        this.ratioDidChange$.next(ratio);
+    public setSliderRatio(ratio: number): void {
+        this.sliderRatio = ratio;
+        this.sliderRatioDidChange$.next(ratio);
     }
 
-    public getRatio(): number {
-        return this.value / this.maxValue;
+    public getSliderRatio(): number {
+        return this.sliderRatio;
     }
 
-    public onSliderDecrease(): void {
+    public onSliderButtonIncrease(): void {
+        const ratioDelta: number = this.scrollWrapperDisplaySize / (this.scrollWrapperScrollSize - this.scrollWrapperDisplaySize);
+        const newRatio: number = Math.min(this.sliderRatio + ratioDelta, 1);
+        this.sliderRatioExternalChange$.next(newRatio);
+        this.setSliderRatio(newRatio);
+    }
 
+    public onSliderButtonDecrease(): void {
+        const ratioDelta: number = this.scrollWrapperDisplaySize / (this.scrollWrapperScrollSize - this.scrollWrapperDisplaySize);
+        const newRatio: number = Math.max(this.sliderRatio - ratioDelta, 0);
+        this.sliderRatioExternalChange$.next(newRatio);
+        this.setSliderRatio(newRatio);
     }
 
 }

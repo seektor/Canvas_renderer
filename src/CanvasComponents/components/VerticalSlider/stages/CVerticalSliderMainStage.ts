@@ -74,7 +74,7 @@ export class CVerticalSliderMainStage extends AbstractCanvasMainStage {
         const upBtn: ILayer = new CVerticalSliderButtonLayer({
             layerHost: this, viewport
                 : this.viewport
-            , model: this.model, layerParamsExtractor: () => this.getUpBtnLayerParams(), config: { direction: Direction.Up, callback: () => console.log("xD") }
+            , model: this.model, layerParamsExtractor: () => this.getUpBtnLayerParams(), config: { direction: Direction.Up, callback: () => this.model.onSliderButtonDecrease() }
         });
         this.addLayer(upBtn);
 
@@ -88,7 +88,7 @@ export class CVerticalSliderMainStage extends AbstractCanvasMainStage {
         const downBtn: ILayer = new CVerticalSliderButtonLayer({
             layerHost: this, viewport
                 : this.viewport
-            , model: this.model, layerParamsExtractor: () => this.getDownBtnLayerParams(), config: { direction: Direction.Down, callback: () => console.log("xD") }
+            , model: this.model, layerParamsExtractor: () => this.getDownBtnLayerParams(), config: { direction: Direction.Down, callback: () => this.model.onSliderButtonIncrease() }
         });
         this.addLayer(downBtn);
     }

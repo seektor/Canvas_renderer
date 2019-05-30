@@ -13,10 +13,12 @@ export class CVerticalSliderButtonLayer extends AbstractCanvasLayer {
     protected viewport: CVerticalSliderViewport;
     private canvasPainter: CVerticalSliderPainter;
     private direction: Direction.Up | Direction.Down;
+    private callback: () => void;
 
     constructor(params: TLayerParams<CVerticalSliderModel, CVerticalSliderViewport, TVerticalSliderButtonParams>) {
         super(params);
         this.direction = params.config.direction;
+        this.callback = params.config.callback;
         this.canvasPainter = this.viewport.getCanvasPainter();
         this.renderSelf(false);
         this.notifyRenderChanges();
@@ -25,6 +27,10 @@ export class CVerticalSliderButtonLayer extends AbstractCanvasLayer {
     public renderSelf(isActive: boolean): void {
         this.clear();
         this.canvasPainter.drawArrowButton(this.layerContext, this.getLayerRenderRect(), this.direction, isActive);
+    }
+
+    public onActionStart(): void {
+        this.callback();
     }
 
     public onActionEnter() {

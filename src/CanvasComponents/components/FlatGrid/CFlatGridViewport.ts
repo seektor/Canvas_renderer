@@ -87,20 +87,20 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
     }
 
     private getRowBufferCount(): number {
-        const displayRowsBuffer: number = this.getNumberOfRowsPerDisplay() * 2;
+        const displayRowsBuffer: number = this.getNumberOfRowsPerDisplay() * 3;
         const calculatedRowsBuffer: number = Math.max(displayRowsBuffer, this.minimumRowBuffer);
         return Math.min(calculatedRowsBuffer, this.model.getRowCount());
     }
 
     public setVerticalSliderHandlers(handlers: ISliderHandlers): void {
         this.verticalSliderHandlers = handlers;
-        handlers.onSelectedRatioDidChange$.subscribe((ratio) => this.onVertialSliderSelectedRatioDidChange(ratio));
+        handlers.onSliderRatioDidChange$.subscribe((ratio) => this.onVertialSliderSelectedRatioDidChange(ratio));
     }
 
     private createDataRequestRange(firstVisibleRowNumber: number, lastVisibleRowNumber: number): TRange {
         const rowBuffer: number = this.getRowBufferCount();
         const visibleRowsCount: number = lastVisibleRowNumber - firstVisibleRowNumber;
-        const rowBufferPerSide: number = Math.ceil(rowBuffer / 2);
+        const rowBufferPerSide: number = Math.ceil((rowBuffer - visibleRowsCount) * 0.5);
         let from: number = Math.max(0, firstVisibleRowNumber - rowBufferPerSide);
         const fromDiff: number = rowBufferPerSide - (firstVisibleRowNumber - from);
         const calculatedTo: number = Math.max(from + visibleRowsCount + rowBufferPerSide + fromDiff, rowBuffer);
@@ -169,7 +169,6 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
         const lastVisibleRow: number = firstVisibleWholeRow + numberOfRowsPerDisplay;
         const currentDataFrame: TDataFrame = this.model.getData();
         const isOutOfDataRange: boolean = firstVisibleWholeRow < currentDataFrame.from || lastVisibleRow > currentDataFrame.to;
-
         if (isOutOfDataRange) {
             const requestDataRange: TRange = this.createDataRequestRange(firstVisibleWholeRow, lastVisibleRow);
             this.model.requestData(requestDataRange.from, requestDataRange.to);

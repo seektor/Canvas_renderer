@@ -27,6 +27,7 @@ export class CVerticalSliderHandleLayer extends AbstractCanvasLayer {
         this.renderSelf();
         this.notifyRenderChanges();
         this.model.onDimensionsDidChange$.subscribe(() => this.onResize());
+        this.model.onSliderRatioExternalChange$.subscribe((ratio) => this.onUpdatePositionFromExternalChange(ratio));
     }
 
     public onResize(): void {
@@ -36,6 +37,11 @@ export class CVerticalSliderHandleLayer extends AbstractCanvasLayer {
     protected onLayerDidResize(): void {
         this.trackLength = this.layerHost.getLayerDisplayRect().height;
         this.dragStartDY = this.dY;
+    }
+
+    private onUpdatePositionFromExternalChange(ratio: number): void {
+        this.updatePositionFromExternalChange(ratio);
+        this.notifyRenderChanges();
     }
 
     public renderSelf(): void {
@@ -59,7 +65,7 @@ export class CVerticalSliderHandleLayer extends AbstractCanvasLayer {
     }
 
     public onActionDrag(deltas: TDeltas): void {
-        this.updatePositionFromAction(deltas.dY);
+        this.updatePositionFromActionDrag(deltas.dY);
         this.notifyRenderChanges();
     }
 
@@ -69,11 +75,18 @@ export class CVerticalSliderHandleLayer extends AbstractCanvasLayer {
         }
     }
 
-    private updatePositionFromAction(deltaY: number) {
+    private updatePositionFromActionDrag(deltaY: number) {
         const maxDY: number = this.trackLength - this.layerHeight;
         const newDY: number = Utils.clampValue(this.dragStartDY + deltaY, 0, maxDY);
         const ratio: number = newDY / maxDY;
-        this.model.setSelectedRatio(ratio);
         this.dY = Utils.clampValue(this.dragStartDY + deltaY, 0, maxDY);
+        this.model.setSliderRatio(ratio);
+    }
+
+    private updatePositionFromExternalChange(ratio: number) {
+        const maxDY: number = this.trackLength - this.layerHeight;
+        const newDY: number = maxDY * ratio;
+        this.dY = newDY;
+        this.notifyRenderChanges();
     }
 }

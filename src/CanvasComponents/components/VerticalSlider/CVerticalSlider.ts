@@ -16,7 +16,7 @@ export class CVerticalSlider extends AbstractCanvasComponent {
 
     public getSliderHandlers(): ISliderHandlers {
         return {
-            onSelectedRatioDidChange$: this.model.onSelectedRatioDidChange$,
+            onSliderRatioDidChange$: this.model.onSliderRatioDidChange$,
             setScrollWrapperDisplaySize: (sd, nc) => this.model.setScrollWrapperDisplaySize(sd, nc),
             setScrollWrapperScrollSize: (ss) => this.model.setScrollWrapperScrollSize(ss),
             setVisibility: (isVisible) => this.viewport.setVisibility(isVisible)
