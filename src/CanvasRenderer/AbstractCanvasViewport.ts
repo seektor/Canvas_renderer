@@ -101,7 +101,6 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         const containerDimensions: TDimensions = this.getContainerDimensions();
         this.displayCanvas.width = containerDimensions.width;
         this.displayCanvas.height = containerDimensions.height;
-        this.updateEventsData();
         this.mainStage.onResize();
         this.render();
     }
@@ -144,14 +143,11 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         this.container.appendChild(this.displayCanvas);
         this.setBaseEvents();
         this.eventsData = this.createEmptyEventsData();
-        this.updateEventsData();
         this.setResizeService();
     }
 
     private createEmptyEventsData(): TCanvasViewportEventsData {
         return {
-            displayOffsetLeft: 0,
-            displayOffsetTop: 0,
             topActiveLayerPlacement: { layer: this.mainStage, ...this.mainStage.getParentRelativeCoords() },
             actionStartLayer: null,
         }
@@ -196,12 +192,6 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         this.displayCanvas = displayCanvas;
     }
 
-    private updateEventsData() {
-        const displayClientRect: ClientRect = this.displayCanvas.getBoundingClientRect();
-        this.eventsData.displayOffsetLeft = displayClientRect.left;
-        this.eventsData.displayOffsetTop = displayClientRect.top;
-    }
-
     private isStage(arg: ILayer): arg is IStage {
         return arg.type === LayerType.Stage;
     }
@@ -241,7 +231,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
     }
 
     private mapToDisplayCoords(e: MouseEvent): TCoords {
-        return { x: e.clientX - this.eventsData.displayOffsetLeft, y: e.clientY - this.eventsData.displayOffsetTop };
+        return { x: e.offsetX, y: e.offsetY };
     }
 
     private onActionStart(e: MouseEvent): void {
