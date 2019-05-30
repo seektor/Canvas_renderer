@@ -67,10 +67,10 @@ export class CFlatGridModel extends AbstractCanvasModel {
 
     private setMetadata(data: TableMetadata): void {
         this.rowCount = data.rowCount;
-        this.columnsData = data.fields.map(field => {
+        this.columnsData = data.fields.map((field, fieldIndex) => {
             return {
                 ...field,
-                width: this.baseColumnWidth
+                width: Math.max(this.minColumnWidth, data.baseWidths[fieldIndex])
             }
         });
         this.metadataDidChange$.next();

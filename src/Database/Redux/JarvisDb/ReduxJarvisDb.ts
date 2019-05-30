@@ -40,7 +40,8 @@ export class ReduxJarvisDb {
                             { id: "address", name: "Address", dataType: DataType.String, fieldType: FieldType.Metric },
                             { id: "latitude", name: "Latitude", dataType: DataType.Number, fieldType: FieldType.Metric },
                             { id: "longitude", name: "Longitude", dataType: DataType.Number, fieldType: FieldType.Metric },
-                        ]
+                        ],
+                        baseWidths: [100, 150, 200, 200, 100, 150, 200, 200, 200]
                     },
                     values: this.targetsTable
                 },

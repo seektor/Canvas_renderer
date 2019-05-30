@@ -56,7 +56,8 @@ export interface VariableMetadata {
 
 export interface TableMetadata {
     rowCount: number;
-    fields: TField[]
+    fields: TField[];
+    baseWidths: number[];
 }
 
 export interface VariablesState {

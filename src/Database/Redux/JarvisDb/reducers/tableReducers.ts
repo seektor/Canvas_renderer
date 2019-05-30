@@ -1,10 +1,10 @@
 import { TablesState } from "../types/DataTypes";
-import { TableActions, ADD_TABLE } from "../types/TableActionsTypes";
+import { ADD_TABLE, TableActions } from "../types/TableActionsTypes";
 
 const defaultTableState: TablesState = {
     allIds: [],
     byId: {
-        'targets': { values: [], metadata: { fields: [], rowCount: 0 } }
+        'targets': { values: [], metadata: { fields: [], rowCount: 0, baseWidths: [] } }
     }
 }
 
