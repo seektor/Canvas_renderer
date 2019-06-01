@@ -14,6 +14,10 @@ export class Body {
         this.construct(container);
     }
 
+    public getElement(): HTMLElement {
+        return this.bodyElement;
+    }
+
     public initialize(): void {
         const reduxJarvisDb: ReduxJarvisDb = new ReduxJarvisDb();
         CommunicationService.setDataProvider(reduxJarvisDb.getStore());

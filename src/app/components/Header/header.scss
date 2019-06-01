@@ -1,44 +1,43 @@
 .header {
-    $headerHeight: 40px;
-    height: $headerHeight;
-    background-color: $ColorBackgroundDark;
-    display:flex;
+  $headerHeight: 40px;
+  height: $headerHeight;
+  background-color: $ColorBackgroundDark;
+  display: flex;
+  flex-direction: row;
+  color: white;
+  padding-right: 10px;
+  padding-left: 10px;
+
+  &__button-config {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-right: 20px;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &__title {
+    font-size: 3rem;
+    line-height: $headerHeight + 10;
+    flex-grow: 1;
+    font-weight: bold;
+  }
+
+  &__user {
+    display: flex;
     flex-direction: row;
-    color: white;
-    padding-right: 10px;
-    padding-left: 10px;
+  }
 
-    &__config {
-        padding-top: 5px;
-        padding-bottom: 5px;
-        margin-right: 20px;
+  &__user-name {
+    font-size: 2rem;
+    line-height: $headerHeight + 2;
+    color: #ff5722;
+  }
 
-        &:hover {
-            cursor: pointer;
-        }
-    }
-
-    &__title {
-        font-size: 3rem;
-        line-height: $headerHeight + 10;
-        flex-grow: 1;
-        font-weight: bold;
-    }
-
-    &__user {
-        display: flex;
-        flex-direction: row;
-    }
-
-    &__user-name {
-        font-size: 2rem;
-        line-height: $headerHeight + 2;
-        color: #FF5722;    
-    }
-
-    &__user-avatar {
-        padding-top: 5px;
-        padding-bottom: 5px;
-    }
+  &__user-avatar {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
 }
-

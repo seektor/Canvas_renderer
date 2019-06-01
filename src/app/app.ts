@@ -1,7 +1,8 @@
 import './assets/styles/app.scss';
-import { Header } from './components/Header/Header';
 import { Body } from './components/Body/Body';
+import { ConfigSection } from './components/ConfigSection/ConfigSection';
 import { Footer } from './components/Footer/Footer';
+import { Header } from './components/Header/Header';
 import { Utils } from './utils/Utils';
 
 class App {
@@ -9,6 +10,7 @@ class App {
     private header: Header;
     private body: Body;
     private footer: Footer;
+    private configComponent: ConfigSection;
 
     constructor() {
         const appElement: HTMLElement = document.getElementById('app');
@@ -16,6 +18,8 @@ class App {
         this.header = new Header(appElement);
         this.body = new Body(appElement);
         // this.footer = new Footer(appElement);
+        this.configComponent = new ConfigSection(this.body.getElement());
+        this.header.setConfigCallback(this.configComponent.getToggleCallback());
 
         setTimeout(() => this.body.initialize(), 1000);
     }
@@ -33,6 +37,5 @@ class App {
 
 const app = new App();
 
-export {
-    app
-}
+export { app };
+
