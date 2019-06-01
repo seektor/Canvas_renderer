@@ -7,10 +7,13 @@ export class ConfigSection {
 
     private componentElement: HTMLElement;
     private visible: boolean;
+    private isTransitioning: boolean;
 
     constructor(container: HTMLElement) {
+        this.onTransitionEnd = this.onTransitionEnd.bind(this);
         this.construct(container);
         this.visible = false;
+        this.isTransitioning = false;
     }
 
     private construct(hostElement: HTMLElement): void {
@@ -27,13 +30,20 @@ export class ConfigSection {
         return () => this.toggle();
     }
 
+    private onTransitionEnd(): void {
+        this.componentElement.style.display = 'none';
+    }
+
     private toggle(): void {
         if (this.visible) {
             this.visible = false;
+            this.componentElement.addEventListener('transitionend', this.onTransitionEnd)
             this.componentElement.classList.add(ConfigSectionClassHooks.hidden);
         } else {
             this.visible = true;
+            this.componentElement.removeEventListener('transitionend', this.onTransitionEnd);
             this.componentElement.classList.remove(ConfigSectionClassHooks.hidden);
+            this.componentElement.style.display = 'block';
         }
     }
 }
