@@ -1,7 +1,7 @@
-import { AbstractCanvasComponent } from '../../../CanvasRenderer/AbstractCanvasComponent';
+import { AbstractCanvasComponent } from '../../../../CanvasRenderer/AbstractCanvasComponent';
+import { ISliderHandlers } from '../interfaces/ISliderHandlers';
 import { CVerticalSliderModel } from './CVerticalSliderModel';
 import { CVerticalSliderViewport } from './CVerticalSliderViewport';
-import { ISliderHandlers } from './interfaces/ISliderHandlers';
 
 export class CVerticalSlider extends AbstractCanvasComponent {
 

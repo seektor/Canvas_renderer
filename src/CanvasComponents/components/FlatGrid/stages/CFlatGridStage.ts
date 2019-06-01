@@ -22,7 +22,7 @@ export class CFlatGridStage extends AbstractCanvasStage {
     }
 
     private getHeaderLayerParams(layer: ILayer): TLayerRenderParams {
-        const headerWidth: number = this.viewport.calculateHeaderWidth();
+        const headerWidth: number = this.viewport.calculateTotalHeaderWidth();
         const layerHeight: number = this.viewport.getHeaderHeight() + this.headerShadowOffset;
         const isVerticalScrolllbarVisible: boolean = this.viewport.isVerticalScrollbarVisible();
         const layerRenderWidth: number = isVerticalScrolllbarVisible ? Math.max(this.layerWidth - this.viewport.getVerticalScrollbarWidth(), 0) : this.layerWidth;
@@ -38,12 +38,11 @@ export class CFlatGridStage extends AbstractCanvasStage {
     }
 
     private getDataLayerParams(layer: ILayer): TLayerRenderParams {
-        const headerWidth: number = this.viewport.calculateHeaderWidth();
+        const headerWidth: number = this.viewport.calculateTotalHeaderWidth();
         const bufferHeight: number = this.viewport.getRowBufferHeight();
-        const layerRenderHeight: number = Math.max(this.layerHeight - this.viewport.getHeaderHeight(), 0);
+        const layerRenderHeight: number = this.viewport.getDataLayerRenderHeight(this.viewport.isHorizontalScrollbarVisible());
         const layerHeight: number = Math.max(bufferHeight, layerRenderHeight);
-        const isVerticalScrolllbarVisible: boolean = this.viewport.isVerticalScrollbarVisible();
-        const layerRenderWidth: number = isVerticalScrolllbarVisible ? Math.max(this.layerWidth - this.viewport.getVerticalScrollbarWidth(), 0) : this.layerWidth;
+        const layerRenderWidth: number = this.viewport.getDataLayerRenderWidth(this.viewport.isVerticalScrollbarVisible());
         const layerWidth: number = Math.max(headerWidth, layerRenderWidth);
         return {
             dX: 0,

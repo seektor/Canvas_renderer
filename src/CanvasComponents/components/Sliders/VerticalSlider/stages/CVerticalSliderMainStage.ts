@@ -1,10 +1,10 @@
-import { AbstractCanvasMainStage } from '../../../../CanvasRenderer/AbstractCanvasMainStage';
-import { ILayer } from '../../../../CanvasRenderer/interfaces/ILayer';
-import { Direction } from '../../../../CanvasRenderer/structures/Direction';
-import { TDimensions } from '../../../../CanvasRenderer/structures/TDimensions';
-import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
-import { TLayerRect } from '../../../../CanvasRenderer/structures/TLayerRect';
-import { TLayerRenderParams } from '../../../../CanvasRenderer/structures/TLayerRenderParams';
+import { AbstractCanvasMainStage } from '../../../../../CanvasRenderer/AbstractCanvasMainStage';
+import { ILayer } from '../../../../../CanvasRenderer/interfaces/ILayer';
+import { Direction } from '../../../../../CanvasRenderer/structures/Direction';
+import { TDimensions } from '../../../../../CanvasRenderer/structures/TDimensions';
+import { TLayerParams } from '../../../../../CanvasRenderer/structures/TLayerParams';
+import { TLayerRect } from '../../../../../CanvasRenderer/structures/TLayerRect';
+import { TLayerRenderParams } from '../../../../../CanvasRenderer/structures/TLayerRenderParams';
 import { CVerticalSliderModel } from '../CVerticalSliderModel';
 import { CVerticalSliderViewport } from '../CVerticalSliderViewport';
 import { CVerticalSliderBackgroundLayer } from '../layers/CVerticalSliderBackgroundLayer';

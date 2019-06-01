@@ -1,7 +1,7 @@
-import { AbstractCanvasStage } from '../../../../CanvasRenderer/AbstractCanvasStage';
-import { ILayer } from '../../../../CanvasRenderer/interfaces/ILayer';
-import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
-import { TLayerRenderParams } from '../../../../CanvasRenderer/structures/TLayerRenderParams';
+import { AbstractCanvasStage } from '../../../../../CanvasRenderer/AbstractCanvasStage';
+import { ILayer } from '../../../../../CanvasRenderer/interfaces/ILayer';
+import { TLayerParams } from '../../../../../CanvasRenderer/structures/TLayerParams';
+import { TLayerRenderParams } from '../../../../../CanvasRenderer/structures/TLayerRenderParams';
 import { CVerticalSliderModel } from '../CVerticalSliderModel';
 import { CVerticalSliderViewport } from '../CVerticalSliderViewport';
 import { CVerticalSliderHandleLayer } from '../layers/CVerticalSliderHandleLayer';

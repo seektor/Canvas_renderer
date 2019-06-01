@@ -1,9 +1,9 @@
-import { TThemeStyles } from '../../../../app/services/themingService/structures/TThemeStyles';
-import { Direction } from '../../../../CanvasRenderer/structures/Direction';
-import { TCoords } from '../../../../CanvasRenderer/structures/TCoords';
-import { TRect } from '../../../../CanvasRenderer/structures/TRect';
-import { CanvasBasePainter } from '../../../../CanvasRenderer/utils/painter/CanvasBasePainter';
-import { TLineStyles } from '../../../../CanvasRenderer/utils/painter/structures/CanvasPainterTypes';
+import { TThemeStyles } from '../../../../../app/services/themingService/structures/TThemeStyles';
+import { Direction } from '../../../../../CanvasRenderer/structures/Direction';
+import { TCoords } from '../../../../../CanvasRenderer/structures/TCoords';
+import { TRect } from '../../../../../CanvasRenderer/structures/TRect';
+import { CanvasBasePainter } from '../../../../../CanvasRenderer/utils/painter/CanvasBasePainter';
+import { TLineStyles } from '../../../../../CanvasRenderer/utils/painter/structures/CanvasPainterTypes';
 import { TVerticalSliderStyles } from './TVerticalSliderStyles';
 
 export class CVerticalSliderPainter extends CanvasBasePainter {

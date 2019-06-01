@@ -114,10 +114,10 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         }
         this.model.onForceRender$.subscribe(() => this.forceRender());
         this.model.onForceRerender$.subscribe(() => this.forceRerender());
-        this.onViewportDidInitialized();
+        this.onViewportDidInitialize();
     }
 
-    protected onViewportDidInitialized(): void { }
+    protected onViewportDidInitialize(): void { }
 
     private constructHostedViewport(hostingParams: TLayerHostingParams): void {
         this.viewportType = ViewportType.Hosted;

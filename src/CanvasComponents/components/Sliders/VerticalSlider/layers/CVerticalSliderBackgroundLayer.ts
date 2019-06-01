@@ -1,5 +1,5 @@
-import { AbstractCanvasLayer } from '../../../../CanvasRenderer/AbstractCanvasLayer';
-import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
+import { AbstractCanvasLayer } from '../../../../../CanvasRenderer/AbstractCanvasLayer';
+import { TLayerParams } from '../../../../../CanvasRenderer/structures/TLayerParams';
 import { CVerticalSliderModel } from '../CVerticalSliderModel';
 import { CVerticalSliderViewport } from '../CVerticalSliderViewport';
 import { CVerticalSliderPainter } from '../styles/CVerticalSliderPainter';
@@ -14,6 +14,7 @@ export class CVerticalSliderBackgroundLayer extends AbstractCanvasLayer {
         super(params);
         this.painter = this.viewport.getCanvasPainter();
         this.renderSelf();
+        this.notifyRenderChanges();
     }
 
     public renderSelf(): void {

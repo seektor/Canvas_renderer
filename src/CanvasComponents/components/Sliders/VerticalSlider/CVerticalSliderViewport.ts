@@ -1,7 +1,7 @@
-import ThemingService from '../../../app/services/themingService/ThemingService';
-import { AbstractCanvasViewport } from '../../../CanvasRenderer/AbstractCanvasViewport';
-import { ILayerHost } from '../../../CanvasRenderer/interfaces/ILayerHost';
-import { ILayerParamsExtractor } from '../../../CanvasRenderer/interfaces/ILayerParamsExtractor';
+import ThemingService from '../../../../app/services/themingService/ThemingService';
+import { AbstractCanvasViewport } from '../../../../CanvasRenderer/AbstractCanvasViewport';
+import { ILayerHost } from '../../../../CanvasRenderer/interfaces/ILayerHost';
+import { ILayerParamsExtractor } from '../../../../CanvasRenderer/interfaces/ILayerParamsExtractor';
 import { CVerticalSliderModel } from './CVerticalSliderModel';
 import { CVerticalSliderMainStage } from './stages/CVerticalSliderMainStage';
 import { CVerticalSliderPainter } from './styles/CVerticalSliderPainter';

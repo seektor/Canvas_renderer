@@ -1,10 +1,10 @@
 import { Observable, Subject } from 'rxjs';
-import { AbstractCanvasModel } from '../../../CanvasRenderer/AbstractCanvasModel';
-import { CVerticalSliderPainter } from './styles/CVerticalSliderPainter';
+import { AbstractCanvasModel } from '../../../../CanvasRenderer/AbstractCanvasModel';
+import { CHorizontalSliderPainter } from './styles/CHorizontalSliderPainter';
 
-export class CVerticalSliderModel extends AbstractCanvasModel {
+export class CHorizontalSliderModel extends AbstractCanvasModel {
 
-    protected canvasPainter: CVerticalSliderPainter;
+    protected canvasPainter: CHorizontalSliderPainter;
 
     public onSliderRatioExternalChange$: Observable<number>;
     private sliderRatioExternalChange$: Subject<number>;

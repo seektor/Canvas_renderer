@@ -1,4 +1,4 @@
-import { TLayerRect } from '../../../../CanvasRenderer/structures/TLayerRect';
+import { TLayerRect } from '../../../../../CanvasRenderer/structures/TLayerRect';
 
 export interface TVerticalSliderViewState {
     sliderRect: TLayerRect;

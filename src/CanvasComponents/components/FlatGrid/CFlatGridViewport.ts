@@ -6,7 +6,7 @@ import { ILayerParamsExtractor } from '../../../CanvasRenderer/interfaces/ILayer
 import { TDimensions } from '../../../CanvasRenderer/structures/TDimensions';
 import { TLayerRenderParams } from '../../../CanvasRenderer/structures/TLayerRenderParams';
 import { TRange } from '../../../CanvasRenderer/structures/TRange';
-import { ISliderHandlers } from '../VerticalSlider/interfaces/ISliderHandlers';
+import { ISliderHandlers } from '../Sliders/interfaces/ISliderHandlers';
 import { CFlatGridModel } from './CFlatGridModel';
 import { CFlatGridMainStage } from './stages/CFlatGridMainStage';
 import { TDataFrame } from './structures/TDataFrame';
@@ -25,11 +25,17 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
     private readonly headerHeight: number = 40;
     private readonly rowHeight: number = 25;
     private readonly verticalScrollBarWidth: number = 20;
+    private readonly horizontalScrollbarHeight: number = 20;
 
-    private verticalSliderHandlers: ISliderHandlers;
-    private verticalSliderVisible: boolean;
+    private verticalScrollbarHandlers: ISliderHandlers;
+    private verticalScrollbarVisible: boolean;
+    private verticalScrollbarRatio: number;
+
+    private horizontalScrollbarHandlers: ISliderHandlers;
+    private horizontalScrollbarVisible: boolean;
+    private horizontalScrollbarRatio: number;
+
     private viewportDimensions: TDimensions;
-    private verticalSliderRatio: number;
 
     protected model: CFlatGridModel;
     protected canvasPainter: CFlatGridPainter;
@@ -38,7 +44,8 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
         super(model);
         this.canvasPainter = new CFlatGridPainter(ThemingService.getTheme(), this.rowHeight);
         ThemingService.onThemeDidChange$.subscribe(() => this.onThemeDidChange());
-        this.verticalSliderRatio = 0;
+        this.verticalScrollbarRatio = 0;
+        this.horizontalScrollbarRatio = 0;
         this.columnResizeDidStart$ = new Subject();
         this.onColumnResizeDidStart$ = this.columnResizeDidStart$.asObservable();
         this.columnResizeDidEnd$ = new Subject();
@@ -55,14 +62,14 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
 
     private setEvents(): void {
         this.model.onMetadataDidChange$.subscribe(() => {
-            this.verticalSliderHandlers.setScrollWrapperScrollSize(this.getTotalRowsHeight());
+            this.verticalScrollbarHandlers.setScrollWrapperScrollSize(this.getTotalRowsHeight());
         });
         this.model.onDataDidChange$.subscribe(() => {
-            this.updateDataViewport();
+            this.updateDataViewportVertically();
         });
     }
 
-    public calculateHeaderWidth(): number {
+    public calculateTotalHeaderWidth(): number {
         return this.model.getColumnsData().reduce((p, c) => p += c.width, 0);
     }
 
@@ -76,6 +83,10 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
 
     public getVerticalScrollbarWidth(): number {
         return this.verticalScrollBarWidth;
+    }
+
+    public getHorizontalScrollbarHeight(): number {
+        return this.horizontalScrollbarHeight;
     }
 
     public getCanvasPainter(): CFlatGridPainter {
@@ -93,8 +104,13 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
     }
 
     public setVerticalSliderHandlers(handlers: ISliderHandlers): void {
-        this.verticalSliderHandlers = handlers;
-        handlers.onSliderRatioDidChange$.subscribe((ratio) => this.onVertialSliderSelectedRatioDidChange(ratio));
+        this.verticalScrollbarHandlers = handlers;
+        handlers.onSliderRatioDidChange$.subscribe((ratio) => this.onVertialSliderRatioDidChange(ratio));
+    }
+
+    public setHorizontalSliderHandlers(handlers: ISliderHandlers): void {
+        this.horizontalScrollbarHandlers = handlers;
+        handlers.onSliderRatioDidChange$.subscribe((ratio) => this.onHorizontalSliderRatioDidChange(ratio));
     }
 
     private createDataRequestRange(firstVisibleRowNumber: number, lastVisibleRowNumber: number): TRange {
@@ -115,12 +131,25 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
         this.viewportDimensions = { height: layerRect.height, width: layerRect.width };
     }
 
-    protected onViewportDidInitialized(): void {
-        const isVerticalScrollbarVisible: boolean = this.isVerticalScrollbarVisible();
-        this.verticalSliderVisible = isVerticalScrollbarVisible;
-        this.verticalSliderHandlers.setVisibility(isVerticalScrollbarVisible);
-        this.verticalSliderHandlers.setScrollWrapperScrollSize(this.getTotalRowsHeight());
-        this.verticalSliderHandlers.setScrollWrapperDisplaySize(this.getDataLayerRenderHeight(), true);
+    protected onViewportDidInitialize(): void {
+        let isVerticalScrollbarVisible: boolean = this.shouldVerticalScrollbarBeVisible(true);
+        let isHorizontalScrollbarVisible: boolean = this.shouldHorizontalScrollbarBeVisible(true);
+        if (!isVerticalScrollbarVisible) {
+            isHorizontalScrollbarVisible = this.shouldHorizontalScrollbarBeVisible(false);
+        }
+        if (!isHorizontalScrollbarVisible) {
+            isVerticalScrollbarVisible = this.shouldVerticalScrollbarBeVisible(false);
+        }
+
+        this.verticalScrollbarVisible = isVerticalScrollbarVisible;
+        this.verticalScrollbarHandlers.setVisibility(isVerticalScrollbarVisible);
+        this.verticalScrollbarHandlers.setScrollWrapperScrollSize(this.getTotalRowsHeight());
+        this.verticalScrollbarHandlers.setScrollWrapperDisplaySize(this.getDataLayerRenderHeight(isHorizontalScrollbarVisible), true);
+
+        this.horizontalScrollbarVisible = isHorizontalScrollbarVisible;
+        this.horizontalScrollbarHandlers.setVisibility(isHorizontalScrollbarVisible);
+        this.horizontalScrollbarHandlers.setScrollWrapperScrollSize(this.calculateTotalHeaderWidth());
+        this.horizontalScrollbarHandlers.setScrollWrapperDisplaySize(this.getDataLayerRenderWidth(isVerticalScrollbarVisible), true)
     }
 
     public onBeforeMainStageResize(): void {
@@ -129,22 +158,56 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
         const dataRequestRange: TRange = this.createDataRequestRange(0, this.getNumberOfRowsPerDisplay());
         this.model.requestData(dataRequestRange.from, dataRequestRange.to);
 
-        this.verticalSliderHandlers.setScrollWrapperDisplaySize(this.getDataLayerRenderHeight(), false);
-        const isVerticalScrollbarVisible: boolean = this.isVerticalScrollbarVisible();
-        if (this.verticalSliderVisible !== isVerticalScrollbarVisible) {
-            this.verticalSliderVisible = isVerticalScrollbarVisible;
-            this.verticalSliderHandlers.setVisibility(isVerticalScrollbarVisible);
+        let isVerticalScrollbarVisible: boolean = this.shouldVerticalScrollbarBeVisible(true);
+        let isHorizontalScrollbarVisible: boolean = this.shouldHorizontalScrollbarBeVisible(true);
+        if (!isVerticalScrollbarVisible) {
+            isHorizontalScrollbarVisible = this.shouldHorizontalScrollbarBeVisible(false);
+        }
+        if (!isHorizontalScrollbarVisible) {
+            isVerticalScrollbarVisible = this.shouldVerticalScrollbarBeVisible(false);
+        }
+
+        this.verticalScrollbarHandlers.setScrollWrapperDisplaySize(this.getDataLayerRenderHeight(isHorizontalScrollbarVisible), false);
+        if (this.verticalScrollbarVisible !== isVerticalScrollbarVisible) {
+            this.verticalScrollbarVisible = isVerticalScrollbarVisible;
+            this.verticalScrollbarHandlers.setVisibility(isVerticalScrollbarVisible);
+        }
+
+        this.horizontalScrollbarHandlers.setScrollWrapperDisplaySize(this.getDataLayerRenderWidth(isVerticalScrollbarVisible), false);
+        if (this.horizontalScrollbarVisible !== isHorizontalScrollbarVisible) {
+            this.horizontalScrollbarVisible = isHorizontalScrollbarVisible;
+            this.horizontalScrollbarHandlers.setVisibility(isHorizontalScrollbarVisible);
         }
     }
 
-    public isVerticalScrollbarVisible(): boolean {
+    private shouldVerticalScrollbarBeVisible(isHorizontalScrollbarVisible: boolean): boolean {
         const totalRowsHeight: number = this.getTotalRowsHeight();
-        const dataLayerRenderHeight: number = this.getDataLayerRenderHeight();
+        const dataLayerRenderHeight: number = this.getDataLayerRenderHeight(isHorizontalScrollbarVisible);
         return totalRowsHeight > dataLayerRenderHeight;
     }
 
-    public getDataLayerRenderHeight(): number {
-        return this.viewportDimensions.height - this.headerHeight;
+    public isVerticalScrollbarVisible(): boolean {
+        return this.verticalScrollbarVisible;
+    }
+
+    public shouldHorizontalScrollbarBeVisible(isVerticalScrollbarVisible: boolean): boolean {
+        const totalColumnsWidth: number = this.calculateTotalHeaderWidth();
+        const dataLayerRenderHeight: number = this.getDataLayerRenderWidth(isVerticalScrollbarVisible);
+        return totalColumnsWidth > dataLayerRenderHeight;
+    }
+
+    public isHorizontalScrollbarVisible(): boolean {
+        return this.horizontalScrollbarVisible;
+    }
+
+    public getDataLayerRenderHeight(isHorizontalScrollbarVisible: boolean): number {
+        const horizontalScrollbarDiff: number = isHorizontalScrollbarVisible ? this.horizontalScrollbarHeight : 0;
+        return Math.max(this.viewportDimensions.height - this.headerHeight - horizontalScrollbarDiff, 0);
+    }
+
+    public getDataLayerRenderWidth(isVerticalScrollbarVisible: boolean): number {
+        const verticalScrollbarDiff: number = isVerticalScrollbarVisible ? this.verticalScrollBarWidth : 0;
+        return Math.max(this.viewportDimensions.width - verticalScrollbarDiff, 0);
     }
 
     public getHeaderHeight(): number {
@@ -152,19 +215,28 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
     }
 
     private getNumberOfRowsPerDisplay(): number {
-        return Math.ceil(this.getDataLayerRenderHeight() / this.rowHeight);
+        return Math.ceil(this.getDataLayerRenderHeight(this.horizontalScrollbarVisible) / this.rowHeight);
     }
 
-    private onVertialSliderSelectedRatioDidChange(ratio: number): void {
-        this.verticalSliderRatio = ratio;
-        this.updateDataViewport();
+    private onVertialSliderRatioDidChange(ratio: number): void {
+        this.verticalScrollbarRatio = ratio;
+        this.updateDataViewportVertically();
     }
 
-    public updateDataViewport(): void {
-        const dataLayerRenderHeight: number = this.getDataLayerRenderHeight();
+    private onHorizontalSliderRatioDidChange(ratio: number): void {
+        this.horizontalScrollbarRatio = ratio;
+        this.updateDataViewportHorizontally();
+    }
+
+    public updateDataViewportHorizontally(): void {
+
+    }
+
+    public updateDataViewportVertically(): void {
+        const dataLayerRenderHeight: number = this.getDataLayerRenderHeight(this.horizontalScrollbarVisible);
         const numberOfRowsPerDisplay: number = this.getNumberOfRowsPerDisplay();
         const scrollableHeight: number = Math.max(this.getTotalRowsHeight() - dataLayerRenderHeight, 0);
-        const firstVisiblePartialRow: number = scrollableHeight * this.verticalSliderRatio / this.rowHeight;
+        const firstVisiblePartialRow: number = scrollableHeight * this.verticalScrollbarRatio / this.rowHeight;
         const firstVisibleWholeRow: number = Math.floor(firstVisiblePartialRow);
         const lastVisibleRow: number = Math.floor(firstVisiblePartialRow + numberOfRowsPerDisplay);
         const currentDataFrame: TDataFrame = this.model.getData();

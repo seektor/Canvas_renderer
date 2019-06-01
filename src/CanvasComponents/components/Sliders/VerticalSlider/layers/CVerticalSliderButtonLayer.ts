@@ -1,7 +1,7 @@
-import { AbstractCanvasLayer } from '../../../../CanvasRenderer/AbstractCanvasLayer';
-import { CursorType } from '../../../../CanvasRenderer/structures/CursorType';
-import { Direction } from '../../../../CanvasRenderer/structures/Direction';
-import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
+import { AbstractCanvasLayer } from '../../../../../CanvasRenderer/AbstractCanvasLayer';
+import { CursorType } from '../../../../../CanvasRenderer/structures/CursorType';
+import { Direction } from '../../../../../CanvasRenderer/structures/Direction';
+import { TLayerParams } from '../../../../../CanvasRenderer/structures/TLayerParams';
 import { CVerticalSliderModel } from '../CVerticalSliderModel';
 import { CVerticalSliderViewport } from '../CVerticalSliderViewport';
 import { TVerticalSliderButtonParams } from '../structures/TVerticalSliderButtonParams';
