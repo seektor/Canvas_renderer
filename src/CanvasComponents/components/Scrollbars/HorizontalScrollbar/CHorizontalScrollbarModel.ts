@@ -71,7 +71,7 @@ export class CHorizontalScrollbarModel extends AbstractCanvasModel {
     }
 
     public onScrollbarIncreaseButton(): void {
-        const ratioDelta: number = this.scrollWrapperDisplaySize / (this.scrollWrapperScrollSize - this.scrollWrapperDisplaySize);
+        const ratioDelta: number = this.scrollWrapperDisplaySize * 0.1;
         const newRatio: number = Math.min(this.scrollbarRatio + ratioDelta, 1);
         this.scrollbarRatioExternalChange$.next(newRatio);
         this.setScrollbarRatio(newRatio);

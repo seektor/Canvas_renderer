@@ -84,9 +84,9 @@ export class CHorizontalScrollbarHandleLayer extends AbstractCanvasLayer {
     }
 
     private updatePositionFromExternalChange(ratio: number) {
-        const maxDY: number = this.trackLength - this.layerHeight;
-        const newDY: number = maxDY * ratio;
-        this.dY = newDY;
+        const maxDX: number = this.trackLength - this.layerWidth;
+        const newDX: number = maxDX * ratio;
+        this.dX = newDX;
         this.notifyRenderChanges();
     }
 }
