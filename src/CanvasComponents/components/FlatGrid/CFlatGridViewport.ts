@@ -14,10 +14,16 @@ import { CFlatGridPainter } from './styles/CFLatGridPainter';
 
 export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerHost {
 
-    public readonly onColumnResizeDidStart$: Observable<string>;
-    public readonly columnResizeDidStart$: Subject<string>;
-    public readonly onColumnResizeDidEnd$: Observable<string>;
-    public readonly columnResizeDidEnd$: Subject<string>;
+    private readonly onColumnWillBeResizedManually$: Observable<string>;
+    public readonly columnWillBeResizedManually$: Subject<string>;
+    public readonly onBeforeManualColumnResize$: Observable<string>;
+    private readonly beforeManualColumnResize$: Subject<string>;
+
+    private readonly onColumnManualResizeDidEnd$: Observable<void>;
+    public readonly columnManualResizeDidEnd$: Subject<void>;
+    public readonly onAfterManualColumnResizeDidEnd$: Observable<void>;
+    private readonly afterManualColumnResizeDidEnd$: Subject<void>;
+
     public readonly onDataTopDidChange$: Observable<number>;
     private readonly dataTopDidChange$: Subject<number>;
     public readonly onDataLeftDidChange$: Observable<number>;
@@ -50,10 +56,14 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
         this.verticalScrollbarRatio = 0;
         this.horizontalScrollbarRatio = 0;
         this.totalHeaderWidth = 0;
-        this.columnResizeDidStart$ = new Subject();
-        this.onColumnResizeDidStart$ = this.columnResizeDidStart$.asObservable();
-        this.columnResizeDidEnd$ = new Subject();
-        this.onColumnResizeDidEnd$ = this.columnResizeDidEnd$.asObservable();
+        this.columnWillBeResizedManually$ = new Subject();
+        this.onColumnWillBeResizedManually$ = this.columnWillBeResizedManually$.asObservable();
+        this.beforeManualColumnResize$ = new Subject();
+        this.onBeforeManualColumnResize$ = this.beforeManualColumnResize$.asObservable();
+        this.columnManualResizeDidEnd$ = new Subject();
+        this.onColumnManualResizeDidEnd$ = this.columnManualResizeDidEnd$.asObservable();
+        this.afterManualColumnResizeDidEnd$ = new Subject();
+        this.onAfterManualColumnResizeDidEnd$ = this.afterManualColumnResizeDidEnd$.asObservable();
         this.dataTopDidChange$ = new Subject();
         this.onDataTopDidChange$ = this.dataTopDidChange$.asObservable();
         this.dataLeftDidChange$ = new Subject();
@@ -75,9 +85,22 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
         this.model.onDataDidChange$.subscribe(() => {
             this.updateDataViewportVertically();
         });
-        this.onColumnResizeDidEnd$.subscribe(() => {
-            this.updateTotalHeaderWidth();
+        this.onColumnWillBeResizedManually$.subscribe((colId) => {
+            this.beforeManualColumnResize$.next(colId);
+        })
+        this.onColumnManualResizeDidEnd$.subscribe(() => {
+            this.onColumnResizeDidEnd();
         });
+    }
+
+    // TODO: Temporary hack to make it work at least.
+    private onColumnResizeDidEnd(): void {
+        this.updateTotalHeaderWidth();
+        this.updateScrollbars(true);
+        this.afterManualColumnResizeDidEnd$.next();
+        // @ts-ignore
+        this.onResize();
+        this.forceRender();
     }
 
     private updateTotalHeaderWidth(): void {
@@ -147,24 +170,7 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
     }
 
     protected onViewportDidInitialize(): void {
-        let isVerticalScrollbarVisible: boolean = this.shouldVerticalScrollbarBeVisible(true);
-        let isHorizontalScrollbarVisible: boolean = this.shouldHorizontalScrollbarBeVisible(true);
-        if (!isVerticalScrollbarVisible) {
-            isHorizontalScrollbarVisible = this.shouldHorizontalScrollbarBeVisible(false);
-        }
-        if (!isHorizontalScrollbarVisible) {
-            isVerticalScrollbarVisible = this.shouldVerticalScrollbarBeVisible(false);
-        }
-
-        this.verticalScrollbarVisible = isVerticalScrollbarVisible;
-        this.verticalScrollbarHandlers.setVisibility(isVerticalScrollbarVisible);
-        this.verticalScrollbarHandlers.setScrollWrapperScrollSize(this.getTotalRowsHeight());
-        this.verticalScrollbarHandlers.setScrollWrapperDisplaySize(this.getDataLayerRenderHeight(isHorizontalScrollbarVisible), true);
-
-        this.horizontalScrollbarVisible = isHorizontalScrollbarVisible;
-        this.horizontalScrollbarHandlers.setVisibility(isHorizontalScrollbarVisible);
-        this.horizontalScrollbarHandlers.setScrollWrapperScrollSize(this.totalHeaderWidth);
-        this.horizontalScrollbarHandlers.setScrollWrapperDisplaySize(this.getDataLayerRenderWidth(isVerticalScrollbarVisible), true);
+        this.updateScrollbars(true);
     }
 
     public onBeforeMainStageResize(): void {
@@ -172,7 +178,10 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
         this.viewportDimensions = { height: layerRect.height, width: layerRect.width };
         const dataRequestRange: TRange = this.createDataRequestRange(0, this.getNumberOfRowsPerDisplay());
         this.model.requestData(dataRequestRange.from, dataRequestRange.to);
+        this.updateScrollbars(false);
+    }
 
+    private updateScrollbars(updateScrollDimensions: boolean): void {
         let isVerticalScrollbarVisible: boolean = this.shouldVerticalScrollbarBeVisible(true);
         let isHorizontalScrollbarVisible: boolean = this.shouldHorizontalScrollbarBeVisible(true);
         if (!isVerticalScrollbarVisible) {
@@ -182,13 +191,19 @@ export class CFlatGridViewport extends AbstractCanvasViewport implements ILayerH
             isVerticalScrollbarVisible = this.shouldVerticalScrollbarBeVisible(false);
         }
 
-        this.verticalScrollbarHandlers.setScrollWrapperDisplaySize(this.getDataLayerRenderHeight(isHorizontalScrollbarVisible), false);
+        this.verticalScrollbarHandlers.setScrollWrapperDisplaySize(this.getDataLayerRenderHeight(isHorizontalScrollbarVisible));
+        if (updateScrollDimensions) {
+            this.verticalScrollbarHandlers.setScrollWrapperScrollSize(this.getTotalRowsHeight());
+        }
         if (this.verticalScrollbarVisible !== isVerticalScrollbarVisible) {
             this.verticalScrollbarVisible = isVerticalScrollbarVisible;
             this.verticalScrollbarHandlers.setVisibility(isVerticalScrollbarVisible);
         }
 
-        this.horizontalScrollbarHandlers.setScrollWrapperDisplaySize(this.getDataLayerRenderWidth(isVerticalScrollbarVisible), false);
+        this.horizontalScrollbarHandlers.setScrollWrapperDisplaySize(this.getDataLayerRenderWidth(isVerticalScrollbarVisible));
+        if (updateScrollDimensions) {
+            this.horizontalScrollbarHandlers.setScrollWrapperScrollSize(this.totalHeaderWidth);
+        }
         if (this.horizontalScrollbarVisible !== isHorizontalScrollbarVisible) {
             this.horizontalScrollbarVisible = isHorizontalScrollbarVisible;
             this.horizontalScrollbarHandlers.setVisibility(isHorizontalScrollbarVisible);

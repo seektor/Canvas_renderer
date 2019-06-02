@@ -26,12 +26,12 @@ export class CVerticalScrollbarHandleLayer extends AbstractCanvasLayer {
         this.onLayerDidResize();
         this.renderSelf();
         this.notifyRenderChanges();
-        this.model.onScrollDimensionsDidChange$.subscribe(() => this.onResize());
+        this.model.onScrollDimensionsDidChange$.subscribe(() => this.onScrollDimensionsDidChange());
         this.model.onScrollbarRatioExternalChange$.subscribe((ratio) => this.onUpdatePositionFromExternalChange(ratio));
     }
 
-    public onResize(): void {
-        super.onResize();
+    private onScrollDimensionsDidChange(): void {
+        this.onResize();
     }
 
     protected onLayerDidResize(): void {

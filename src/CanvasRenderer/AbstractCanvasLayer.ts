@@ -61,6 +61,7 @@ export abstract class AbstractCanvasLayer implements ILayer {
         this.updateLayer(layerParams);
         this.onLayerDidResize();
         this.renderSelf();
+        this.notifyRenderChanges();
     }
 
     protected onLayerDidResize(): void { }
@@ -187,15 +188,15 @@ export abstract class AbstractCanvasLayer implements ILayer {
         return this.isBetween(coords.x, this.sX, this.sX + this.sWidth) && this.isBetween(coords.y, this.sY, this.sY + this.sHeight);
     }
 
-    public onActionEnter(coords: TCoords): void { };
+    public onActionEnter(displayLayerCoords: TCoords): void { };
 
-    public onActionStart(coords: TCoords): void { }
+    public onActionStart(displayLayerCoords: TCoords): void { }
 
-    public onActionMove(coords: TCoords): void { }
+    public onActionMove(displayLayerCoords: TCoords): void { }
 
     public onActionDrag(deltas: TDeltas): void { }
 
-    public onActionEnd(coords: TCoords): void { }
+    public onActionEnd(displayLayerCoords: TCoords): void { }
 
     public onActionLeave(): void { }
 

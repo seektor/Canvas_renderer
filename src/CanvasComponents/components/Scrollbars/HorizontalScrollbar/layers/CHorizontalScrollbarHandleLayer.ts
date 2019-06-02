@@ -30,10 +30,6 @@ export class CHorizontalScrollbarHandleLayer extends AbstractCanvasLayer {
         this.model.onScrollbarRatioExternalChange$.subscribe((ratio) => this.onUpdatePositionFromExternalChange(ratio));
     }
 
-    public onResize(): void {
-        super.onResize();
-    }
-
     protected onLayerDidResize(): void {
         this.trackLength = this.layerHost.getLayerDisplayRect().width;
         this.dragStartDX = this.dY;

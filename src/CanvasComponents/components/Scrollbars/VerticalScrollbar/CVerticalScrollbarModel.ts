@@ -51,14 +51,14 @@ export class CVerticalScrollbarModel extends AbstractCanvasModel {
 
     public setScrollWrapperScrollSize(size: number): void {
         this.scrollWrapperScrollSize = size;
+        this.updateHandleSizes();
         this.scrollDimensionsDidChange$.next();
     }
 
-    public setScrollWrapperDisplaySize(size: number, notifyChange: boolean): void {
+    public setScrollWrapperDisplaySize(size: number): void {
         this.scrollWrapperDisplaySize = size;
-        if (notifyChange) {
-            this.scrollDimensionsDidChange$.next();
-        }
+        this.updateHandleSizes();
+        this.scrollDimensionsDidChange$.next();
     }
 
     public setScrollbarRatio(ratio: number): void {

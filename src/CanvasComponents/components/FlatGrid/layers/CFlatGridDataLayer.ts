@@ -41,11 +41,11 @@ export class CFlatGridDataLayer extends AbstractCanvasLayer {
             this.redrawResizedColumn();
             this.notifyRenderChanges();
         });
-        this.viewport.onColumnResizeDidStart$.subscribe((columnId) => {
-            this.onColumnResizeDidStart(columnId);
+        this.viewport.onBeforeManualColumnResize$.subscribe((columnId) => {
+            this.onBeforeManulColumnResize(columnId);
         });
-        this.viewport.onColumnResizeDidEnd$.subscribe((columnId) => {
-            this.onColumnResizeDidEnd();
+        this.viewport.onAfterManualColumnResizeDidEnd$.subscribe((columnId) => {
+            this.onAfterManualColumnResizeDidEnd();
         });
         this.viewport.onDataTopDidChange$.subscribe((top) => {
             this.onDataTopDidChange(top);
@@ -65,7 +65,7 @@ export class CFlatGridDataLayer extends AbstractCanvasLayer {
         this.notifyRenderChanges();
     }
 
-    private onColumnResizeDidStart(columnId: string): void {
+    private onBeforeManulColumnResize(columnId: string): void {
         const columnIndex: number = this.columnsData.findIndex(column => column.id === columnId);
         const column: TColumnData = this.columnsData[columnIndex];
         let leftWidth: number = 0;
@@ -91,8 +91,9 @@ export class CFlatGridDataLayer extends AbstractCanvasLayer {
         }
     }
 
-    private onColumnResizeDidEnd(): void {
+    private onAfterManualColumnResizeDidEnd(): void {
         this.columnResizeData = null;
+        this.onResize();
     }
 
     private redrawResizedColumn(): void {

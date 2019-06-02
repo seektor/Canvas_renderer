@@ -40,6 +40,9 @@ export class CFlatGridHeaderLayer extends AbstractCanvasLayer {
         this.viewport.onDataLeftDidChange$.subscribe((top) => {
             this.onDataLeftDidChange(top);
         });
+        this.viewport.onAfterManualColumnResizeDidEnd$.subscribe(() => {
+            this.onResize();
+        });
     }
 
     public renderSelf(): void {
@@ -48,14 +51,15 @@ export class CFlatGridHeaderLayer extends AbstractCanvasLayer {
     }
 
     public isPierced(coords: TCoords): boolean {
-        return this.isBetween(coords.x, this.sX, this.sX + this.sWidth) && this.isBetween(coords.y, this.sY, this.sY + this.sHeight - this.layerBottomOffset);
+        return this.isBetween(coords.x + this.sX, this.sX, this.sX + this.sWidth) && this.isBetween(coords.y + this.sY, this.sY, this.sY + this.sHeight - this.layerBottomOffset);
     }
 
     public onActionStart(coords: TCoords): void {
-        const column: TColumnData | null = this.getResizableColumn(coords);
+        const localCoords: TCoords = { x: coords.x + this.sX, y: coords.y + this.sY };
+        const column: TColumnData | null = this.getResizableColumn(localCoords);
         if (column) {
             this.columnResizeData = { columnIndex: this.columnsData.indexOf(column), initialWidth: column.width };
-            this.viewport.columnResizeDidStart$.next(column.id);
+            this.viewport.columnWillBeResizedManually$.next(column.id);
         }
     }
 
@@ -71,14 +75,15 @@ export class CFlatGridHeaderLayer extends AbstractCanvasLayer {
         if (!this.isPierced(coords)) {
             this.viewport.setCursor(CursorType.Auto);
         }
-        this.viewport.columnResizeDidEnd$.next();
+        this.viewport.columnManualResizeDidEnd$.next();
     }
 
     public onActionMove(coords: TCoords): void {
         if (this.columnResizeData) {
             return;
         }
-        if (this.getResizableColumn(coords)) {
+        const localCoords: TCoords = { x: coords.x + this.sX, y: coords.y + this.sY };
+        if (this.getResizableColumn(localCoords)) {
             this.viewport.setCursor(CursorType.ColResize);
         } else {
             this.viewport.setCursor(CursorType.Auto);
@@ -101,14 +106,14 @@ export class CFlatGridHeaderLayer extends AbstractCanvasLayer {
         this.notifyRenderChanges();
     }
 
-    private getResizableColumn(coords: TCoords): TColumnData | null {
+    private getResizableColumn(localCoords: TCoords): TColumnData | null {
         let resizableColumn: TColumnData | null = null;
         let currentX: number = 0;
         for (let columnIndex: number = 0; columnIndex < this.columnsData.length; columnIndex++) {
             const column: TColumnData = this.columnsData[columnIndex];
             currentX += column.width;
-            const isBetweenHorizontally: boolean = this.isBetween(coords.x, currentX - this.resizeHorizontalTriggerWidth, currentX + this.resizeHorizontalTriggerWidth);
-            const isBetweenVertically: boolean = this.isBetween(coords.y, 0, this.layerHeight);
+            const isBetweenHorizontally: boolean = this.isBetween(localCoords.x, currentX - this.resizeHorizontalTriggerWidth, currentX + this.resizeHorizontalTriggerWidth);
+            const isBetweenVertically: boolean = this.isBetween(localCoords.y, 0, this.layerHeight);
             if (isBetweenHorizontally && isBetweenVertically) {
                 resizableColumn = this.columnsData[columnIndex];
                 break;

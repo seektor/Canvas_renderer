@@ -17,7 +17,7 @@ export class CVerticalScrollbar extends AbstractCanvasComponent {
     public getScrollbarHandlers(): IScrollbarHandlers {
         return {
             onScrollbarRatioDidChange$: this.model.onScrollbarRatioDidChange$,
-            setScrollWrapperDisplaySize: (sd, nc) => this.model.setScrollWrapperDisplaySize(sd, nc),
+            setScrollWrapperDisplaySize: (sd) => this.model.setScrollWrapperDisplaySize(sd),
             setScrollWrapperScrollSize: (ss) => this.model.setScrollWrapperScrollSize(ss),
             setVisibility: (isVisible) => this.viewport.setVisibility(isVisible)
         }
