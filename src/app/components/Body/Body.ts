@@ -61,10 +61,6 @@ export class Body {
         // flatDisplayPlaceholderElement_Two.appendChild(flatDisplayElement_Two);
 
         window.dispatchEvent(new Event('resize'));
-
-
-        // const verticalSliderComponent: CVerticalSlider = new CVerticalSlider();
-        // verticalSliderComponent.createViewport(this.bodyElement);
     }
 
     private createGridItemWithCanvasComponent(title: string, element: AbstractCanvasComponent): HTMLElement {

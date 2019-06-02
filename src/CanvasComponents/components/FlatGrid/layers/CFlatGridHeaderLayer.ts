@@ -37,6 +37,9 @@ export class CFlatGridHeaderLayer extends AbstractCanvasLayer {
             this.renderSelf();
             this.notifyRenderChanges();
         });
+        this.viewport.onDataLeftDidChange$.subscribe((top) => {
+            this.onDataLeftDidChange(top);
+        });
     }
 
     public renderSelf(): void {
@@ -91,6 +94,11 @@ export class CFlatGridHeaderLayer extends AbstractCanvasLayer {
 
     public onViewportLeave() {
         this.onActionLeave();
+    }
+
+    private onDataLeftDidChange(left: number): void {
+        this.sX = left;
+        this.notifyRenderChanges();
     }
 
     private getResizableColumn(coords: TCoords): TColumnData | null {

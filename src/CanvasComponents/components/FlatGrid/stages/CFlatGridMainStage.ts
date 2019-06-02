@@ -2,9 +2,9 @@ import { AbstractCanvasMainStage } from '../../../../CanvasRenderer/AbstractCanv
 import { ILayer } from '../../../../CanvasRenderer/interfaces/ILayer';
 import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
 import { TLayerRenderParams } from '../../../../CanvasRenderer/structures/TLayerRenderParams';
-import { CHorizontalSlider } from '../../Sliders/HorizontalSlider/CHorizontalSlider';
-import { ISliderHandlers } from '../../Sliders/interfaces/ISliderHandlers';
-import { CVerticalSlider } from '../../Sliders/VerticalSlider/CVerticalSlider';
+import { CHorizontalScrollbar } from '../../Scrollbars/HorizontalScrollbar/CHorizontalScrollbar';
+import { IScrollbarHandlers } from '../../Scrollbars/interfaces/IScrollbarHandlers';
+import { CVerticalScrollbar } from '../../Scrollbars/VerticalScrollbar/CVerticalScrollbar';
 import { CFlatGridModel } from '../CFlatGridModel';
 import { CFlatGridViewport } from '../CFlatGridViewport';
 import { CFlatGridPainter } from '../styles/CFLatGridPainter';
@@ -46,7 +46,7 @@ export class CFlatGridMainStage extends AbstractCanvasMainStage {
         }
     }
 
-    private getHorizontalSliderLayerParams(): TLayerRenderParams {
+    private getHorizontalScrollbarLayerParams(): TLayerRenderParams {
         const horizontalScrollbarHeight: number = this.viewport.getHorizontalScrollbarHeight();
         const verticalScrollbarDiff: number = this.viewport.isVerticalScrollbarVisible() ? this.viewport.getVerticalScrollbarWidth() : 0;
         return {
@@ -63,24 +63,24 @@ export class CFlatGridMainStage extends AbstractCanvasMainStage {
         });
         this.addLayer(flatGridStage);
 
-        const verticalSlider: CVerticalSlider = new CVerticalSlider();
-        const verticalSliderHandlers: ISliderHandlers = verticalSlider.getSliderHandlers();
-        this.viewport.setVerticalSliderHandlers(verticalSliderHandlers);
-        verticalSlider.initViewport(this.viewport.getContainer(), {
+        const verticalScrollbar: CVerticalScrollbar = new CVerticalScrollbar();
+        const verticalScrollbarHandlers: IScrollbarHandlers = verticalScrollbar.getScrollbarHandlers();
+        this.viewport.setVerticalScrollbarHandlers(verticalScrollbarHandlers);
+        verticalScrollbar.initViewport(this.viewport.getContainer(), {
             hostingViewport: this.viewport,
             displayLayerRectExtractor: (_layer: ILayer) => this.getVerticalScrollbarLayerParams(),
             layerHost: this
         });
-        this.addComponent(verticalSlider);
+        this.addComponent(verticalScrollbar);
 
-        const horizontalSlider: CHorizontalSlider = new CHorizontalSlider();
-        const horizontalSliderHandlers: ISliderHandlers = horizontalSlider.getSliderHandlers();
-        this.viewport.setHorizontalSliderHandlers(horizontalSliderHandlers);
-        horizontalSlider.initViewport(this.viewport.getContainer(), {
+        const horizontalScrollbar: CHorizontalScrollbar = new CHorizontalScrollbar();
+        const horizontalScrollbarHandlers: IScrollbarHandlers = horizontalScrollbar.getScrollbarHandlers();
+        this.viewport.setHorizontalScrollbarHandlers(horizontalScrollbarHandlers);
+        horizontalScrollbar.initViewport(this.viewport.getContainer(), {
             hostingViewport: this.viewport,
-            displayLayerRectExtractor: (_layer: ILayer) => this.getHorizontalSliderLayerParams(),
+            displayLayerRectExtractor: (_layer: ILayer) => this.getHorizontalScrollbarLayerParams(),
             layerHost: this
         });
-        this.addComponent(horizontalSlider);
+        this.addComponent(horizontalScrollbar);
     }
 }

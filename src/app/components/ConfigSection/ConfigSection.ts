@@ -20,6 +20,7 @@ export class ConfigSection {
         const template: string = require('./config-section.html');
         const templateFragment: DocumentFragment = Utils.convertToDocumentFragment(template);
         this.componentElement = templateFragment.firstChild as HTMLElement;
+        this.componentElement.style.display = 'none';
         hostElement.append(this.componentElement);
 
         const themeSection: HTMLElement = Utils.getElementByAttribute(this.componentElement, ConfigSectionAttributeHooks.sectionTheme);
