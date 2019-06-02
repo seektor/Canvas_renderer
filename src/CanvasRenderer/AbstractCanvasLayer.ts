@@ -78,7 +78,7 @@ export abstract class AbstractCanvasLayer implements ILayer {
     }
 
     protected clear(): void {
-        this.layerContext.clearRect(this.sX, this.sY, this.sWidth, this.sHeight);
+        this.layerContext.clearRect(0, 0, this.layerWidth, this.layerHeight);
     }
 
     protected updateLayer(params: TLayerRenderParams): void {

@@ -1,5 +1,6 @@
 import { AbstractCanvasLayer } from '../../../../CanvasRenderer/AbstractCanvasLayer';
 import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
+import { TRect } from '../../../../CanvasRenderer/structures/TRect';
 import { CFlatGridModel } from '../CFlatGridModel';
 import { CFlatGridViewport } from '../CFlatGridViewport';
 import { TColumnData } from '../structures/TColumnData';
@@ -101,6 +102,8 @@ export class CFlatGridDataLayer extends AbstractCanvasLayer {
 
     protected renderSelf(): void {
         this.clear();
-        this.canvasPainter.drawDataCells(this.layerContext, this.getLayerRect(), this.columnsData, this.dataFrame);
+        const dataWidth: number = this.viewport.getTotalHeaderWidth();
+        const dataRect: TRect = { ...this.getLayerRect(), width: dataWidth };
+        this.canvasPainter.drawDataCells(this.layerContext, dataRect, this.columnsData, this.dataFrame);
     };
 }

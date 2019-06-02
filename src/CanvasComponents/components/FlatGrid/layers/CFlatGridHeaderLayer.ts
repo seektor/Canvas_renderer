@@ -10,7 +10,7 @@ import { CFlatGridPainter } from '../styles/CFLatGridPainter';
 
 export class CFlatGridHeaderLayer extends AbstractCanvasLayer {
 
-    private readonly shadowHeight: number;
+    private readonly layerBottomOffset: number;
     private readonly resizeHorizontalTriggerWidth: number = 5;
 
     protected model: CFlatGridModel;
@@ -19,10 +19,10 @@ export class CFlatGridHeaderLayer extends AbstractCanvasLayer {
     private columnsData: TColumnData[];
     private columnResizeData: { columnIndex: number, initialWidth: number } | null = null;
 
-    constructor(params: TLayerParams<CFlatGridModel, CFlatGridViewport, unknown>, shadowOffset: number) {
+    constructor(params: TLayerParams<CFlatGridModel, CFlatGridViewport, unknown>, layerBottomOffset: number) {
         super(params);
         this.canvasPainter = this.viewport.getCanvasPainter();
-        this.shadowHeight = shadowOffset;
+        this.layerBottomOffset = layerBottomOffset;
         this.setEvents();
         this.onLayerDidResize();
     }
@@ -44,11 +44,11 @@ export class CFlatGridHeaderLayer extends AbstractCanvasLayer {
 
     public renderSelf(): void {
         this.clear();
-        this.canvasPainter.drawHeader(this.layerContext, { y: 0, x: 0, height: this.layerHeight, width: this.layerWidth }, this.shadowHeight, this.columnsData);
+        this.canvasPainter.drawHeader(this.layerContext, { y: 0, x: 0, height: this.layerHeight, width: this.layerWidth }, this.layerBottomOffset, this.columnsData);
     }
 
     public isPierced(coords: TCoords): boolean {
-        return this.isBetween(coords.x, this.sX, this.sX + this.sWidth) && this.isBetween(coords.y, this.sY, this.sY + this.sHeight - this.shadowHeight);
+        return this.isBetween(coords.x, this.sX, this.sX + this.sWidth) && this.isBetween(coords.y, this.sY, this.sY + this.sHeight - this.layerBottomOffset);
     }
 
     public onActionStart(coords: TCoords): void {

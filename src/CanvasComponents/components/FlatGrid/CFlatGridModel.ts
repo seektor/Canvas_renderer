@@ -66,11 +66,12 @@ export class CFlatGridModel extends AbstractCanvasModel {
     }
 
     private setMetadata(data: TableMetadata): void {
-        this.rowCount = data.rowCount;
-        this.columnsData = data.fields.map((field, fieldIndex) => {
+        let fakeData: TableMetadata = { baseWidths: data.baseWidths, fields: data.fields.slice(0, 3), rowCount: data.rowCount }
+        this.rowCount = fakeData.rowCount;
+        this.columnsData = fakeData.fields.map((field, fieldIndex) => {
             return {
                 ...field,
-                width: Math.max(this.minColumnWidth, data.baseWidths[fieldIndex])
+                width: Math.max(this.minColumnWidth, fakeData.baseWidths[fieldIndex])
             }
         });
         this.metadataDidChange$.next();

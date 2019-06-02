@@ -39,29 +39,13 @@ export class CFlatGridPainter extends CanvasBasePainter {
         this.fillRect(ctx, rect, { fillStyle: this.styles.colorBackground });
     }
 
-    public drawHeader(ctx: CanvasRenderingContext2D, rect: TRect, shadowOffset: number, columnsData: TColumnData[]): void {
-        const effectiveRect: TRect = { ...rect, height: Math.round(rect.height - shadowOffset) };
-        const headerFrameRect: TRect = {
-            width: rect.width - this.headerCellLineWidth * 0.5,
-            height: effectiveRect.height - this.headerCellLineWidth * 0.5,
-            x: rect.x + this.headerCellLineWidth * 0.5,
-            y: rect.y + this.headerCellLineWidth * 0.5
-        };
+    public drawHeader(ctx: CanvasRenderingContext2D, rect: TRect, layerBottomOffset: number, columnsData: TColumnData[]): void {
+        const effectiveRect: TRect = { ...rect, height: Math.round(rect.height - layerBottomOffset) };
         this.fillRect(ctx, effectiveRect, { fillStyle: this.styles.colorBackground });
-        this.strokeRect(ctx, headerFrameRect, {
-            lineWidth: this.headerCellLineWidth, strokeStyle: this.styles.colorHeaderMain
-        });
-        this.strokeLines(ctx, [{ x: 0, y: effectiveRect.height }, { x: effectiveRect.width, y: effectiveRect.height }], {
-            lineWidth: this.headerCellLineWidth * 2,
-            shadowBlur: 5,
-            shadowColor: this.styles.colorHeaderMain,
-            shadowOffsetY: shadowOffset * 0.25,
-            strokeStyle: this.styles.colorHeaderMain
-        })
-        this.drawHeaderCells(ctx, effectiveRect, columnsData);
+        this.drawHeaderCells(ctx, effectiveRect, layerBottomOffset, columnsData);
     }
 
-    private drawHeaderCells(ctx: CanvasRenderingContext2D, rect: TRect, columnsData: TColumnData[]): void {
+    private drawHeaderCells(ctx: CanvasRenderingContext2D, rect: TRect, layerBottomOffset: number, columnsData: TColumnData[]): void {
         const styles: Partial<TCanvasStyles> = {
             lineWidth: this.headerCellLineWidth,
             strokeStyle: this.styles.colorHeaderMain,
@@ -82,7 +66,16 @@ export class CFlatGridPainter extends CanvasBasePainter {
             const processedText: string = this.truncateTextPure(ctx, column.name, maxWidth, this.truncationSymbol, truncationSymbolWidth);
             ctx.fillText(processedText, currentCellCenter.x, currentCellCenter.y);
             currentX += column.width;
-        })
+        });
+
+        this.strokeLines(ctx, [{ x: 0, y: rect.height }, { x: currentX, y: rect.height }], {
+            lineWidth: this.headerCellLineWidth * 2,
+            shadowBlur: 5,
+            shadowColor: this.styles.colorHeaderMain,
+            shadowOffsetY: layerBottomOffset * 0.25,
+            strokeStyle: this.styles.colorHeaderMain
+        });
+
         this.applyStyles(ctx, savedStyles);
     }
 
