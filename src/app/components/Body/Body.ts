@@ -1,3 +1,4 @@
+import { CFlatDisplay } from '../../../CanvasComponents/components/FlatDisplay/CFlatDisplay';
 import { CFlatGrid } from '../../../CanvasComponents/components/FlatGrid/CFlatGrid';
 import { AbstractCanvasComponent } from '../../../CanvasRenderer/AbstractCanvasComponent';
 import { ReduxJarvisDb } from '../../../Database/Redux/JarvisDb/ReduxJarvisDb';
@@ -25,10 +26,10 @@ export class Body {
         const gridItemTemplate: string = require('../../templates/GridItemWrapper/grid-item-wrapper.tpl.html');
         this.placeholderGridItem = Utils.convertToDocumentFragment(gridItemTemplate).firstElementChild as HTMLElement;
 
-        const flatGridPlaceholderElement: HTMLElement = document.getElementById('body__grid-Placeholder');
+        const flatGridPlaceholderElement: HTMLElement = document.getElementById('body__grid-placeholder');
         const canvasFlatGridComponent: CFlatGrid = new CFlatGrid({ tableName: 'targets' });
         const flatGridElement: HTMLElement = this.createGridItemWithCanvasComponent('Flat grid', canvasFlatGridComponent);
-        flatGridPlaceholderElement.append(flatGridElement);
+        flatGridPlaceholderElement.appendChild(flatGridElement);
 
         // const digitalDisplayPlaceholderElement: HTMLElement = document.getElementById('body__digital-display-placeholder');
         // const canvasDigitalDisplayComponent: CDigitalDisplay = new CDigitalDisplay();
@@ -50,10 +51,10 @@ export class Body {
         // const lineChartElement: HTMLElement = this.createGridItemWithCanvasComponent('Stark Industries’ revenue', canvasLineChartComponent);
         // lineChartPlaceholderElement.appendChild(lineChartElement);
 
-        // const flatDisplayPlaceholderElement_One: HTMLElement = document.getElementById('body__flat-display-placeholder--one');
-        // const canvasFlatDisplayComponent_One: CFlatDisplay = new CFlatDisplay();
-        // const flatDisplayElement_One: HTMLElement = this.createGridItemWithCanvasComponent('Stark Industries’ revenue', canvasFlatDisplayComponent_One);
-        // flatDisplayPlaceholderElement_One.appendChild(flatDisplayElement_One);
+        const flatDisplayPlaceholderElement_One: HTMLElement = document.getElementById('body__flat-display-placeholder--one');
+        const canvasFlatDisplayComponent_One: CFlatDisplay = new CFlatDisplay();
+        const flatDisplayElement_One: HTMLElement = this.createGridItemWithCanvasComponent('Stark Industries’ revenue', canvasFlatDisplayComponent_One);
+        flatDisplayPlaceholderElement_One.appendChild(flatDisplayElement_One);
 
         // const flatDisplayPlaceholderElement_Two: HTMLElement = document.getElementById('body__flat-display-placeholder--two');
         // const canvasFlatDisplayComponent_Two: CFlatDisplay = new CFlatDisplay();

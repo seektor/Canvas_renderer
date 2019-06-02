@@ -32,7 +32,7 @@ export class CFlatGrid extends AbstractCanvasComponent {
                 this.lastDataRequestGuid = null;
             }
             res();
-        }, 50));
+        }, 0));
     }
 
     private createDataRequestGuid(from: number, to: number): string {

@@ -90,7 +90,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
         return Utils.getElementDimensions(this.container);
     }
 
-    protected render(): void {
+    private render(): void {
         if (this.hasRenderChanges) {
             this.mainStage.render(this.displayCanvasContext);
             this.hasRenderChanges = false;

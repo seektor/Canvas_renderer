@@ -21,6 +21,14 @@ export class ReduxJarvisDb {
                         type: DataType.Number
                     },
                     value: 0
+                },
+                'revenue': {
+                    metadata: {
+                        max: 55.3,
+                        min: 53.3,
+                        type: DataType.Number
+                    },
+                    value: 54.3
                 }
             }
         },
