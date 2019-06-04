@@ -26,7 +26,7 @@ export class CVerticalScrollbarButtonLayer extends AbstractCanvasLayer {
 
     public renderSelf(isActive: boolean): void {
         this.clear();
-        this.canvasPainter.drawArrowButton(this.layerContext, this.getLayerRenderRect(), this.direction, isActive);
+        this.canvasPainter.drawArrowButton(this.layerContext, this.getLayerSourceRect(), this.direction, isActive);
     }
 
     public onActionStart(): void {

@@ -150,7 +150,7 @@ export abstract class AbstractCanvasLayer implements ILayer {
         }
     }
 
-    public getLayerDisplayRect(): TLayerRect {
+    public getLayerDestinationRect(): TLayerRect {
         return {
             height: this.layerHeight,
             width: this.layerWidth,
@@ -160,7 +160,7 @@ export abstract class AbstractCanvasLayer implements ILayer {
         }
     }
 
-    protected getLayerRenderRect(): TRect {
+    protected getLayerSourceRect(): TRect {
         return {
             height: this.sHeight,
             width: this.sWidth,

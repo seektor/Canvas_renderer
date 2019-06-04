@@ -35,7 +35,7 @@ export class CVerticalScrollbarHandleLayer extends AbstractCanvasLayer {
     }
 
     protected onLayerDidResize(): void {
-        this.trackLength = this.layerHost.getLayerDisplayRect().height;
+        this.trackLength = this.layerHost.getLayerDestinationRect().height;
         this.dragStartDY = this.dY;
     }
 
@@ -45,7 +45,7 @@ export class CVerticalScrollbarHandleLayer extends AbstractCanvasLayer {
     }
 
     public renderSelf(): void {
-        this.painter.drawHandle(this.layerContext, this.getLayerRenderRect());
+        this.painter.drawHandle(this.layerContext, this.getLayerSourceRect());
     }
 
     public onActionEnter(): void {

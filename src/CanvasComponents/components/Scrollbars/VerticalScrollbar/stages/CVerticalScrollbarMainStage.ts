@@ -25,7 +25,7 @@ export class CVerticalScrollbarMainStage extends AbstractCanvasMainStage {
     }
 
     private getMainStageLayerParams(): TLayerRenderParams {
-        const displayRect: TLayerRect = this.viewport.getLayerDisplayRect();
+        const displayRect: TLayerRect = this.viewport.getLayerDestinationRect();
         return {
             dX: 0,
             dY: 0,
@@ -35,7 +35,7 @@ export class CVerticalScrollbarMainStage extends AbstractCanvasMainStage {
     }
 
     private getButtonDimensions(): TDimensions {
-        const displayRect: TLayerRect = this.viewport.getLayerDisplayRect();
+        const displayRect: TLayerRect = this.viewport.getLayerDestinationRect();
         return {
             height: displayRect.width,
             width: displayRect.width
