@@ -1,6 +1,7 @@
 import { AbstractCanvasMainStage } from '../../../../CanvasRenderer/AbstractCanvasMainStage';
 import { ILayer } from '../../../../CanvasRenderer/interfaces/ILayer';
 import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
+import { TLayerRenderParams } from '../../../../CanvasRenderer/structures/TLayerRenderParams';
 import { CFlatDisplayModel } from '../CFlatDisplayModel';
 import { CFlatDisplayViewport } from '../CFlatDisplayViewport';
 import { CFlatDisplayContentLayer } from '../layers/CFlatDisplayContentLayer';
@@ -23,11 +24,18 @@ export class CFlatDisplayMainStage extends AbstractCanvasMainStage {
         this.canvasPainter.drawBackground(this.layerContext, this.getLayerRect());
     }
 
+    private getContentLayerParams(): TLayerRenderParams {
+        return {
+            dX: 0,
+            dY: 0,
+            height: this.layerHeight,
+            width: this.layerWidth
+        }
+    }
+
     protected createLayers(): void {
         const contentLayer: ILayer = new CFlatDisplayContentLayer({
-            layerHost: this, viewport: this.viewport, model: this.model, layerParamsExtractor: () => ({
-                dX: 0, dY: 0, height: this.layerHeight, width: this.layerWidth
-            })
+            layerHost: this, viewport: this.viewport, model: this.model, layerParamsExtractor: () => this.getContentLayerParams()
         });
         this.addLayer(contentLayer);
     }

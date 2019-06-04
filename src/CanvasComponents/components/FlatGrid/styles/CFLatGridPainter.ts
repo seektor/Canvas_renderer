@@ -31,7 +31,7 @@ export class CFlatGridPainter extends CanvasBasePainter {
             colorHeaderMain: theme.colorPrimary,
             colorDataCellBorder: theme.colorPrimary,
             colorEvenRow: theme.colorPrimaryDark,
-            colorOddRow: theme.colorPrimaryDarker
+            colorOddRow: theme.colorPrimaryExtraDark
         }
     }
 

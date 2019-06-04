@@ -12,23 +12,23 @@ export class ReduxJarvisDb {
     private store: Store;
     private initialState: TestDbState = {
         variables: {
-            allIds: ['varA'],
+            allIds: ['rockets', 'drones'],
             byId: {
-                'varA': {
+                'rockets': {
                     metadata: {
                         max: 100,
                         min: 0,
                         type: DataType.Number
                     },
-                    value: 0
+                    value: 77
                 },
-                'revenue': {
+                'drones': {
                     metadata: {
-                        max: 55.3,
-                        min: 53.3,
+                        max: 1000,
+                        min: 0,
                         type: DataType.Number
                     },
-                    value: 54.3
+                    value: 789
                 }
             }
         },

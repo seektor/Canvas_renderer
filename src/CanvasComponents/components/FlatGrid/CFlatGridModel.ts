@@ -32,13 +32,13 @@ export class CFlatGridModel extends AbstractCanvasModel {
         this.columnWidthDidChange$ = new Subject();
         this.onColumnWidthDidChange$ = this.columnWidthDidChange$.asObservable();
         this.init();
-        this.requestMetadata();
     }
 
     private init(): void {
         this.columnsData = [];
         this.rowCount = 0;
         this.dataFrame = { from: 0, to: 0, rows: [] };
+        this.requestMetadata();
     }
 
     public getColumnsData(): TColumnData[] {

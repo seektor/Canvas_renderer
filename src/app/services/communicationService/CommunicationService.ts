@@ -1,5 +1,9 @@
 import { Store } from "redux";
-import { DataRow, TableData, TableMetadata, TestDbState } from "../../../Database/Redux/JarvisDb/types/DataTypes";
+import { setVariableValue } from "../../../Database/Redux/JarvisDb/actions/variableActions";
+import { DataRow, TableData, TableMetadata, TestDbState, VariableMetadata } from "../../../Database/Redux/JarvisDb/types/DataTypes";
+import { CallbackFunction } from "../../structures/CallbackFunction";
+import IntervalService from "../intervalService/IntervalService";
+import { IntervalType } from "../intervalService/structures/IntervalType";
 
 class CommunicationService {
 
@@ -8,6 +12,16 @@ class CommunicationService {
 
     public static getInstance(): CommunicationService {
         return this.instance || (this.instance = new this());
+    }
+
+    private constructor() {
+        IntervalService.subscribe(IntervalType["15000ms"], () => this.updateVariableValue('drones'));
+    }
+
+    private updateVariableValue(variableId: string) {
+        const variableMetaData = this.store.getState().variables.byId[variableId].metadata;
+        const newValue: number = Math.round(Math.random() * (variableMetaData.max - variableMetaData.min) + variableMetaData.min);
+        this.store.dispatch(setVariableValue(variableId, newValue));
     }
 
     public setDataProvider(store: Store) {
@@ -28,58 +42,17 @@ class CommunicationService {
         return this.store.getState().tables.allIds;
     }
 
-    public createAvgSummaryTable(tableName: 'targets', characteristicId: string, metricId: string): string {
-        // const summaryTableName: string = `${tableName}_summary_avg_${characteristicId}_${metricId}`;
-        // const alreadyExists: boolean = this.store.getState().tables.allIds.includes(summaryTableName);
-        // if (!alreadyExists) {
-        //     const avgSummaryTableData: TableData = this.createAvgSummaryTableData(tableName, characteristicId, metricId);
-        //     this.store.dispatch(addTable(summaryTableName, avgSummaryTableData));
-        // }
-        // return summaryTableName;
-        return '';
+    public getVariableValue(variableId: string): number {
+        return this.store.getState().variables.byId[variableId].value;
     }
 
-    // private createAvgSummaryTableData(tableName: 'targets', characteristicId: string, metricId: string): TableData {
-    //     const metricValues: Map<string, number[]> = new Map();
-    //     const rows: TargetsTableRow[] = this.store.getState().tables.byId[tableName].values;
-    //     const mainFields = this.store.getState().tables.byId[tableName].metadata.fields;
-    //     const mainCharacteristic: TField = mainFields.find(f => f.id === characteristicId);
-    //     rows.forEach(row => {
-    //         const characteristicValue: string = row[characteristicId];
-    //         if (!metricValues.has(characteristicValue)) {
-    //             metricValues.set(characteristicValue, []);
-    //         }
-    //         metricValues.get(characteristicValue).push(row[metricId]);
-    //     });
-    //     const summaryTableValues = [...metricValues.keys()].map(key => {
-    //         const arr: number[] = metricValues.get(key);
-    //         const average: number = arr.reduce((p, c) => p + c, 0) / arr.length;
-    //         return {
-    //             [key]: average
-    //         }
-    //     });
-    //     const tableData: TableData = {
-    //         metadata: {
-    //             fields: [
-    //                 {
-    //                     dataType: DataType.String,
-    //                     id: characteristicId,
-    //                     name: mainCharacteristic.name,
-    //                     fieldType: FieldType.Characteristic
-    //                 },
-    //                 {
-    //                     dataType: DataType.Number,
-    //                     id: metricId,
-    //                     name: `Avg_${mainCharacteristic.name}`,
-    //                     fieldType: FieldType.Metric
-    //                 }
-    //             ],
-    //             rowCount: summaryTableValues.length
-    //         },
-    //         values: summaryTableValues
-    //     }
-    //     return tableData;
-    // }
+    public getVariableMetadata(variableId: string): VariableMetadata {
+        return this.store.getState().variables.byId[variableId].metadata;
+    }
+
+    public subscribe(callback: CallbackFunction): void {
+        this.store.subscribe(callback);
+    }
 }
 
 export default CommunicationService.getInstance();

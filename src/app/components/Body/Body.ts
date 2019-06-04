@@ -1,4 +1,5 @@
 import { CFlatDisplay } from '../../../CanvasComponents/components/FlatDisplay/CFlatDisplay';
+import { FlatDisplayViewMode } from '../../../CanvasComponents/components/FlatDisplay/structures/FlatDisplayViewMode';
 import { CFlatGrid } from '../../../CanvasComponents/components/FlatGrid/CFlatGrid';
 import { AbstractCanvasComponent } from '../../../CanvasRenderer/AbstractCanvasComponent';
 import { ReduxJarvisDb } from '../../../Database/Redux/JarvisDb/ReduxJarvisDb';
@@ -27,7 +28,7 @@ export class Body {
         this.placeholderGridItem = Utils.convertToDocumentFragment(gridItemTemplate).firstElementChild as HTMLElement;
 
         const flatGridPlaceholderElement: HTMLElement = document.getElementById('body__grid-placeholder');
-        const canvasFlatGridComponent: CFlatGrid = new CFlatGrid({ tableName: 'targets' });
+        const canvasFlatGridComponent: CFlatGrid = new CFlatGrid({ tableId: 'targets' });
         const flatGridElement: HTMLElement = this.createGridItemWithCanvasComponent('Flat grid', canvasFlatGridComponent);
         flatGridPlaceholderElement.appendChild(flatGridElement);
 
@@ -52,14 +53,14 @@ export class Body {
         // lineChartPlaceholderElement.appendChild(lineChartElement);
 
         const flatDisplayPlaceholderElement_One: HTMLElement = document.getElementById('body__flat-display-placeholder--one');
-        const canvasFlatDisplayComponent_One: CFlatDisplay = new CFlatDisplay();
-        const flatDisplayElement_One: HTMLElement = this.createGridItemWithCanvasComponent('Stark Industries’ revenue', canvasFlatDisplayComponent_One);
+        const canvasFlatDisplayComponent_One: CFlatDisplay = new CFlatDisplay({ variableId: 'drones', viewMode: FlatDisplayViewMode.Difference });
+        const flatDisplayElement_One: HTMLElement = this.createGridItemWithCanvasComponent('Drones online', canvasFlatDisplayComponent_One);
         flatDisplayPlaceholderElement_One.appendChild(flatDisplayElement_One);
 
-        // const flatDisplayPlaceholderElement_Two: HTMLElement = document.getElementById('body__flat-display-placeholder--two');
-        // const canvasFlatDisplayComponent_Two: CFlatDisplay = new CFlatDisplay();
-        // const flatDisplayElement_Two: HTMLElement = this.createGridItemWithCanvasComponent('Flat Display', canvasFlatDisplayComponent_Two);
-        // flatDisplayPlaceholderElement_Two.appendChild(flatDisplayElement_Two);
+        const flatDisplayPlaceholderElement_Two: HTMLElement = document.getElementById('body__flat-display-placeholder--two');
+        const canvasFlatDisplayComponent_Two: CFlatDisplay = new CFlatDisplay({ variableId: 'rockets', viewMode: FlatDisplayViewMode.Accomplishment });
+        const flatDisplayElement_Two: HTMLElement = this.createGridItemWithCanvasComponent('Rockets count', canvasFlatDisplayComponent_Two);
+        flatDisplayPlaceholderElement_Two.appendChild(flatDisplayElement_Two);
 
         window.dispatchEvent(new Event('resize'));
     }

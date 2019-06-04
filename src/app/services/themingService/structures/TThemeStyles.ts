@@ -2,7 +2,7 @@ export interface TThemeStyles {
     colorPrimaryLight: string;
     colorPrimary: string;
     colorPrimaryDark: string;
-    colorPrimaryDarker: string;
+    colorPrimaryExtraDark: string;
 
     colorSecondaryLight: string;
     colorSecondary: string;
@@ -11,4 +11,8 @@ export interface TThemeStyles {
     colorBackgroundLight: string;
     colorBackground: string;
     colorBackgroundDark: string;
+
+    colorDanger: string;
+    colorSuccess: string;
+    colorWarning: string;
 }

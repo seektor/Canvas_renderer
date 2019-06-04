@@ -1,3 +1,3 @@
 export interface TFlatGridParams {
-    tableName: string;
+    tableId: string;
 }

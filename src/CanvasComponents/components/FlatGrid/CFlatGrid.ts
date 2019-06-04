@@ -12,18 +12,18 @@ export class CFlatGrid extends AbstractCanvasComponent {
     protected viewport: CFlatGridViewport;
 
     protected lastDataRequestGuid: string | null;
-    private tableName: string;
+    private tableId: string;
 
     constructor(params: TFlatGridParams) {
         super();
-        this.tableName = params.tableName;
+        this.tableId = params.tableId;
         this.lastDataRequestGuid = null;
         this.model = new CFlatGridModel(this);
         this.viewport = new CFlatGridViewport(this.model)
     }
 
     public async requestData(from: number, to: number, cb: (data: TDataFrame) => void): Promise<void> {
-        const rows: DataRow[] = CommunicationService.getTableData(this.tableName, from, to);
+        const rows: DataRow[] = CommunicationService.getTableData(this.tableId, from, to);
         const dataRequestGuid: string = this.createDataRequestGuid(from, to);
         this.lastDataRequestGuid = dataRequestGuid;
         return new Promise((res) => setTimeout(() => {
@@ -40,7 +40,7 @@ export class CFlatGrid extends AbstractCanvasComponent {
     }
 
     public async requestMetadata(cb: (metadata: TableMetadata) => void): Promise<void> {
-        const tableMetadata: TableMetadata = CommunicationService.getTableMetadata(this.tableName);
+        const tableMetadata: TableMetadata = CommunicationService.getTableMetadata(this.tableId);
         return new Promise((res) => setTimeout(() => {
             cb(tableMetadata);
             res();
