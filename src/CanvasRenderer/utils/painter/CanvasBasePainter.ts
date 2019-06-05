@@ -136,19 +136,24 @@ export class CanvasBasePainter {
     }
 
     protected getFittingFont(ctx: CanvasRenderingContext2D, text: string, height: number, fontName: string, decoration: FontDecoration | null, maxWidth: number): string {
+        const fittingFontHeight: number = this.getFittingFontHeight(ctx, text, height, fontName, decoration, maxWidth);
+        return this.getFontStyle(fontName, fittingFontHeight, decoration);
+    }
+
+    protected getFittingFontHeight(ctx: CanvasRenderingContext2D, text: string, height: number, fontName: string, decoration: FontDecoration | null, maxWidth: number): number {
         const initialFontStyle: string = ctx.font;
-        let fittingFontHeight: number = height;
-        let font: string = this.getFontStyle(fontName, fittingFontHeight, decoration);
+        let fontHeight: number = height;
+        let font: string = this.getFontStyle(fontName, fontHeight, decoration);
         ctx.font = font;
         let textWidth: number = ctx.measureText(text).width;
         while (textWidth > maxWidth) {
-            fittingFontHeight -= 1;
-            font = this.getFontStyle(fontName, fittingFontHeight, decoration);
+            fontHeight -= 1;
+            font = this.getFontStyle(fontName, fontHeight, decoration);
             ctx.font = font;
             textWidth = ctx.measureText(text).width;
         }
         ctx.font = initialFontStyle;
-        return this.getFontStyle(fontName, fittingFontHeight, decoration);
+        return fontHeight;
     }
 
     protected truncateTextPure(ctx: CanvasRenderingContext2D, text: string, maxWidth: number, truncationSymbol: string, truncationSymbolWidth: number): string {

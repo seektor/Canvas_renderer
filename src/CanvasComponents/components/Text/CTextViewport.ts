@@ -12,6 +12,7 @@ export class CTextViewport extends AbstractCanvasViewport implements ILayerHost 
 
     constructor(model: CTextModel) {
         super(model);
+        this.canvasPainter = new CTextPainter();
     }
 
     protected createMainStage(layerHost: ILayerHost, layerParamsExtractor: ILayerParamsExtractor): CTextMainStage {

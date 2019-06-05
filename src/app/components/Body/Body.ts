@@ -46,7 +46,7 @@ export class Body {
 
         const textPlaceholderElement: HTMLElement = document.getElementById('body__text-placeholder');
         const canvasTextComponent: CText = new CText();
-        const textElement: HTMLElement = this.createGridItemWithCanvasComponent('Summary', canvasTextComponent);
+        const textElement: HTMLElement = this.createGridItemWithCanvasComponent('Status report', canvasTextComponent);
         textPlaceholderElement.appendChild(textElement);
 
         const lineChartPlaceholderElement: HTMLElement = document.getElementById('body__line-chart-placeholder');
