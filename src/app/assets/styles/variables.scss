@@ -1,12 +1,12 @@
 :root {
-	--color-primary--light: coral;
-	--color-primary: coral;
-	--color-primary--dark: coral;
-	--color-primary--extra-dark: coral;
+	--color-primary--light: #c8ffff;
+	--color-primary: #40feff;
+	--color-primary--dark: #004040;
+	--color-primary--extra-dark: #001e1e;
 
-	--color-secondary--light: coral;
-	--color-secondary: coral;
-	--color-secondary--dark: coral;
+	--color-secondary--light: #ffffff;
+	--color-secondary: #ffffff;
+	--color-secondary--dark: #ffffff;
 
 	--color-background--light: coral;
 	--color-background: coral;
@@ -15,23 +15,27 @@
 	--color-danger: coral;
 	--color-success: coral;
 	--color-warning: coral;
+
+	--color-font: #ffffff;
 }
 
 :root [theme="light"] {
 	--color-primary--light: coral;
-	--color-primary: coral;
-	--color-primary--dark: coral;
+	--color-primary: #64b5f6;
+	--color-primary--dark: #062e6d;
 	--color-primary--extra-dark: coral;
 
 	--color-secondary--light: coral;
-	--color-secondary: coral;
+	--color-secondary: #000000;
 	--color-secondary--dark: coral;
 
 	--color-background--light: coral;
 	--color-background: coral;
-	--color-background--dark: #e3f2fd;
+	--color-background--dark: #ffffff;
 
 	--color-danger: coral;
 	--color-success: coral;
 	--color-warning: coral;
+
+	--color-font: #000000;
 }

@@ -5,11 +5,11 @@
 	height: 100%;
 	width: 20%;
 	background-color: var(--color-background--dark);
-	border-right: 2px solid $ColorPrimary;
-	border-top: 2px solid $ColorPrimary;
+	border-right: 2px solid var(--color-primary);
+	border-top: 2px solid var(--color-primary);
 	border-top-right-radius: 10px;
 	border-bottom-right-radius: 10px;
-	box-shadow: 4px 0px 4px 0px $ColorPrimary;
+	box-shadow: 4px 0px 4px 0px var(--color-primary);
 	transition: opacity 0.5s ease-out;
 	opacity: 1;
 
@@ -18,7 +18,7 @@
 	}
 
 	&__title {
-		color: $ColorSecondary;
+		color: var(--color-secondary);
 		text-align: center;
 		margin-bottom: 25px;
 	}
@@ -28,7 +28,7 @@
 	}
 
 	&__section-title {
-		color: $ColorPrimary;
+		color: var(--color-primary);
 	}
 
 	&__section--theme {

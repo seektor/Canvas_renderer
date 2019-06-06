@@ -18,6 +18,7 @@ export class CHorizontalScrollbarBackgroundLayer extends AbstractCanvasLayer {
     }
 
     public renderSelf(): void {
+        this.clear();
         this.painter.drawBackground(this.layerContext, this.getLayerSourceRect());
     }
 }

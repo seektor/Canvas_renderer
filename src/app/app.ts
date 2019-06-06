@@ -3,6 +3,7 @@ import { Body } from './components/Body/Body';
 import { ConfigSection } from './components/ConfigSection/ConfigSection';
 import { Footer } from './components/Footer/Footer';
 import { Header } from './components/Header/Header';
+import ThemingService from './services/themingService/ThemingService';
 import { Utils } from './utils/Utils';
 
 class App {
@@ -26,11 +27,14 @@ class App {
     }
 
     private onThemeChange(isPrimary: boolean): void {
+        console.time('Theme Change');
         if (isPrimary) {
             this.appElement.setAttribute('theme', '');
         } else {
             this.appElement.setAttribute('theme', 'light');
         }
+        ThemingService.toggleTheme();
+        console.timeEnd('Theme Change');
     }
 
     private runAppInitAnimation(appElement: HTMLElement) {
