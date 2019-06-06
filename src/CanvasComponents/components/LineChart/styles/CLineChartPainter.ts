@@ -1,5 +1,4 @@
 import { TThemeStyles } from '../../../../app/services/themingService/structures/TThemeStyles';
-import ThemingService from '../../../../app/services/themingService/ThemingService';
 import { TCoords } from '../../../../CanvasRenderer/structures/TCoords';
 import { TRect } from '../../../../CanvasRenderer/structures/TRect';
 import { CanvasBasePainter } from '../../../../CanvasRenderer/utils/painter/CanvasBasePainter';
@@ -10,13 +9,12 @@ export class CLineChartPainter extends CanvasBasePainter {
 
     private styles: TLineChartStyles;
 
-    constructor() {
+    constructor(theme: TThemeStyles) {
         super();
-        this.applyTheme();
+        this.applyTheme(theme);
     }
 
-    private applyTheme() {
-        const theme: TThemeStyles = ThemingService.getTheme();
+    public applyTheme(theme: TThemeStyles) {
         this.styles = {
             colorBackground: theme.colorBackgroundDark,
             colorAxis: theme.colorPrimary,

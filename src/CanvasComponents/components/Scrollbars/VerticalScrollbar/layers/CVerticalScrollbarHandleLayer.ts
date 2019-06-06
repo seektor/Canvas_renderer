@@ -45,6 +45,7 @@ export class CVerticalScrollbarHandleLayer extends AbstractCanvasLayer {
     }
 
     public renderSelf(): void {
+        this.clear();
         this.painter.drawHandle(this.layerContext, this.getLayerSourceRect());
     }
 

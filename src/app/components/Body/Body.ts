@@ -1,6 +1,7 @@
 import { CFlatGrid } from '../../../CanvasComponents/components/FlatGrid/CFlatGrid';
 import { CGauge } from '../../../CanvasComponents/components/Gauge/CGauge';
 import { TGaugeParams } from '../../../CanvasComponents/components/Gauge/structures/TGaugeParams';
+import { CLineChart } from '../../../CanvasComponents/components/LineChart/CLineChart';
 import { CText } from '../../../CanvasComponents/components/Text/CText';
 import { AbstractCanvasComponent } from '../../../CanvasRenderer/AbstractCanvasComponent';
 import { ReduxJarvisDb } from '../../../Database/Redux/JarvisDb/ReduxJarvisDb';
@@ -49,10 +50,10 @@ export class Body {
         const textElement: HTMLElement = this.createGridItemWithCanvasComponent('Status report', canvasTextComponent);
         textPlaceholderElement.appendChild(textElement);
 
-        // const lineChartPlaceholderElement: HTMLElement = document.getElementById('body__line-chart-placeholder');
-        // const canvasLineChartComponent: CLineChart = new CLineChart();
-        // const lineChartElement: HTMLElement = this.createGridItemWithCanvasComponent('Stark Industries’ revenue', canvasLineChartComponent);
-        // lineChartPlaceholderElement.appendChild(lineChartElement);
+        const lineChartPlaceholderElement: HTMLElement = document.getElementById('body__line-chart-placeholder');
+        const canvasLineChartComponent: CLineChart = new CLineChart();
+        const lineChartElement: HTMLElement = this.createGridItemWithCanvasComponent('Stark Industries’ revenue', canvasLineChartComponent);
+        lineChartPlaceholderElement.appendChild(lineChartElement);
 
         // const flatDisplayPlaceholderElement_One: HTMLElement = document.getElementById('body__flat-display-placeholder--one');
         // const canvasFlatDisplayComponent_One: CFlatDisplay = new CFlatDisplay({ variableId: 'drones', viewMode: FlatDisplayViewMode.Difference });

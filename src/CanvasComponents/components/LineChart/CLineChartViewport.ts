@@ -1,3 +1,4 @@
+import ThemingService from '../../../app/services/themingService/ThemingService';
 import { AbstractCanvasViewport } from '../../../CanvasRenderer/AbstractCanvasViewport';
 import { ILayerHost } from '../../../CanvasRenderer/interfaces/ILayerHost';
 import { ILayerParamsExtractor } from '../../../CanvasRenderer/interfaces/ILayerParamsExtractor';
@@ -15,7 +16,13 @@ export class CLineChartViewport extends AbstractCanvasViewport implements ILayer
 
     constructor(model: CLineChartModel) {
         super(model);
-        this.canvasPainter = new CLineChartPainter();
+        this.canvasPainter = new CLineChartPainter(ThemingService.getTheme());
+        ThemingService.onThemeDidChange$.subscribe(() => this.onThemeDidChange());
+    }
+
+    private onThemeDidChange(): void {
+        this.canvasPainter.applyTheme(ThemingService.getTheme());
+        this.forceRerender();
     }
 
     protected createMainStage(layerHost: ILayerHost, layerParamsExtractor: ILayerParamsExtractor): CLineChartMainStage {

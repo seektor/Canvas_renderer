@@ -41,6 +41,7 @@ export class CGaugeValueLayer extends AbstractCanvasLayer {
     }
 
     public renderSelf(): void {
+        this.clear();
         const displayValue: string = this.model.getCurrentDisplayValue();
         const angleValue: number = this.model.getCurrentValueAsAngle();
         this.canvasPainter.drawValue(this.layerContext, this.getLayerRect(), displayValue, angleValue);
