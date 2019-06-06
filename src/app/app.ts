@@ -27,14 +27,12 @@ class App {
     }
 
     private onThemeChange(isPrimary: boolean): void {
-        console.time('Theme Change');
         if (isPrimary) {
             this.appElement.setAttribute('theme', '');
         } else {
             this.appElement.setAttribute('theme', 'light');
         }
         ThemingService.toggleTheme();
-        console.timeEnd('Theme Change');
     }
 
     private runAppInitAnimation(appElement: HTMLElement) {

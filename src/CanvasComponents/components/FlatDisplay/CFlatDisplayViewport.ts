@@ -14,6 +14,12 @@ export class CFlatDisplayViewport extends AbstractCanvasViewport implements ILay
     constructor(model: CFlatDisplayModel) {
         super(model);
         this.canvasPainter = new CFlatDisplayPainter(ThemingService.getTheme());
+        ThemingService.onThemeDidChange$.subscribe(() => this.onThemeDidChange());
+    }
+
+    private onThemeDidChange(): void {
+        this.canvasPainter.applyTheme(ThemingService.getTheme());
+        this.forceRerender();
     }
 
     protected createMainStage(layerHost: ILayerHost, layerParamsExtractor: ILayerParamsExtractor): CFlatDisplayMainStage {
