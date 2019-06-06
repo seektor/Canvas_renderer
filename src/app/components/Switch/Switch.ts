@@ -26,8 +26,8 @@ export class Switch {
     private onCheckboxChange(e: Event): void {
         if (this.canSwitch) {
             this.onChangeCallback(this.checkboxElement.checked);
-            this.canSwitch = false;
-            setTimeout(() => this.canSwitch = true, 1000);
+            // this.canSwitch = false;
+            // setTimeout(() => this.canSwitch = true, 1000);
         } else {
             this.checkboxElement.checked = !this.checkboxElement.checked;
         }
