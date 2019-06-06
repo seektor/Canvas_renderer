@@ -1,5 +1,4 @@
 import { TThemeStyles } from '../../../../app/services/themingService/structures/TThemeStyles';
-import ThemingService from '../../../../app/services/themingService/ThemingService';
 import { Constants } from '../../../../app/utils/Constants';
 import { TRect } from '../../../../CanvasRenderer/structures/TRect';
 import { CanvasBasePainter } from '../../../../CanvasRenderer/utils/painter/CanvasBasePainter';
@@ -11,13 +10,12 @@ export class CTextPainter extends CanvasBasePainter {
 
     private styles: TTextStyles;
 
-    constructor() {
+    constructor(theme: TThemeStyles) {
         super();
-        this.applyTheme();
+        this.applyTheme(theme);
     }
 
-    private applyTheme() {
-        const theme: TThemeStyles = ThemingService.getTheme();
+    public applyTheme(theme: TThemeStyles) {
         this.styles = {
             colorBackground: theme.colorPrimaryExtraDark,
             colorBackgroundBorder: theme.colorPrimary,

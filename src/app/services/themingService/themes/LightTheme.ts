@@ -8,8 +8,8 @@ export default {
 
     colorPrimaryLight: "#6ec6ff",
     colorPrimary: "#64b5f6",
-    colorPrimaryDark: "#062e6d",
-    colorPrimaryExtraDark: "#021635",
+    colorPrimaryDark: "#cfd8dc",
+    colorPrimaryExtraDark: "#eceff1",
 
     colorSecondaryLight: "#ffe54c",
     colorSecondary: "#ffb300",

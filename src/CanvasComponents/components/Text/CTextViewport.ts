@@ -1,3 +1,4 @@
+import ThemingService from '../../../app/services/themingService/ThemingService';
 import { AbstractCanvasViewport } from '../../../CanvasRenderer/AbstractCanvasViewport';
 import { ILayerHost } from '../../../CanvasRenderer/interfaces/ILayerHost';
 import { ILayerParamsExtractor } from '../../../CanvasRenderer/interfaces/ILayerParamsExtractor';
@@ -12,7 +13,13 @@ export class CTextViewport extends AbstractCanvasViewport implements ILayerHost 
 
     constructor(model: CTextModel) {
         super(model);
-        this.canvasPainter = new CTextPainter();
+        ThemingService.onThemeDidChange$.subscribe(() => this.onThemeDidChange());
+        this.canvasPainter = new CTextPainter(ThemingService.getTheme());
+    }
+
+    private onThemeDidChange(): void {
+        this.canvasPainter.applyTheme(ThemingService.getTheme());
+        this.forceRerender();
     }
 
     protected createMainStage(layerHost: ILayerHost, layerParamsExtractor: ILayerParamsExtractor): CTextMainStage {

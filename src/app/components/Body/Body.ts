@@ -1,4 +1,5 @@
 import { CFlatGrid } from '../../../CanvasComponents/components/FlatGrid/CFlatGrid';
+import { CText } from '../../../CanvasComponents/components/Text/CText';
 import { AbstractCanvasComponent } from '../../../CanvasRenderer/AbstractCanvasComponent';
 import { ReduxJarvisDb } from '../../../Database/Redux/JarvisDb/ReduxJarvisDb';
 import CommunicationService from '../../services/communicationService/CommunicationService';
@@ -40,10 +41,10 @@ export class Body {
         // const gaugeElement: HTMLElement = this.createGridItemWithCanvasComponent('Jet Power', canvasGaugeComponent);
         // gaugePlaceholderElement.appendChild(gaugeElement);
 
-        // const textPlaceholderElement: HTMLElement = document.getElementById('body__text-placeholder');
-        // const canvasTextComponent: CText = new CText();
-        // const textElement: HTMLElement = this.createGridItemWithCanvasComponent('Status report', canvasTextComponent);
-        // textPlaceholderElement.appendChild(textElement);
+        const textPlaceholderElement: HTMLElement = document.getElementById('body__text-placeholder');
+        const canvasTextComponent: CText = new CText();
+        const textElement: HTMLElement = this.createGridItemWithCanvasComponent('Status report', canvasTextComponent);
+        textPlaceholderElement.appendChild(textElement);
 
         // const lineChartPlaceholderElement: HTMLElement = document.getElementById('body__line-chart-placeholder');
         // const canvasLineChartComponent: CLineChart = new CLineChart();
