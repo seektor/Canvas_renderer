@@ -34,7 +34,7 @@ export class CLineChartMainStage extends AbstractCanvasMainStage {
     }
 
     private getDataLayerRenderParams(): TLayerRenderParams {
-        const chartRect: TRect = this.canvasPainter.getChartRect(this);
+        const chartRect: TRect = this.viewport.getChartDataLayerRect(this);
         return {
             dX: chartRect.x,
             dY: chartRect.y,
@@ -44,10 +44,11 @@ export class CLineChartMainStage extends AbstractCanvasMainStage {
     }
 
     protected createLayers(): void {
+        const dataLayer: CLineChartDataLayer = new CLineChartDataLayer({ layerHost: this, viewport: this.viewport, model: this.model, layerParamsExtractor: (layer) => this.getDataLayerRenderParams() });
+        this.addLayer(dataLayer);
+
         const axesLayer: CLineChartAxesLayer = new CLineChartAxesLayer({ layerHost: this, viewport: this.viewport, model: this.model, layerParamsExtractor: (layer) => this.getAxesLayerRenderParams() });
         this.addLayer(axesLayer);
 
-        const dataLayer: CLineChartDataLayer = new CLineChartDataLayer({ layerHost: this, viewport: this.viewport, model: this.model, layerParamsExtractor: (layer) => this.getDataLayerRenderParams() });
-        this.addLayer(dataLayer);
     }
 }

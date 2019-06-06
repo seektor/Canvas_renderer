@@ -1,4 +1,9 @@
 export interface TLineChartStyles {
     colorBackground: string;
-    colorAxes: string;
+    colorAxis: string;
+    colorDataLine: string;
+    colorGradientHigh: string;
+    colorGradientLow: string;
+    widthDataLine: number;
+    widthAxisLine: number;
 }

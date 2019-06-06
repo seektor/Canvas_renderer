@@ -7,5 +7,6 @@ export interface TCanvasStyles {
     fillStyle: string | CanvasGradient | CanvasPattern;
     textAlign: CanvasTextAlign;
     font: string;
+    lineCap: CanvasLineCap;
     textBaseline: CanvasTextBaseline;
 }

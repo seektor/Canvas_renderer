@@ -20,6 +20,18 @@ export class CanvasBasePainter {
         this.applyStyles(ctx, savedStyles);
     }
 
+    protected strokeLinesPure(ctx: CanvasRenderingContext2D, points: TCoords[]): void {
+        if (points.length === 0) {
+            return;
+        }
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+        points.forEach((point) => {
+            ctx.lineTo(point.x, point.y);
+        });
+        ctx.stroke();
+    }
+
     protected roundRect(ctx: CanvasRenderingContext2D, rect: TRect, radius: number, stroke: boolean, fill: boolean, styles: Partial<TRoundRectParams>): void {
         const savedStyles: Partial<TCanvasStyles> = this.extractStyles(ctx, Object.keys(styles) as Array<(keyof TCanvasStyles)>);
         this.applyStyles(ctx, styles);

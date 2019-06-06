@@ -1,5 +1,6 @@
 import { AbstractCanvasLayer } from '../../../../CanvasRenderer/AbstractCanvasLayer';
 import { TLayerParams } from '../../../../CanvasRenderer/structures/TLayerParams';
+import { TRect } from '../../../../CanvasRenderer/structures/TRect';
 import { CLineChartModel } from '../CLineChartModel';
 import { CLineChartViewport } from '../CLineChartViewport';
 import { CLineChartPainter } from '../styles/CLineChartPainter';
@@ -17,6 +18,8 @@ export class CLineChartAxesLayer extends AbstractCanvasLayer {
     }
 
     public renderSelf(): void {
-        this.fillContent('orange');
+        this.clear();
+        const dataLayerRect: TRect = this.viewport.getChartDataLayerRect(this);
+        this.canvasPainter.drawAxes(this.layerContext, this.getLayerRect(), dataLayerRect);
     }
 }

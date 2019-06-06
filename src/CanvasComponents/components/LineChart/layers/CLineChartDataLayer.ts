@@ -17,6 +17,7 @@ export class CLineChartDataLayer extends AbstractCanvasLayer {
     }
 
     public renderSelf(): void {
-        this.fillContent('red');
+        this.clear();
+        this.canvasPainter.drawDataLine(this.layerContext, this.getLayerRect(), this.model.getTemporaryRatioData());
     }
 }
