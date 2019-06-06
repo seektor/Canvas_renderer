@@ -4,3 +4,4 @@
 4. TCoords, TParentRelativeCoords. Maybe the second one should be removed?
 5. Unify painter into CanvasPainter maybe or vice versa.
 6. Inspect where clear should be added/removed when rendering.
+7. TFillStyles vs TFill. CanvasPainterTypes unification.

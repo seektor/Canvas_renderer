@@ -1,4 +1,6 @@
 export enum IntervalType {
     '16ms',
-    '15000ms'
+    '32ms',
+    '15000ms',
+    '60000ms',
 }

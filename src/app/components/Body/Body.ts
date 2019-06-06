@@ -1,3 +1,4 @@
+import { CDigitalDisplay } from '../../../CanvasComponents/components/DigitalDisplay/CDigitalDisplay';
 import { CFlatDisplay } from '../../../CanvasComponents/components/FlatDisplay/CFlatDisplay';
 import { FlatDisplayViewMode } from '../../../CanvasComponents/components/FlatDisplay/structures/FlatDisplayViewMode';
 import { CFlatGrid } from '../../../CanvasComponents/components/FlatGrid/CFlatGrid';
@@ -37,10 +38,10 @@ export class Body {
         const flatGridElement: HTMLElement = this.createGridItemWithCanvasComponent('Flat grid', canvasFlatGridComponent);
         flatGridPlaceholderElement.appendChild(flatGridElement);
 
-        // const digitalDisplayPlaceholderElement: HTMLElement = document.getElementById('body__digital-display-placeholder');
-        // const canvasDigitalDisplayComponent: CDigitalDisplay = new CDigitalDisplay();
-        // const digitalDisplayElement: HTMLElement = this.createGridItemWithCanvasComponent('Digital Display', canvasDigitalDisplayComponent);
-        // digitalDisplayPlaceholderElement.appendChild(digitalDisplayElement);
+        const digitalDisplayPlaceholderElement: HTMLElement = document.getElementById('body__digital-display-placeholder');
+        const canvasDigitalDisplayComponent: CDigitalDisplay = new CDigitalDisplay();
+        const digitalDisplayElement: HTMLElement = this.createGridItemWithCanvasComponent('Digital Display', canvasDigitalDisplayComponent);
+        digitalDisplayPlaceholderElement.appendChild(digitalDisplayElement);
 
         const gaugePlaceholderElement: HTMLElement = document.getElementById('body__gauge-placeholder');
         const canvasGaugeComponent: CGauge = new CGauge(this.getGaugeParams());
