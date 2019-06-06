@@ -1,7 +1,10 @@
 import { CFlatGrid } from '../../../CanvasComponents/components/FlatGrid/CFlatGrid';
+import { CGauge } from '../../../CanvasComponents/components/Gauge/CGauge';
+import { TGaugeParams } from '../../../CanvasComponents/components/Gauge/structures/TGaugeParams';
 import { CText } from '../../../CanvasComponents/components/Text/CText';
 import { AbstractCanvasComponent } from '../../../CanvasRenderer/AbstractCanvasComponent';
 import { ReduxJarvisDb } from '../../../Database/Redux/JarvisDb/ReduxJarvisDb';
+import Colors from '../../../UIHelpers/Colors';
 import CommunicationService from '../../services/communicationService/CommunicationService';
 import GIWAttributeHooks from '../../templates/GridItemWrapper/structures/GIWAttributeHooks';
 import { Utils } from '../../utils/Utils';
@@ -36,10 +39,10 @@ export class Body {
         // const digitalDisplayElement: HTMLElement = this.createGridItemWithCanvasComponent('Digital Display', canvasDigitalDisplayComponent);
         // digitalDisplayPlaceholderElement.appendChild(digitalDisplayElement);
 
-        // const gaugePlaceholderElement: HTMLElement = document.getElementById('body__gauge-placeholder');
-        // const canvasGaugeComponent: CGauge = new CGauge(this.getGaugeParams());
-        // const gaugeElement: HTMLElement = this.createGridItemWithCanvasComponent('Jet Power', canvasGaugeComponent);
-        // gaugePlaceholderElement.appendChild(gaugeElement);
+        const gaugePlaceholderElement: HTMLElement = document.getElementById('body__gauge-placeholder');
+        const canvasGaugeComponent: CGauge = new CGauge(this.getGaugeParams());
+        const gaugeElement: HTMLElement = this.createGridItemWithCanvasComponent('Jet Power', canvasGaugeComponent);
+        gaugePlaceholderElement.appendChild(gaugeElement);
 
         const textPlaceholderElement: HTMLElement = document.getElementById('body__text-placeholder');
         const canvasTextComponent: CText = new CText();
@@ -80,22 +83,22 @@ export class Body {
         container.append(this.bodyElement);
     }
 
-    // private getGaugeParams(): TGaugeParams {
-    //     return {
-    //         colorPercentageRanges: [
-    //             {
-    //                 color: Colors.ORANGE,
-    //                 from: 55,
-    //                 to: 80
-    //             },
-    //             {
-    //                 color: Colors.RED,
-    //                 from: 80,
-    //                 to: 100
-    //             }
-    //         ],
-    //         max: 100,
-    //         min: 0
-    //     }
-    // }
+    private getGaugeParams(): TGaugeParams {
+        return {
+            colorPercentageRanges: [
+                {
+                    color: Colors.ORANGE,
+                    from: 55,
+                    to: 80
+                },
+                {
+                    color: Colors.RED,
+                    from: 80,
+                    to: 100
+                }
+            ],
+            max: 100,
+            min: 0
+        }
+    }
 }

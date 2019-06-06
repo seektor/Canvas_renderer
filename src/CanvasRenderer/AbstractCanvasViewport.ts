@@ -1,7 +1,6 @@
 import ResizeService from '../app/services/resizeService/ResizeService';
 import { AbstractCanvasMainStage } from './AbstractCanvasMainStage';
 import { AbstractCanvasModel } from './AbstractCanvasModel';
-import { AbstractCanvasStage } from './AbstractCanvasStage';
 import { ILayer } from './interfaces/ILayer';
 import { ILayerHost } from './interfaces/ILayerHost';
 import { ILayerParamsExtractor } from './interfaces/ILayerParamsExtractor';
@@ -133,7 +132,7 @@ export abstract class AbstractCanvasViewport implements ILayerHost {
 
     public onBeforeMainStageResize(): void { }
 
-    protected abstract createMainStage(layerHost: ILayerHost, layerParamsExtractor: ILayerParamsExtractor): AbstractCanvasStage;
+    protected abstract createMainStage(layerHost: ILayerHost, layerParamsExtractor: ILayerParamsExtractor): AbstractCanvasMainStage;
 
     private constructMainViewport(): void {
         this.viewportType = ViewportType.SelfContained;
