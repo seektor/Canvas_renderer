@@ -1,22 +1,22 @@
 .body {
-    flex-grow: 1;
-    background-color: $ColorBackgroundDark;
-    overflow: hidden;
-    box-sizing: border-box;
-    padding: 0 10px 10px 10px;
-    position: relative;
+	flex-grow: 1;
+	background-color: var(--color-background--dark);
+	overflow: hidden;
+	box-sizing: border-box;
+	padding: 0 10px 10px 10px;
+	position: relative;
 
-    &__grid {
-        height: 100%;
-        width: 100%;
-        display: grid;
-        grid-template-columns: repeat(13, 1fr);
-        grid-template-rows: repeat(12, 1fr);
-        row-gap: 10px;
-        column-gap: 10px;
+	&__grid {
+		height: 100%;
+		width: 100%;
+		display: grid;
+		grid-template-columns: repeat(13, 1fr);
+		grid-template-rows: repeat(12, 1fr);
+		row-gap: 10px;
+		column-gap: 10px;
 
-        &>div {
-            background-color: $ColorBackgroundDark;
-        }
-    }
+		& > div {
+			background-color: var(--color-background--dark);
+		}
+	}
 }

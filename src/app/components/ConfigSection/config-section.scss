@@ -4,7 +4,7 @@
 	left: 0px;
 	height: 100%;
 	width: 20%;
-	background-color: $ColorBackgroundDark;
+	background-color: var(--color-background--dark);
 	border-right: 2px solid $ColorPrimary;
 	border-top: 2px solid $ColorPrimary;
 	border-top-right-radius: 10px;

@@ -1,25 +1,25 @@
 .giw {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	overflow: hidden;
 
-    &__title {
-        width:100%;
-        text-align:center;
-        border-bottom: 1px solid $ColorSecondary;
-        line-height:0.1em; 
-        margin:10px 0 20px;
-        color: $ColorSecondary;
+	&__title {
+		width: 100%;
+		text-align: center;
+		border-bottom: 1px solid $ColorSecondary;
+		line-height: 0.1em;
+		margin: 10px 0 20px;
+		color: $ColorSecondary;
 
-        &>span {
-            background:$ColorBackgroundDark;
-            padding:0 10px;
-        }
-    }
+		& > span {
+			background: var(--color-background--dark);
+			padding: 0 10px;
+		}
+	}
 
-    &__content {
-        overflow: hidden;
-        flex-grow: 1;
-    }
+	&__content {
+		overflow: hidden;
+		flex-grow: 1;
+	}
 }

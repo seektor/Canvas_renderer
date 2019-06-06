@@ -68,7 +68,6 @@ export class CTextPainter extends CanvasBasePainter {
         content.forEach((sentence) => {
             ctx.fillText(sentence, rect.x, currentY);
             currentY += marginHeight + equalFontHeight;
-            console.log(currentY);
         });
         this.applyStyles(ctx, savedStyles);
     }

@@ -7,16 +7,14 @@ export class ConfigSection {
 
     private componentElement: HTMLElement;
     private visible: boolean;
-    private isTransitioning: boolean;
 
-    constructor(container: HTMLElement) {
+    constructor(container: HTMLElement, themeChangeCallback: (isChecked: boolean) => void) {
         this.onTransitionEnd = this.onTransitionEnd.bind(this);
-        this.construct(container);
+        this.construct(container, themeChangeCallback);
         this.visible = false;
-        this.isTransitioning = false;
     }
 
-    private construct(hostElement: HTMLElement): void {
+    private construct(hostElement: HTMLElement, themeChangeCallback: (isChecked: boolean) => void): void {
         const template: string = require('./config-section.html');
         const templateFragment: DocumentFragment = Utils.convertToDocumentFragment(template);
         this.componentElement = templateFragment.firstChild as HTMLElement;
@@ -24,7 +22,7 @@ export class ConfigSection {
         hostElement.append(this.componentElement);
 
         const themeSection: HTMLElement = Utils.getElementByAttribute(this.componentElement, ConfigSectionAttributeHooks.sectionTheme);
-        new Switch(themeSection);
+        new Switch(themeSection, themeChangeCallback);
     }
 
     public getToggleCallback(): () => void {

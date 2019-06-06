@@ -7,21 +7,30 @@ import { Utils } from './utils/Utils';
 
 class App {
 
+    private appElement: HTMLElement;
     private header: Header;
     private body: Body;
     private footer: Footer;
     private configComponent: ConfigSection;
 
     constructor() {
-        const appElement: HTMLElement = document.getElementById('app');
-        // this.runAppInitAnimation(appElement);
-        this.header = new Header(appElement);
-        this.body = new Body(appElement);
-        // this.footer = new Footer(appElement);
-        this.configComponent = new ConfigSection(this.body.getElement());
+        this.appElement = document.getElementById('app');
+        // this.runAppInitAnimation(this.appElement);
+        this.header = new Header(this.appElement);
+        this.body = new Body(this.appElement);
+        // this.footer = new Footer(this.appElement);
+        this.configComponent = new ConfigSection(this.body.getElement(), (isPrimary: boolean) => this.onThemeChange(isPrimary));
         this.header.setConfigCallback(this.configComponent.getToggleCallback());
 
         setTimeout(() => this.body.initialize(), 1000);
+    }
+
+    private onThemeChange(isPrimary: boolean): void {
+        if (isPrimary) {
+            this.appElement.setAttribute('theme', '');
+        } else {
+            this.appElement.setAttribute('theme', 'light');
+        }
     }
 
     private runAppInitAnimation(appElement: HTMLElement) {
