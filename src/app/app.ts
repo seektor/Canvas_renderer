@@ -16,7 +16,7 @@ class App {
 
     constructor() {
         this.appElement = document.getElementById('app');
-        // this.runAppInitAnimation(this.appElement);
+        this.runAppInitAnimation(this.appElement);
         this.header = new Header(this.appElement);
         this.body = new Body(this.appElement);
         // this.footer = new Footer(this.appElement);
