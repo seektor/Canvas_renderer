@@ -23,8 +23,8 @@ export class CLineChartPainter extends CanvasBasePainter {
             colorDataLine: theme.colorPrimary,
             colorGradientHigh: theme.colorPrimaryDark,
             colorGradientLow: theme.colorBackgroundDark,
-            widthDataLine: 20,
-            widthAxisLine: 4
+            widthDataLine: 16,
+            widthAxisLine: 6
         }
     }
 

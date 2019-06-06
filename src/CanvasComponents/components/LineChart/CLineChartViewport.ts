@@ -31,11 +31,16 @@ export class CLineChartViewport extends AbstractCanvasViewport implements ILayer
         const topPadding: number = Math.min(Math.round(parentLayerDimensions.height * 0.1), 10);
         const bottomPadding: number = Math.min(Math.round(parentLayerDimensions.height * 0.2), 30);
         const leftPadding: number = Math.min(bottomPadding, parentLayerDimensions.width);
+        // return {
+        //     height: parentLayerDimensions.height - topPadding - bottomPadding,
+        //     width: parentLayerDimensions.width - leftPadding,
+        //     x: leftPadding,
+        //     y: topPadding
+        // }
         return {
-            height: parentLayerDimensions.height - topPadding - bottomPadding,
-            width: parentLayerDimensions.width - leftPadding,
-            x: leftPadding,
-            y: topPadding
+            x: 0,
+            y: 0,
+            ...parentLayerDimensions
         }
     }
 }
