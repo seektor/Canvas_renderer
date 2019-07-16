@@ -9,9 +9,9 @@
 	padding-left: 10px;
 
 	&__button-config {
-		padding-top: 5px;
-		padding-bottom: 5px;
-		margin-right: 20px;
+		width: 50px;
+		padding-top: 10px;
+		margin-right: 5px;
 
 		&:hover {
 			cursor: pointer;
@@ -39,5 +39,6 @@
 	&__user-avatar {
 		padding-top: 5px;
 		padding-bottom: 5px;
+		width: 50px;
 	}
 }

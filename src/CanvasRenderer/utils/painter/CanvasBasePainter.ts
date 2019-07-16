@@ -186,13 +186,13 @@ export class CanvasBasePainter {
 
     protected applyStyles(ctx: CanvasRenderingContext2D, styles: Partial<TCanvasStyles>): void {
         (Object.keys(styles) as Array<keyof typeof styles>).forEach((key) => {
-            ctx[key] = styles[key]!;
+            (ctx as object)[key] = styles[key]!;
         });
     }
 
     protected extractStyles(ctx: CanvasRenderingContext2D, keys: Array<(keyof TCanvasStyles)>): Partial<TCanvasStyles> {
         const extract: Partial<TCanvasStyles> = {};
-        keys.forEach((key) => extract[key] = ctx[key]);
+        keys.forEach((key) => (extract as object)[key] = ctx[key]);
         return extract;
     }
 

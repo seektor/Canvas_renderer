@@ -36,7 +36,7 @@ export interface TargetsTableData extends TableData {
     values: TargetsTableRow[];
 }
 
-export interface TargetsTableRow {
+export interface TargetsTableRow extends DataRow {
     id: number;
     isActive: boolean;
     bounty: string;
